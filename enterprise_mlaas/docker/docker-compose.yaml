@@ -1,0 +1,39 @@
+services:
+  postgres-db:
+    image: postgres:latest
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  django-app:
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - ../backend/server:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres-db
+
+  payment-service:
+    build:
+      context: ../backend/services/payment-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres-db
+
+  ml-service:
+    build:
+      context: ../backend/services/ml-service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres_data:
