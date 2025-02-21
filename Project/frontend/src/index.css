@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/**
+* DOM level variables and configurations.
+*/
+:root {
+  --typography-color: #52525b;
+  --typography-heading: #070707;
+  --typography-strong: #09090b;
+  --typography-link: #09090b;
+  --typography-link-underline: #e4e4e7;
+  --typography-link-underline-hover: #a1a1aa;
+  --typography-code: #09090b;
+  --typography-thead-border: #e4e4e7;
+  --typography-list-marker: #09090b;
+  --typography-hr: #e4e4e7;
+
+  --background-color-secondary: #d5d5d9;
+  --background-color-tertiary: #dfdbdb;
+  --background-color-default: #ffffff;
+  --background-color-hover: #d4d4d4;
+
+  --border-color: #e1e1e2;
+  --border-color-rgba: 0, 0, 0, 0.1;
+
+  --scrollbar-width: 8px;
+  --scrollbar-track-bg: var(--background-color-primary);
+  --scrollbar-thumb-bg: rgba(var(--background-color-primary-rgb), 0.5);
+  --scrollbar-thumb-hover-bg: #575454;
+  --scrollbar-border-radius: 5px;
+
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+/**
+* Global tag styles.
+*/
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--typography-heading);
+  font-family: 'Inter', sans-serif;
+}
+
+/**
+* Global custom styles.
+*/
+.container-primary {
+  background-color: var(--background-color-default);
+}
+
+.container-secondary {
+  background-color: var(--background-color-secondary);
+}
+
+.container-tertiary {
+  background-color: var(--background-color-tertiary);
+}
+
+.container:hover {
+  background-color: var(--background-color-hover);
+}
+
+.border {
+  border: 1.5px solid rgba(var(--border-color-rgba));
+}
+
+.border-t {
+  border-top: 1.5px solid rgba(var(--border-color-rgba));
+}
+
+.border-b {
+  border-bottom: 1.5px solid rgba(var(--border-color-rgba));
+}
+
+.border-l {
+  border-left: 1.5px solid rgba(var(--border-color-rgba));
+}
+
+.border-r {
+  border-right: 1.5px solid rgba(var(--border-color-rgba));
+}
+
+.overlay {
+  background-color: var(--background-color-tertiary);
+}
+
+
+/*
+* Breakpoints and custom directives.
+*/
+@layer utilities {
+  .text-responsive {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl;
+  }
+}
