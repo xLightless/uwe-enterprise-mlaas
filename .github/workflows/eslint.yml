@@ -15,28 +15,38 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          fetch-depth: 0
 
-      - name: Check directory structure
+      - name: Debug current working directory
         run: |
-          echo "Listing directory contents..."
-          ls -R /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/
           echo "Current working directory:"
           pwd
+          ls -la
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20'
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
       - name: Install dependencies
-        working-directory: project/frontend
+        working-directory: /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend
         run: npm install
 
       - name: Run ESLint
-        working-directory: project/frontend/src
+        working-directory: /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend/src
         run: npx eslint .
 
       - name: Build Application
         run: |
-          cd project/frontend
+          cd /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend
           npm run build
