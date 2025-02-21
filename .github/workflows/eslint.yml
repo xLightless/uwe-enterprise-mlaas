@@ -23,15 +23,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-            cd frontend
+            cd project/frontend
             npm ci
 
       - name: Run eslint
         run: |
-          cd frontend
+          cd project/frontend
           npm run lint
 
       - name: Build
         run: |
-          cd frontend
+          cd project/frontend
           npm run build
