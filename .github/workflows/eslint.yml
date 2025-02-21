@@ -22,16 +22,14 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: |
-            cd project/frontend
-            npm ci
+        working-directory: project/frontend
+        run: npm install
 
-      - name: Run eslint
-        run: |
-          cd project/frontend
-          npm run lint
+      - name: Run ESLint
+        working-directory: project/frontend/src
+        run: npx eslint .
 
-      - name: Build
+      - name: Build Application
         run: |
           cd project/frontend
           npm run build
