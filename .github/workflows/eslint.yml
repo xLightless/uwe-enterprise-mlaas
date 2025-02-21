@@ -1,52 +1,23 @@
-name: Lint with ESLint
+name: ESLint
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  lint:
+  eslint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          submodules: 'true'
-          fetch-depth: 0
-
-      - name: Debug current working directory
-        run: |
-          echo "Current working directory:"
-          pwd
-          ls -la
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20'
 
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
       - name: Install dependencies
-        working-directory: /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend
         run: npm install
+        working-directory: project/frontend
 
       - name: Run ESLint
-        working-directory: /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend/src
-        run: npx eslint .
-
-      - name: Build Application
-        run: |
-          cd /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/project/frontend
-          npm run build
+        run: npm run lint
+        working-directory: project/frontend
