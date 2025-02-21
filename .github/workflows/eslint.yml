@@ -14,17 +14,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: project/frontend/src
+        working-directory: ./project/frontend
         run: npm install
 
       - name: Run ESLint
-        working-directory: project/frontend/src
+        working-directory: ./project/frontend/src
         run: npx eslint .
+
+      - name: Build Application
+        run: |
+          cd frontend
+          npm run build
