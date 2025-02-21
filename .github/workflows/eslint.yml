@@ -17,7 +17,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Check directory structure
-        run: ls -la
+        run: |
+          echo "Listing directory contents..."
+          ls -R /home/runner/work/uwe-enterprise-mlaas/uwe-enterprise-mlaas/
+          echo "Current working directory:"
+          pwd
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
