@@ -16,15 +16,21 @@ services:
       - app_network
 
   postgres-db:
-    image: postgres:17
+    image: postgres:latest
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ../backend/databases/insurance/Insurance.sql:/docker-entrypoint-initdb.d/Insurance.sql
+      - ../backend/databases/ml/Models.sql:/docker-entrypoint-initdb.d/Models.sql
+      - ../backend/databases/payments/Transactions.sql:/docker-entrypoint-initdb.d/Transactions.sql
+      - ../backend/databases/traffic/Network.sql:/docker-entrypoint-initdb.d/Network.sql
+      - ../backend/databases/users/Users.sql:/docker-entrypoint-initdb.d/Users.sql
     environment:
-      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: postgres-db
     networks:
       - app_network
 
