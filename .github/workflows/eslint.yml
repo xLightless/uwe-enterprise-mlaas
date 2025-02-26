@@ -3,14 +3,14 @@ name: Eslint Testing
 on:
   pull_request:
     paths:
-      - 'projects/frontend/**'
+      - 'project/frontend/**'
 
 jobs:
   eslint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: projects/frontend
+        working-directory: project/frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,4 +19,4 @@ jobs:
         run: npm install
 
       - name: Run ESLint
-        run: npx eslint . --config eslint.config.js
+        run: npm run lint
