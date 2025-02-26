@@ -19,7 +19,7 @@ jobs:
 
       - name: Run Flake8 and Validate API
         run: |
-          cd project/backend
+          cd Project/backend
           flake8 --max-complexity 10 --exclude .venv . --max-complexity 10 $(git ls-files '*.py')
 
       - name: Validate decorators
