@@ -1,39 +1,28 @@
 name: ESLint Matrix Testing
 
-on: [push, pull_request]
+on:
+  pull_request:
+    paths:
+      - 'frontend/**'
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
-    name: Lint with Node.js ${{ matrix.node-version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Debug Repository Path
-        run: pwd
-
-      - name: List Files
-        run: ls -al
-
-      - name: Check directory existence
-        run: ls -al "Enterprise AI Project/project/frontend/src"
-
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
+          node-version: '20'
       - name: Install dependencies
-        working-directory: "project/frontend/src"
-        run: npm install
-
-      - name: Run ESLint
-        working-directory: "project/frontend/src"
-        run: npx eslint .
+        run: |
+          cd frontend
+          npm ci
+      - name: Run eslint
+        run: |
+          cd frontend
+          npm run lint
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
