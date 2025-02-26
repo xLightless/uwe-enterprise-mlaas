@@ -17,11 +17,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8
 
-      - name: Run Flake8 and Validate API
+      - name: Run Flake8
         run: |
           cd Project/backend
           git ls-files '*.py' | xargs flake8 --max-complexity 10 --exclude .venv
 
-      - name: Validate decorators
+      - name: Validate API
         run: |
           python .github/workflows/check_decorators.py
