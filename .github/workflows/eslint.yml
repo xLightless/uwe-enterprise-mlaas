@@ -1,4 +1,5 @@
-name: Eslint
+
+name: ESLint
 
 on: [push, pull_request]
 
@@ -19,6 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: project/frontend
 
       - name: Run ESLint
         run: npm run lint
