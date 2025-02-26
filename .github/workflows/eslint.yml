@@ -11,13 +11,11 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          cd Project/frontend
           npm ci
       - name: Run eslint
         run: |
-          cd Project/frontend/src
+          cd src
           npm run lint
       - name: Build
         run: |
-          cd Project/frontend
           npm run build
