@@ -42,6 +42,7 @@ export default [
       ...pluginJs.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       ...pluginReact.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
       "@typescript-eslint/no-unused-expressions": [
         "error",
         {

@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "your_ml_service_script.py"] # Replace your_ml_service_script.py
+CMD ["python", "app.py"] 

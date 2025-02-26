@@ -1,13 +1,16 @@
-name: ESLint
+name: Eslint
 
 on: [push, pull_request]
 
 jobs:
   eslint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Project/frontend
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -16,8 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: project/frontend
 
       - name: Run ESLint
         run: npm run lint
-        working-directory: project/frontend

@@ -1,64 +1,38 @@
 services:
-  postgres-db:
-    image: postgres:latest
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: always
-    entrypoint: |
-      bash -c '
-      docker-entrypoint.sh postgres &
-      
-      until psql -U postgres -c "\l" >/dev/null 2>&1; do
-        echo "Waiting for PostgreSQL to start..."
-        sleep 1
-      done
-      
-      echo "PostgreSQL is ready"
-
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'insurance'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE insurance;"
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'models'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE models;"
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'network'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE network;"
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'logging'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE logging;"
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'payments'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE payments;"
-      psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '"'"'users'"'"'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE users;"
-
-      psql -U postgres -tc "SELECT 1 FROM pg_roles WHERE rolname = '"'"'$POSTGRES_USER'"'"'" | grep -q 1 || psql -U postgres -c "CREATE USER $POSTGRES_USER WITH PASSWORD '"'"'$POSTGRES_PASSWORD'"'"';"
-
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE insurance TO $POSTGRES_USER;"
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE models TO $POSTGRES_USER;"
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE network TO $POSTGRES_USER;"
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE logging TO $POSTGRES_USER;"
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE payments TO $POSTGRES_USER;"
-      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE users TO $POSTGRES_USER;"
-
-      wait $(jobs -p)
-      '
-    networks:
-      - backend
-
-  django-app:
+  django:
     build:
-      context: ../backend/main
+      context: ../backend
       dockerfile: Dockerfile
-    command: ["./django-web-app-entrypoint.sh"]
-    env_file:
-      - .env
+    restart: unless-stopped
     volumes:
-      - ../backend/main:/app
+      - ../backend:/app
     ports:
       - "8000:8000"
+    env_file:
+      - ../backend/.env
     depends_on:
       - postgres-db
-    restart: always
     networks:
-      - backend
+      - app_network
+
+  postgres-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ../backend/databases/insurance/Insurance.sql:/docker-entrypoint-initdb.d/Insurance.sql
+      - ../backend/databases/ml/Models.sql:/docker-entrypoint-initdb.d/Models.sql
+      - ../backend/databases/payments/Transactions.sql:/docker-entrypoint-initdb.d/Transactions.sql
+      - ../backend/databases/traffic/Network.sql:/docker-entrypoint-initdb.d/Network.sql
+      - ../backend/databases/users/Users.sql:/docker-entrypoint-initdb.d/Users.sql
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: postgres-db
+    networks:
+      - app_network
 
   payment-service:
     build:
@@ -72,7 +46,7 @@ services:
       - postgres-db
     restart: always
     networks:
-      - backend
+      - app_network
 
   ml-service:
     build:
@@ -86,11 +60,11 @@ services:
       - postgres-db
     restart: always
     networks:
-      - backend
+      - app_network
 
 volumes:
   postgres_data:
 
 networks:
-  backend:
+  app_network:
     driver: bridge
