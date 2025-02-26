@@ -1,4 +1,4 @@
-name: Lint with ESLint
+name: ESLint Matrix Testing
 
 on:
   push:
@@ -11,22 +11,24 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [20]
+    name: Lint with Node.js ${{ matrix.node-version }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          cd project/frontend/src
-          npm install
+        working-directory: project/frontend/src
+        run: npm install
 
       - name: Run ESLint
-        run: |
-          cd project/frontend/src
-          npx eslint .
+        working-directory: project/frontend/src
+        run: npx eslint .
