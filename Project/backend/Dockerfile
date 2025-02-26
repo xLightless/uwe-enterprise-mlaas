@@ -15,12 +15,17 @@ RUN pip install --upgrade pip && \
 # Copy the project files
 COPY . .
 
-# Make scripts executable
-RUN chmod +x ./entrypoint.sh
-RUN chmod +x ./wait-for
+# Install dos2unix and convert line endings
+RUN apt-get update && apt-get install -y dos2unix && \
+    dos2unix /app/entrypoint.sh && \
+    dos2unix /app/wait-for && \
+    chmod +x /app/entrypoint.sh && \
+    chmod +x /app/wait-for && \
+    apt-get --purge remove -y dos2unix && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the port
 EXPOSE 8000
 
 # Run entrypoint script
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
