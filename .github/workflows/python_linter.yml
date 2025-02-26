@@ -20,7 +20,7 @@ jobs:
       - name: Run Flake8 and Validate API
         run: |
           cd Project/backend
-          flake8 --max-complexity 10 --exclude .venv . --max-complexity 10 $(git ls-files '*.py')
+          git ls-files '*.py' | xargs flake8 --max-complexity 10 --exclude .venv
 
       - name: Validate decorators
         run: |
