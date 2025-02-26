@@ -31,9 +31,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        working-directory: "Enterprise AI Project/project/frontend/src"
+        working-directory: "project/frontend/src"
         run: npm install
 
       - name: Run ESLint
-        working-directory: "Enterprise AI Project/project/frontend/src"
+        working-directory: "project/frontend/src"
         run: npx eslint .
