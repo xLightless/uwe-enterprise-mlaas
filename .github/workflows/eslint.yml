@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Project/frontend/**
+        working-directory: Project/frontend
     steps:
       - name: Install dependencies
         run: |
