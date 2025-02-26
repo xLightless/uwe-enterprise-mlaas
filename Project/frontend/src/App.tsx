@@ -1,4 +1,4 @@
-// @ts-expect-error .
+// @ts-expect-error ...
 import React from 'react'
 import './App.css'
 
