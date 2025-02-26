@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: project/frontend
+        working-directory: Project/frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
