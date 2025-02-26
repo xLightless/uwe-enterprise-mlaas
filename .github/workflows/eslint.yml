@@ -12,6 +12,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Debug Repository Path
+        run: pwd
+
+      - name: List Files
+        run: ls -al
+
+      - name: Check directory existence
+        run: ls -al "Enterprise AI Project/project/frontend/src"
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -20,9 +31,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        working-directory: project/frontend/src
+        working-directory: "Enterprise AI Project/project/frontend/src"
         run: npm install
 
       - name: Run ESLint
-        working-directory: project/frontend/src
+        working-directory: "Enterprise AI Project/project/frontend/src"
         run: npx eslint .
