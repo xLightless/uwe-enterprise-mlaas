@@ -131,14 +131,19 @@ ALTER SEQUENCE public."Roles_role_id_seq" OWNED BY public."Roles".role_id;
 CREATE TABLE public."Users" (
     user_id integer NOT NULL,
     role_id integer NOT NULL,
+    full_name character varying(70) NOT NULL,
     email character varying(254) NOT NULL,
     password_hash text NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    last_logged_in timestamp without time zone NOT NULL,
-    first_name character varying(50) NOT NULL,
-    last_name character varying(50) NOT NULL
+    last_login timestamp without time zone NOT NULL,
+    is_verified boolean NOT NULL DEFAULT false,
+    phone_number character varying(11),
+    is_active boolean NOT NULL DEFAULT true,
+    is_staff boolean NOT NULL DEFAULT false,
+    is_admin boolean NOT NULL DEFAULT false,
+    is_superuser boolean NOT NULL DEFAULT false,
+    PRIMARY KEY (user_id)
 );
-
 
 ALTER TABLE public."Users" OWNER TO postgres;
 
@@ -220,7 +225,7 @@ COPY public."Roles" (role_id, role_name) FROM stdin;
 -- Data for Name: Users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Users" (user_id, role_id, email, password_hash, created_at, last_logged_in, first_name, last_name) FROM stdin;
+COPY public."Users" (user_id, role_id, email, password_hash, created_at, last_logged_in, full_name) FROM stdin;
 \.
 
 

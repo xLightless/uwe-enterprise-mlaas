@@ -31,6 +31,9 @@ CREATE TABLE public."Models" (
     model_description text NOT NULL,
     model_version numeric NOT NULL,
     uploaded_at timestamp without time zone NOT NULL
+    is_active boolean DEFAULT true NOT NULL,
+    num_accepted_claims integer DEFAULT 0 NOT NULL,
+    num_rejected_claims integer DEFAULT 0 NOT NULL
 );
 
 
@@ -102,9 +105,7 @@ CREATE TABLE public."UserModelFeedback" (
     settlement_amount numeric DEFAULT 0 NOT NULL,
     expected_amount numeric DEFAULT 0 NOT NULL,
     feedback_rating smallint DEFAULT 0 NOT NULL,
-    comments text,
-    num_accepted_claims integer DEFAULT 0 NOT NULL,
-    num_rejected_claims integer DEFAULT 0 NOT NULL
+    comments text
 );
 
 
