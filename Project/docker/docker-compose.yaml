@@ -7,9 +7,9 @@ services:
     volumes:
       - ../backend:/app
     ports:
-      - "8000:8000"
+      - '8000:8000'
     env_file:
-      - ../backend/.env
+      - .env
     depends_on:
       - postgres-db
     networks:
@@ -18,19 +18,18 @@ services:
   postgres-db:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
-      - ../backend/databases/insurance/Insurance.sql:/docker-entrypoint-initdb.d/Insurance.sql
-      - ../backend/databases/ml/Models.sql:/docker-entrypoint-initdb.d/Models.sql
-      - ../backend/databases/payments/Transactions.sql:/docker-entrypoint-initdb.d/Transactions.sql
-      - ../backend/databases/traffic/Network.sql:/docker-entrypoint-initdb.d/Network.sql
-      - ../backend/databases/users/Users.sql:/docker-entrypoint-initdb.d/Users.sql
+      - ./init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+      - ../backend/databases/insurance/insurance.sql:/docker-entrypoint-initdb.d/insurance.sql
+      - ../backend/databases/ml/ml.sql:/docker-entrypoint-initdb.d/ml.sql
+      - ../backend/databases/payments/payments.sql:/docker-entrypoint-initdb.d/payments.sql
+      - ../backend/databases/traffic/traffic.sql:/docker-entrypoint-initdb.d/traffic.sql
+      - ../backend/databases/users/users.sql:/docker-entrypoint-initdb.d/users.sql
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: postgres-db
     networks:
       - app_network
 
@@ -41,7 +40,7 @@ services:
     env_file:
       - .env
     ports:
-      - "4000:4000"
+      - '4000:4000'
     depends_on:
       - postgres-db
     restart: always
@@ -55,7 +54,7 @@ services:
     env_file:
       - .env
     ports:
-      - "5000:5000"
+      - '5000:5000'
     depends_on:
       - postgres-db
     restart: always

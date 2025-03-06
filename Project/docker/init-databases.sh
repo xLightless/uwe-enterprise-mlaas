@@ -6,7 +6,7 @@ set -e
 create_and_init_db() {
     database=$1
     echo "Checking/Creating database: $database"
-    
+
     # Create database if it doesn't exist
     psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
         SELECT 'CREATE DATABASE $database'
@@ -16,19 +16,19 @@ EOSQL
     # Initialize schema based on database name
     case $database in
         "insurance_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/Insurance.sql
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/insurance.sql
             ;;
         "ml_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/Models.sql
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/ml.sql
             ;;
         "payments_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/Transactions.sql
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/payments.sql
             ;;
         "traffic_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/Network.sql
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/traffic.sql
             ;;
         "users_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/Users.sql
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/users.sql
             ;;
     esac
 }
