@@ -21,16 +21,16 @@ def register_user(request):
         cache.set(cache_key, serializer.validated_data, timeout=300)
 
         # Send SMS OTP using Twilio
-        client = Client(
-            settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        client.verify.services(
-            settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
+
+        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
             to=f"+44{phone_number}",
             channel='sms'
         )
 
         return Response({
-            "message": "User data cached. Check your phone for verification."
+
+            "message": "User data cached successfully. Please check your phone for verification."
         }, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -51,10 +51,9 @@ def verify_otp(request):
 
     try:
         # Verify OTP using Twilio
-        client = Client(
-            settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        verification_check = client.verify.services(
-            settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
+        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
+
             to=f"+44{phone_number}",
             code=otp  # Ensure 'code' parameter is not None
         )
@@ -75,18 +74,16 @@ def verify_otp(request):
                     cache.delete(cache_key)
 
                     return Response({
-                    "message": "User verified and registered successfully.",
-                    "user": serializer.data
+
+                        "message": "User verified and registered successfully.",
+                        "user": serializer.data
                     }, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors,
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"error": "User data not found in cache."},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({"error": "Invalid OTP."},
-                        status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "User data not found in cache."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        return Response({"error": str(e)},
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
