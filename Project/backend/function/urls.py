@@ -10,7 +10,6 @@ urlpatterns = [
     path('auth/login/', login_user, name='login'),
     path('auth/profile/', get_user_profile, name='profile'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
     # Include Djoser URLs
     path('auth/', include('djoser.urls')),
 ]
