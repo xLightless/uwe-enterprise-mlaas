@@ -80,7 +80,7 @@ SIMPLE_JWT = {
 }
 
 CACHES = {
-    'default': {# In-memory cache
+    'default': {  # In-memory cache
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
         'TIMEOUT': 300,  # Cache timeout in seconds (e.g., 5 minutes)

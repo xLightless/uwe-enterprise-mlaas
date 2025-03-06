@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (AbstractBaseUser, 
+                                        BaseUserManager, PermissionsMixin)
 from django.utils import timezone
+
 
 class Role(models.Model):
     role_id = models.AutoField(primary_key=True, db_column='role_id')
@@ -12,9 +14,12 @@ class Role(models.Model):
     def __str__(self):
         return self.role_name
 
+
 class Permission(models.Model):
-    permission_id = models.AutoField(primary_key=True, db_column='permission_id')
-    permission_name = models.CharField(max_length=75, db_column='permission_name')
+    permission_id = models.AutoField(primary_key=True, 
+                                    db_column='permission_id')
+    permission_name = models.CharField(max_length=75, 
+                                        db_column='permission_name')
 
     class Meta:
         db_table = 'Permissions'
@@ -23,15 +28,20 @@ class Permission(models.Model):
         return self.permission_name
 
 class RolePermission(models.Model):
-    role_permission_id = models.AutoField(primary_key=True, db_column='role_permission_id')
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column='role_id')
-    permission = models.ForeignKey(Permission, on_delete=models.CASCADE, db_column='permission_id')
+    role_permission_id = models.AutoField(primary_key=True, 
+                                        db_column='role_permission_id')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE,
+                                db_column='role_id')
+    permission = models.ForeignKey(Permission, on_delete=models.CASCADE,
+                                    db_column='permission_id')
 
     class Meta:
         db_table = 'RolePermissions'
 
+
 class UserManager(BaseUserManager):
-    def create_user(self, email, full_name, password=None, role=None, phone_number=None):
+    def create_user(self, email, full_name, password=None, role=None, 
+                                                            phone_number=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -52,7 +62,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, full_name, password=None, phone_number=None):
+    def create_superuser(self, email, full_name, password=None,
+                                                    phone_number=None):
         admin_role, created = Role.objects.get_or_create(
             role_id=4,
             defaults={'role_id': 4, 'role_name': 'Admin'}
@@ -71,13 +82,17 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class Users(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True, db_column='user_id')
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column='role_id')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE,
+                                db_column='role_id')
     email = models.EmailField(max_length=254, unique=True, db_column='email')
     password = models.TextField(db_column='password_hash')
-    created_at = models.DateTimeField(db_column='created_at', default=timezone.now)
-    last_login = models.DateTimeField(db_column='last_login', default=timezone.now)
+    created_at = models.DateTimeField(db_column='created_at',
+                                        default=timezone.now)
+    last_login = models.DateTimeField(db_column='last_login',
+                                        default=timezone.now)
     full_name = models.CharField(max_length=70, db_column='full_name')
     is_verified = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20, blank=True, null=True)

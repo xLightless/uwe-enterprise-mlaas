@@ -2,11 +2,12 @@ import pytest
 from rest_framework.exceptions import ValidationError
 from function.users.login.serializers import UserLoginSerializer
 
+
 @pytest.mark.django_db
 class TestUserLoginSerializer:
 
     def test_valid_credentials(self, mocker):
-        mocker.patch('django.contrib.auth.authenticate', 
+        mocker.patch('django.contrib.auth.authenticate',
                     return_value=mocker.Mock())
         data = {'email': 'test@example.com', 'password': 'password123'}
         serializer = UserLoginSerializer(data=data)
@@ -29,7 +30,7 @@ class TestUserLoginSerializer:
         assert 'Must include "email" and "password"' in str(excinfo.value)
 
     def test_fields_exceeding_length(self):
-        data = {'email': 'a' * 255 + '@example.com', 'password': 'a' * 129}
+        data = {'email': 'a' * 255 + '@example.com','password': 'a' * 129}
         serializer = UserLoginSerializer(data=data)
         with pytest.raises(ValidationError) as excinfo:
             serializer.is_valid(raise_exception=True)

@@ -77,15 +77,15 @@ def verify_otp(request):
                     "message": "User verified and registered successfully.",
                     "user": serializer.data
                     }, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, 
+                return Response(serializer.errors,
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"error": "User data not found in cache."}, 
+            return Response({"error": "User data not found in cache."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"error": "Invalid OTP."}, 
+        return Response({"error": "Invalid OTP."},
                         status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        return Response({"error": str(e)}, 
+        return Response({"error": str(e)},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
