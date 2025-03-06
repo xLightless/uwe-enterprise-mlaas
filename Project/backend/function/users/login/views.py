@@ -10,19 +10,20 @@ from function.serializer import UserDetailSerializer
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
-    serializer = UserLoginSerializer(data=request.data, context={'request': request})
+    serializer = UserLoginSerializer(
+        data=request.data, context={'request': request})
     if serializer.is_valid():
         user = serializer.validated_data['user']
-        
+
         user.last_login = timezone.now()
         user.save()
-        
+
         # Generate JWT token
         refresh = RefreshToken.for_user(user)
-        
+
         # Get user details
         user_serializer = UserDetailSerializer(user)
-        
+
         # Include role_id in the response
         return Response({
             'refresh': str(refresh),

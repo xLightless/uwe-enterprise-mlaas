@@ -6,7 +6,8 @@ from function.users.login.serializers import UserLoginSerializer
 class TestUserLoginSerializer:
 
     def test_valid_credentials(self, mocker):
-        mocker.patch('django.contrib.auth.authenticate', return_value=mocker.Mock())
+        mocker.patch('django.contrib.auth.authenticate', 
+                    return_value=mocker.Mock())
         data = {'email': 'test@example.com', 'password': 'password123'}
         serializer = UserLoginSerializer(data=data)
         assert serializer.is_valid()
@@ -19,7 +20,7 @@ class TestUserLoginSerializer:
         with pytest.raises(ValidationError) as excinfo:
             serializer.is_valid(raise_exception=True)
         assert 'Invalid credentials' in str(excinfo.value)
-        
+
     def test_empty_fields(self):
         data = {'email': '', 'password': ''}
         serializer = UserLoginSerializer(data=data)
@@ -32,7 +33,8 @@ class TestUserLoginSerializer:
         serializer = UserLoginSerializer(data=data)
         with pytest.raises(ValidationError) as excinfo:
             serializer.is_valid(raise_exception=True)
-        assert 'Ensure this field has no more than 254 characters.' in str(excinfo.value)
+        assert 'Ensure this field has no more than 254 characters.' in str(
+                                                                excinfo.value)
 
     def test_incorrect_details(self):
         data = {'email': 'notanemail', 'password': 'short'}
@@ -40,4 +42,5 @@ class TestUserLoginSerializer:
         with pytest.raises(ValidationError) as excinfo:
             serializer.is_valid(raise_exception=True)
         assert 'Enter a valid email address.' in str(excinfo.value)
-        assert 'Ensure this field has at least 8 characters.' in str(excinfo.value)
+        assert 'Ensure this field has at least 8 characters.' in str(excinfo.
+                                                                    value)

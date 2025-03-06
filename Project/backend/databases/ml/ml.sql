@@ -1,4 +1,3 @@
---
 -- PostgreSQL database dump
 --
 
@@ -30,18 +29,13 @@ CREATE TABLE public."Models" (
     model_name character varying(255) NOT NULL,
     model_description text NOT NULL,
     model_version numeric NOT NULL,
-    uploaded_at timestamp without time zone NOT NULL
+    uploaded_at timestamp without time zone NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
     num_accepted_claims integer DEFAULT 0 NOT NULL,
     num_rejected_claims integer DEFAULT 0 NOT NULL
 );
 
-
 ALTER TABLE public."Models" OWNER TO postgres;
-
---
--- Name: Models_model_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
 CREATE SEQUENCE public."Models_model_id_seq"
     AS integer
@@ -51,15 +45,15 @@ CREATE SEQUENCE public."Models_model_id_seq"
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER SEQUENCE public."Models_model_id_seq" OWNER TO postgres;
-
---
--- Name: Models_model_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
 ALTER SEQUENCE public."Models_model_id_seq" OWNED BY public."Models".model_id;
 
+ALTER TABLE ONLY public."Models" ALTER COLUMN model_id SET DEFAULT nextval('public."Models_model_id_seq"'::regclass);
+
+COPY public."Models" (model_id, model_name, model_description, model_version, uploaded_at, num_accepted_claims, num_rejected_claims) FROM stdin;
+\. 
+
+ALTER TABLE ONLY public."Models"
+    ADD CONSTRAINT "Models_pkey" PRIMARY KEY (model_id);
 
 --
 -- Name: Predictions; Type: TABLE; Schema: public; Owner: postgres
@@ -70,12 +64,7 @@ CREATE TABLE public."Predictions" (
     user_claim_id integer NOT NULL
 );
 
-
 ALTER TABLE public."Predictions" OWNER TO postgres;
-
---
--- Name: Predictions_prediction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
 CREATE SEQUENCE public."Predictions_prediction_id_seq"
     AS integer
@@ -85,15 +74,15 @@ CREATE SEQUENCE public."Predictions_prediction_id_seq"
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER SEQUENCE public."Predictions_prediction_id_seq" OWNER TO postgres;
-
---
--- Name: Predictions_prediction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
 ALTER SEQUENCE public."Predictions_prediction_id_seq" OWNED BY public."Predictions".prediction_id;
 
+ALTER TABLE ONLY public."Predictions" ALTER COLUMN prediction_id SET DEFAULT nextval('public."Predictions_prediction_id_seq"'::regclass);
+
+COPY public."Predictions" (prediction_id, user_claim_id) FROM stdin;
+\. 
+
+ALTER TABLE ONLY public."Predictions"
+    ADD CONSTRAINT "Predictions_pkey" PRIMARY KEY (prediction_id);
 
 --
 -- Name: UserModelFeedback; Type: TABLE; Schema: public; Owner: postgres
@@ -108,12 +97,7 @@ CREATE TABLE public."UserModelFeedback" (
     comments text
 );
 
-
 ALTER TABLE public."UserModelFeedback" OWNER TO postgres;
-
---
--- Name: UserModelFeedback_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
 CREATE SEQUENCE public."UserModelFeedback_feedback_id_seq"
     AS integer
@@ -123,99 +107,22 @@ CREATE SEQUENCE public."UserModelFeedback_feedback_id_seq"
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER SEQUENCE public."UserModelFeedback_feedback_id_seq" OWNER TO postgres;
-
---
--- Name: UserModelFeedback_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
 ALTER SEQUENCE public."UserModelFeedback_feedback_id_seq" OWNED BY public."UserModelFeedback".feedback_id;
-
-
---
--- Name: Models model_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Models" ALTER COLUMN model_id SET DEFAULT nextval('public."Models_model_id_seq"'::regclass);
-
-
---
--- Name: Predictions prediction_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Predictions" ALTER COLUMN prediction_id SET DEFAULT nextval('public."Predictions_prediction_id_seq"'::regclass);
-
-
---
--- Name: UserModelFeedback feedback_id; Type: DEFAULT; Schema: public; Owner: postgres
---
 
 ALTER TABLE ONLY public."UserModelFeedback" ALTER COLUMN feedback_id SET DEFAULT nextval('public."UserModelFeedback_feedback_id_seq"'::regclass);
 
-
---
--- Data for Name: Models; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Models" (model_id, model_name, model_description, model_version, uploaded_at) FROM stdin;
-\.
-
-
---
--- Data for Name: Predictions; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."Predictions" (prediction_id, user_claim_id) FROM stdin;
-\.
-
-
---
--- Data for Name: UserModelFeedback; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."UserModelFeedback" (feedback_id, user_id, settlement_amount, expected_amount, feedback_rating, comments, num_accepted_claims, num_rejected_claims) FROM stdin;
-\.
-
-
---
--- Name: Models_model_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."Models_model_id_seq"', 1, false);
-
-
---
--- Name: Predictions_prediction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."Predictions_prediction_id_seq"', 1, false);
-
-
---
--- Name: UserModelFeedback_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."UserModelFeedback_feedback_id_seq"', 1, false);
-
-
---
--- Name: Models Models_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."Models"
-    ADD CONSTRAINT "Models_pkey" PRIMARY KEY (model_id);
-
-
---
--- Name: UserModelFeedback UserModelFeedback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+COPY public."UserModelFeedback" (feedback_id, user_id, settlement_amount, expected_amount, feedback_rating, comments) FROM stdin;
+\. 
 
 ALTER TABLE ONLY public."UserModelFeedback"
     ADD CONSTRAINT "UserModelFeedback_pkey" PRIMARY KEY (feedback_id);
 
-
 --
+-- SEQUENCE SETS
+--
+
+SELECT pg_catalog.setval('public."Models_model_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."Predictions_prediction_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."UserModelFeedback_feedback_id_seq"', 1, false);
+
 -- PostgreSQL database dump complete
---
-

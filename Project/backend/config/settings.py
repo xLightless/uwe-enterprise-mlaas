@@ -46,13 +46,11 @@ INSTALLED_APPS = [
     "djoser",
     "rest_framework_simplejwt",
 ]
+
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_FROM_EMAIL = os.getenv('TWILIO_FROM_EMAIL')
-TWILIO_VERIFY_SERVICE_SID = os.getenv('TWILIO_VERIFY_SERVICE_SID') 
-
-
-
+TWILIO_VERIFY_SERVICE_SID = os.getenv('TWILIO_VERIFY_SERVICE_SID')
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -82,8 +80,8 @@ SIMPLE_JWT = {
 }
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # In-memory cache
+    'default': {# In-memory cache
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
         'TIMEOUT': 300,  # Cache timeout in seconds (e.g., 5 minutes)
     }
