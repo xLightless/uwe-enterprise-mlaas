@@ -23,4 +23,7 @@ RUN chmod +x ./wait-for
 EXPOSE 8000
 
 # Run entrypoint script
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
+
+# Run init-database.py after entrypoint.sh completes (if it does)
+# Modify the CMD section in your Dockerfile
