@@ -24,7 +24,7 @@ function Login() {
 
   return (
     <div className="flex flex-col justify-center gap-5 rounded-lg container-primary">
-        <form className="flex flex-col gap-5">
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="flex flex-col">
                 <label htmlFor="emailLog" className="self-start ml-4">Email</label>
                 
