@@ -21,6 +21,7 @@ def register_user(request):
         cache.set(cache_key, serializer.validated_data, timeout=300)
 
         # Send SMS OTP using Twilio
+
         client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
         client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
             to=f"+44{phone_number}",
@@ -28,6 +29,7 @@ def register_user(request):
         )
 
         return Response({
+
             "message": "User data cached successfully. Please check your phone for verification."
         }, status=status.HTTP_201_CREATED)
 
@@ -51,6 +53,7 @@ def verify_otp(request):
         # Verify OTP using Twilio
         client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
         verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
+
             to=f"+44{phone_number}",
             code=otp  # Ensure 'code' parameter is not None
         )
@@ -59,7 +62,7 @@ def verify_otp(request):
             # Retrieve cached user data
             cache_key = f"user_data_{phone_number}"
             user_data = cache.get(cache_key)
-            
+
             if user_data:
                 serializer = UserCreateSerializer(data=user_data)
                 if serializer.is_valid():
@@ -71,6 +74,7 @@ def verify_otp(request):
                     cache.delete(cache_key)
 
                     return Response({
+
                         "message": "User verified and registered successfully.",
                         "user": serializer.data
                     }, status=status.HTTP_201_CREATED)
@@ -82,3 +86,4 @@ def verify_otp(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

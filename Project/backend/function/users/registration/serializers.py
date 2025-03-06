@@ -5,6 +5,7 @@ from ...models import Users, Role
 from twilio.rest import Client
 from django.conf import settings
 
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -15,11 +16,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'full_name': {'required': True},
             'phone_number': {'required': True}, 
+
         }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+
         return attrs
 
     def create(self, validated_data):
@@ -32,7 +35,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             full_name=validated_data['full_name'],
             role=default_role,
+
             phone_number=validated_data['phone_number'], 
+
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -45,3 +50,4 @@ class UserCreateSerializer(serializers.ModelSerializer):
         )
 
         return user
+
