@@ -174,3 +174,4 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+Project/docker/dos2unix.exe
