@@ -1,3 +1,4 @@
+# flake8: noqa
 from django.core.cache import cache
 from django.conf import settings
 from twilio.rest import Client

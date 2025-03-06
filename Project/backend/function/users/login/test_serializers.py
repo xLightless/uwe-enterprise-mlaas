@@ -1,3 +1,4 @@
+# flake8: noqa
 import pytest
 from rest_framework.exceptions import ValidationError
 from function.users.login.serializers import UserLoginSerializer
