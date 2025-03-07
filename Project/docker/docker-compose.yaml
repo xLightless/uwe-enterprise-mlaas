@@ -22,11 +22,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
-      - ../backend/databases/insurance/insurance.sql:/docker-entrypoint-initdb.d/insurance.sql
-      - ../backend/databases/ml/ml.sql:/docker-entrypoint-initdb.d/ml.sql
-      - ../backend/databases/payments/payments.sql:/docker-entrypoint-initdb.d/payments.sql
-      - ../backend/databases/traffic/traffic.sql:/docker-entrypoint-initdb.d/traffic.sql
-      - ../backend/databases/users/users.sql:/docker-entrypoint-initdb.d/users.sql
+      - ../backend/databases/insurance/Insurance.sql:/docker-entrypoint-initdb.d/insurance.sql
+      - ../backend/databases/ml/ML.sql:/docker-entrypoint-initdb.d/ml.sql
+      - ../backend/databases/payments/Payments.sql:/docker-entrypoint-initdb.d/payments.sql
+      - ../backend/databases/traffic/Traffic.sql:/docker-entrypoint-initdb.d/traffic.sql
+      - ../backend/databases/users/Users.sql:/docker-entrypoint-initdb.d/users.sql
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
