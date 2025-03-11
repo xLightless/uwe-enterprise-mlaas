@@ -5,7 +5,7 @@ import home_cover from '../../assets/home_cover.jpg'
 function Home() {
     return (
         <div className="container-primary">
-            <div className="flex justify-end h-[400px] w-screen" style={{backgroundImage: `url(${home_cover})`, backgroundSize: 'cover', backgroundPosition: 'center',}}>
+            <div className="flex justify-end h-[400px] w-full" style={{backgroundImage: `url(${home_cover})`, backgroundSize: 'cover', backgroundPosition: 'center',}}>
                 <div className="flex flex-col justify-center gap-5 p-5 max-w-1/2 bg-gray-500/50 backdrop-blur-sm text-white">
                     <p className="font-bold text-2xl">TITLE</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -76,5 +76,5 @@ function Home() {
         </div>
     )
   }
-  
+
   export default Home

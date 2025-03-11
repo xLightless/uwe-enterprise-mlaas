@@ -1,15 +1,17 @@
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
-// import Home from './templates/home/Home'
-// import Nav from './components/navigation/Nav'
-// import Footer from './components/footer/Footer'
-// import Contact from './templates/contact/Contact'
-import AdminDashboard from './templates/admin'
+import './App.css'
+
+import Home from './templates/home/Home';
+import AdminDashboard from './templates/admin';
+import TestDashboard from './templates/examples/dashboard';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/test" element={<TestDashboard />} />
       </Routes>
     </Router>
   )

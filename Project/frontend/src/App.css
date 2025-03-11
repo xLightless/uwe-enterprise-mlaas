@@ -22,7 +22,7 @@
   --background-color-default: #ffffff;
   --background-color-hover: #d4d4d4;
 
-  --border-color: rgb(255, 0, 0);
+  --border-color: #e1e1e2;
   --border-color-rgba: 0, 0, 0, 0.1;
 }
 
@@ -72,6 +72,12 @@ ul, ol {
 
 hr {
   border-color: var(--typography-hr);
+}
+
+.typography {
+  color: var(--typography-color);
+  line-height: 1.75rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .scrollbar-container {
