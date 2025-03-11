@@ -1,42 +1,161 @@
-#root {
-  /*max-width: 1280px;*/
-  margin: 0 auto;
-  /*padding: 2rem;*/
+:root {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
   text-align: center;
+  font-family: 'Inter', sans-serif;
+
+  --typography-color: #52525b;
+  --typography-heading: #070707;
+  --typography-strong: #09090b;
+  --typography-link: #09090b;
+  --typography-link-underline: #e4e4e7;
+  --typography-link-underline-hover: #a1a1aa;
+  --typography-code: #09090b;
+  --typography-thead-border: #e4e4e7;
+  --typography-list-marker: #09090b;
+  --typography-hr: #e4e4e7;
+
+  --background-color-primary: #eeeeee;
+  --background-color-secondary: #d5d5d9;
+  --background-color-tertiary: #dfdbdb;
+  --background-color-default: #ffffff;
+  --background-color-hover: #d4d4d4;
+
+  --border-color: rgb(255, 0, 0);
+  --border-color-rgba: 0, 0, 0, 0.1;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+html, body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--typography-color);
+  background-color: var(--background-color-primary);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+*,:after,:before {
+  box-sizing: border-box;
+  border: 0 solid #e5e7eb;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--typography-heading);
+}
+
+strong {
+  color: var(--typography-strong);
+}
+
+a {
+  color: var(--typography-link);
+  text-decoration-color: var(--typography-link-underline);
+}
+
+a:hover {
+  text-decoration-color: var(--typography-link-underline-hover);
+}
+
+code {
+  color: var(--typography-code);
+}
+
+thead {
+  border-color: var(--typography-thead-border);
+}
+
+ul, ol {
+  color: var(--typography-list-marker);
+}
+
+hr {
+  border-color: var(--typography-hr);
+}
+
+.scrollbar-container {
+  overflow: auto;
+  position: relative;
+  padding-right: 8px;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+  border-radius: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollbar-hidden {
+  position: relative;
+  overflow-y: scroll;
+}
+
+.scrollbar-hidden::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: #888;
+  min-height: 100px;
+}
+
+.scrollbar-left {
+  direction: rtl;
+}
+
+.scrollbar-right {
+  direction: ltr;
+}
+
+.scrollbar-top {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scrollbar-bottom {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media (min-width: 640px) {
+  .container {
+      max-width:640px
   }
-  to {
-    transform: rotate(360deg);
+}
+
+@media (min-width: 768px) {
+  .container {
+      max-width:768px
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (min-width: 1024px) {
+  .container {
+      max-width:1024px
   }
 }
 
-.card {
-  padding: 2em;
+@media (min-width: 1280px) {
+  .container {
+      max-width:1280px
+  }
 }
 
-.read-the-docs {
-  color: #888;
+@media (min-width: 1536px) {
+  .container {
+      max-width:1536px
+  }
 }
