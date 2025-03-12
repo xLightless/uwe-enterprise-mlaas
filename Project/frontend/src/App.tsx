@@ -1,28 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
-import Home from './templates/home/Home'
-import Nav from './components/navigation/Nav'
-import Footer from './components/footer/Footer'
-import Contact from './templates/contact/Contact'
+
+import Home from './templates/home/Home';
+import AdminDashboard from './templates/admin';
+import TestDashboard from './templates/examples/dashboard';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="flex flex-col min-h-screen">
-        <Nav />
-
-        <main className="flex-grow flex justify-center">
-          <Routes>
-            <Route index element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </main>
-        
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/test" element={<TestDashboard />} />
+      </Routes>
+    </Router>
   )
 }
 
-export default App
+export default App;
