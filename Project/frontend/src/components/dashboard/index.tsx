@@ -1,11 +1,13 @@
-import { faTimes, faBars, faSearch, faUser, faCog, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faBars, faUser, faCog, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef } from "react";
-import Sidebar from "../../templates/admin/components/sidebar";
 import { Scrollbar } from "../scrollbar";
-import { SidebarItem } from "../../common/interfaces";
+import { SidebarItem, UserProps } from "../../common/interfaces";
 import { createPortal } from "react-dom";
 import { KeyboardCloseEvent } from "../../events/keyboard";
+import Sidebar from "./sidebar";
+import Searchbar from "../searchbar";
+import UserSettingsDropdown from "../user-settings";
 
 interface OverlayAdminDashboardSidebarProps {
     sidebarItems: SidebarItem[];
@@ -50,7 +52,6 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
     const [isHambugerClicked, setIsHamburgerClicked] = useState(false);
-    const [isProfileClicked, setIsProfileClicked] = useState(false);
 
     function toggleSidebar() {
         setIsHamburgerClicked(!isHambugerClicked);
@@ -64,10 +65,6 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
             setShowSidebarOverlay(!showSidebarOverlay);
         }
     }
-
-    function toggleProfileDropdown() {
-        setIsProfileClicked(!isProfileClicked);
-    };
 
     useEffect(() => {
         function monitorComponentResize() {
@@ -119,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
 
                 {/* Navigation */}
                 <div
-                    className="pl-4 w-full h-full border-b border-gray-200 space-x-4 grid grid-cols-[auto_1fr_1fr]" // flex flex-row items-center
+                    className="pl-4 w-full h-full border-b border-gray-200 space-x-4 grid grid-cols-[auto_auto_1fr]" // flex flex-row items-center
                 >
 
                     {/* Hamburger */}
@@ -131,61 +128,19 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
 
                     {/* Search contents of the display */}
                     <div className='w-full flex items-center'>
-                        <form onSubmit={(e) => e.preventDefault()} className='w-full'>
-                            <div className='relative max-w-lg w-full'>
-                                <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                                    <FontAwesomeIcon icon={faSearch} className='text-gray-400'/>
-                                </div>
-                                <input
-                                    type="search"
-                                    name="search"
-                                    id="search"
-                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-3xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                                    placeholder="Search"
-                                />
-                                <button type='submit' className='sr-only'>Submit</button>
-                            </div>
-                        </form>
+                        <Searchbar placeholder={`Search dashboard...`}/>
                     </div>
 
                     {/* User Settings */}
-                    <div className='w-full flex justify-end items-center'>
-                        <div className="h-full w-[150px] flex flex-row justify-end items-center space-x-4 bg-gray-800 px-4 cursor-pointer hover:bg-gray-700" onClick={toggleProfileDropdown}>
-
-                            {/* Avatar */}
-                            <div className='w-[36px] h-full flex justify-center items-center'>
-                                <div className='w-[36px] h-[36px] rounded-full bg-white flex justify-center items-center'>
-                                    <FontAwesomeIcon icon={faUser} className='text-gray-800'/>
-                                </div>
-                            </div>
-
-                            {/* First Name */}
-                            <div className="w-[74px] h-full flex justify-center items-center">
-                                <p className='text-white'>lightless</p>
-                            </div>
-                        </div>
-
-                        {isProfileClicked && (
-                            <div className="absolute top-[63px] right-0 w-[150px] bg-gray-300 z-10 border-l border-b border-r" onMouseLeave={toggleProfileDropdown}>
-                                <ul className="">
-                                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2">
-                                        <FontAwesomeIcon icon={faCog} />
-                                        <span>Settings</span>
-                                    </li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2">
-                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                                        <span>Logout</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
+                    <div className='w-full w-full items-end flex justify-end items-center'>
+                        <UserSettingsDropdown user={{ fullName: "John Doe", email: "john.doe@example.com" }}/>
                     </div>
                 </div>
 
                 {/* Dashboard Directory */}
                 <div className='w-full h-screen'>
-                    <Scrollbar position='right'>
-                        <div className="w-full h-screen">
+                    <Scrollbar position='right' paddingLeft="4">
+                        <div className="w-full h-screen py-4">
                             {children}
                         </div>
                     </Scrollbar>
