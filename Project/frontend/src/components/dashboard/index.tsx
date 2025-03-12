@@ -1,8 +1,8 @@
-import { faTimes, faBars, faUser, faCog, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Scrollbar } from "../scrollbar";
-import { SidebarItem, UserProps } from "../../common/interfaces";
+import { SidebarItem } from "../../common/interfaces";
 import { createPortal } from "react-dom";
 import { KeyboardCloseEvent } from "../../events/keyboard";
 import Sidebar from "./sidebar";
@@ -44,8 +44,8 @@ const OverlayAdminDashboardSidebar: React.FC<OverlayAdminDashboardSidebarProps> 
 
 
 interface DashboardProps {
-    children: React.ReactNode;
     sideBarItems: SidebarItem[];
+    children: React.ReactNode;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {

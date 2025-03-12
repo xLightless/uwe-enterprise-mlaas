@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import React, { JSX } from "react";
 
 /**
  * Navigation items for a sidebar.
