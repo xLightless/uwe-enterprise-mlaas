@@ -5,6 +5,7 @@ from twilio.rest import Client
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from .serializers import UserCreateSerializer
 from function.models import Users
@@ -12,6 +13,7 @@ from function.models import Users
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
+
     serializer = UserCreateSerializer(data=request.data)
     if serializer.is_valid():
         phone_number = serializer.validated_data.get('phone_number')
@@ -55,7 +57,7 @@ def verify_otp(request):
         verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
 
             to=f"+44{phone_number}",
-            code=otp  # Ensure 'code' parameter is not None
+            code=otp # Ensure 'code' parameter is not None
         )
 
         if verification_check.status == "approved":
@@ -70,13 +72,16 @@ def verify_otp(request):
                     user.is_verified = True
                     user.save()
 
+                    refresh = RefreshToken.for_user(user)
+
                     # Clear the cache
                     cache.delete(cache_key)
 
                     return Response({
-
                         "message": "User verified and registered successfully.",
-                        "user": serializer.data
+                        "user": serializer.data,
+                        "refresh": str(refresh),
+                        "access": str(refresh.access_token)
                     }, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
