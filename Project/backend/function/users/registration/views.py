@@ -9,7 +9,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from .serializers import UserCreateSerializer
 from function.models import Users
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+import function.util.swu as swu
 
+@swagger_auto_schema(
+    method="post",
+    request_body=swu.request("password:string","password2:string","email:string","full_name:string","phone_number:string"),
+    responses={201: openapi.Response("Created (Check phone for verification)")}
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -37,7 +45,11 @@ def register_user(request):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@swagger_auto_schema(
+    method="post",
+    request_body=swu.request("otp:string","password:string","password2:string","email:string","full_name:string","phone_number:string"),
+    responses={201: swu.response("token:string","refresh:string","access:string","user:object")}
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def verify_otp(request):
@@ -86,9 +98,8 @@ def verify_otp(request):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({"error": "User data not found in cache."}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
