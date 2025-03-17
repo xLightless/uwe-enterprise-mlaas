@@ -15,12 +15,6 @@ import NetworkActivity from './content/system-activity/network-activity';
 import AuditLogs from './content/system-activity/audit-logs';
 
 const AdminDashboard: React.FC = () => {
-    const [displayChoice, setDisplayChoice] = useState<string | null>(null);
-
-    function onSidebarUpdate(name: string) {
-        setDisplayChoice(name);
-    };
-
     const componentMapping: { [key: string]: React.FC } = {
         "Network Activity": NetworkActivity,
         "Audit Logs": AuditLogs,
@@ -61,15 +55,45 @@ const AdminDashboard: React.FC = () => {
         },
     ];
 
+
+    /**
+     * Gets the relative sidebar item, if applicable,
+     * based on the last clicked item.
+     *
+     * @returns {string} - The sidebar item to render.
+     */
+    const getRelativeSidebarDisplay = () => {
+        const itemIndex = localStorage.getItem('clickedItemIndex');
+        if (itemIndex !== null) {
+            const index = parseInt(itemIndex, 10);
+            let idx = 0;
+            for (const component of sidebarItems) {
+                for (const item of component.items) {
+                    if (idx === index) {
+                        return item[0];
+                    }
+                    idx++;
+                }
+            }
+        }
+        return "Network Activity";
+    };
+    const [displayChoice, setDisplayChoice] = useState<string>(getRelativeSidebarDisplay);
+
+    function onSidebarUpdate(name: string) {
+        setDisplayChoice(name);
+    };
+
     /**
      * Creates a map of components and render
      * them based on the sidebar item clicked.
      */
-    const DisplayComponent = displayChoice ? componentMapping[displayChoice] : null;
+    // const DisplayComponent = displayChoice ? componentMapping[displayChoice] : NetworkActivity;
+    const DisplayComponent = componentMapping[displayChoice];
 
     return (
         <Dashboard sideBarItems={sidebarItems}>
-            {DisplayComponent ? <DisplayComponent /> : null}
+            <DisplayComponent />
         </Dashboard>
     )
 };
