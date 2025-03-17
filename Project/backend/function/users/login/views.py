@@ -7,7 +7,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
 from .serializers import UserLoginSerializer
 from function.serializer import UserDetailSerializer
+from drf_yasg.utils import swagger_auto_schema
+import function.util.swu as swu
 
+@swagger_auto_schema(
+    method="post",
+    request_body=swu.request("password:string","email:string"),
+    responses={201: swu.response("token:string","refresh:string","access:string","user:object")}
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
