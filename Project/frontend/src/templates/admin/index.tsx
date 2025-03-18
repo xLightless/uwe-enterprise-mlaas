@@ -13,17 +13,24 @@ import { SidebarItem } from '../../common/interfaces';
 import Dashboard from '../../components/dashboard';
 import NetworkActivity from './content/system-activity/network-activity';
 import AuditLogs from './content/system-activity/audit-logs';
+import MLAAS_Traffic from './content/system-activity/mlaas-traffic';
+import RolesPermissions from './content/manage-accounts/roles-permissions';
+import Recovery from './content/manage-accounts/recovery';
+import DataRegulation from './content/manage-accounts/data-regulation';
+import { Invoices, Billing } from './content/finances';
+import { RoleProvider } from '../../common/contexts/role';
+
 
 const AdminDashboard: React.FC = () => {
     const componentMapping: { [key: string]: React.FC } = {
         "Network Activity": NetworkActivity,
         "Audit Logs": AuditLogs,
-        // "MLAAS Traffic": MLAAS_Traffic,
-        // "Roles & Permissions": RolesPermissions,
-        // "Recovery": Recovery,
-        // "Data & Regulation": DataRegulation,
-        // "Invoices": Invoices,
-        // "Billing": Billing,
+        "MLAAS Traffic": MLAAS_Traffic,
+        "Roles & Permissions": RolesPermissions,
+        "Recovery": Recovery,
+        "Data & Regulation": DataRegulation,
+        "Invoices": Invoices,
+        "Billing": Billing,
     };
 
     const sidebarItems: SidebarItem[] = [
@@ -93,7 +100,23 @@ const AdminDashboard: React.FC = () => {
 
     return (
         <Dashboard sideBarItems={sidebarItems}>
-            <DisplayComponent />
+            <div className="grid grid-rows-[auto_1fr] w-full h-full overflow-hidden gap-y-4">
+                {/* Descriptor */}
+                <div className="flex items-center justify-start">
+                    <h1 className="font-bold">
+                        Dashboard
+                        <span className="typography"> / {displayChoice}</span>
+                    </h1>
+                </div>
+
+                {/*
+                    Wrap the admin dashboard with role context
+                    to allow cached permissible states.
+                */}
+                <RoleProvider>
+                    <DisplayComponent />
+                </RoleProvider>
+            </div>
         </Dashboard>
     )
 };

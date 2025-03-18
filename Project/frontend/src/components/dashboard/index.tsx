@@ -1,7 +1,6 @@
 import { faTimes, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect, useRef } from "react";
-import { Scrollbar } from "../scrollbar";
 import { SidebarItem } from "../../common/interfaces";
 import { createPortal } from "react-dom";
 import { KeyboardCloseEvent } from "../../events/keyboard";
@@ -99,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
     }, [isHambugerClicked]);
 
     return (
-    <div className='relative h-screen overflow-hidden'>
+    <div className='relative'>
         <div className={`grid grid-cols-1 h-full ${showSidebar ? 'lg:grid-cols-[250px_1fr]' : ''}`}>
             {showSidebar && !showSidebarOverlay &&
                 <div className='hidden lg:block'>
@@ -116,7 +115,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
 
                 {/* Navigation */}
                 <div
-                    className="pl-4 w-full h-full border-b border-gray-200 space-x-4 grid grid-cols-[auto_auto_1fr]" // flex flex-row items-center
+                    className="pl-4 w-full h-full border-b border-gray-200 space-x-4 grid grid-cols-[auto_auto_1fr] sticky top-0 bg-[#eeeeee] z-10"
                 >
 
                     {/* Hamburger */}
@@ -138,12 +137,10 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, children }) => {
                 </div>
 
                 {/* Dashboard Directory */}
-                <div className='w-full h-screen'>
-                    <Scrollbar position='right' paddingLeft="4">
-                        <div className="w-full h-screen py-4">
-                            {children}
-                        </div>
-                    </Scrollbar>
+                <div className='relative w-full h-full'>
+                    <div className="w-full h-screen p-4">
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>

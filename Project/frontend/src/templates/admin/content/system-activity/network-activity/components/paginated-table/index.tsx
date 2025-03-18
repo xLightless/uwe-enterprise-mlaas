@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { ReactChildProp, TableData } from "../../../../../../../common/interfaces";
+import { ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
 import Searchbar from "../../../../../../../components/searchbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import Overlay from "../../../../../../../components/overlay";
 
-const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, maxRowsPerPage, onUserIdClick, children }) => {
+const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({ thead, tbody, maxRowsPerPage, onUserIdClick, children, placeHolder }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -57,7 +57,7 @@ const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, ma
 
                 {/* Filtering Options */}
                 <div className="order-1 w-full md:w-fit relative w-1/2 grid grid-cols-2 gap-4">
-                    <Searchbar placeholder="Search network activity..."/>
+                    <Searchbar placeholder={placeHolder}/>
 
                     <div className="relative h-full w-fit flex justify-center items-center space-x-4">
                         <div

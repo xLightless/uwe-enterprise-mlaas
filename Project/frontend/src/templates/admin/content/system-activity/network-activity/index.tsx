@@ -22,21 +22,19 @@ const NetworkActivity: React.FC = () => {
 
         // Replace with actual fetch request
         const userProp: UserProps = {
-            user: {
-                fullName: "John Smith",
-                email: "john.smith@example.com",
-                phoneNumber: "123-456-7890",
-                roleId: 1,
-                userId: userId,
-                created_at: new Date(),
-                updated_at: new Date(),
-                last_login: new Date(),
-                isVerified: true,
-                isActive: true,
-                isAdmin: true,
-                isStaff: true,
-                isSuperuser: true,
-            }
+            fullName: "John Smith",
+            email: "john.smith@example.com",
+            phoneNumber: "123-456-7890",
+            roleId: 1,
+            userId: userId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            lastLogin: new Date(),
+            isVerified: true,
+            isActive: true,
+            isAdmin: true,
+            isStaff: true,
+            isSuperuser: true,
         }
 
         setUser(userProp ? userProp : null);
@@ -81,15 +79,7 @@ const NetworkActivity: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full h-full grid grid-rows-[auto_1fr]">
-            {/* Descriptor */}
-            <div className="w-full flex items-center justify-start">
-                <h1 className="font-bold">
-                    Dashboard
-                    <span className="typography"> / Network Activity</span>
-                </h1>
-            </div>
-
+        <>
             {/* Network Traffic Analytics and Data */}
             <div className="w-full h-full grid grid-rows-[0.25fr_1fr]">
 
@@ -104,6 +94,7 @@ const NetworkActivity: React.FC = () => {
                         thead={data.thead}
                         tbody={data.tbody}
                         onUserIdClick={onUserIdClick}
+                        placeHolder={"Search network activity..."}
                     >
                         {/* User ID overlay. */}
                         <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
@@ -131,7 +122,7 @@ const NetworkActivity: React.FC = () => {
 
                                 <div className="w-full h-full flex justify-end items-start">
                                     <div>
-                                        {user && <UserSettingsDropdown {...user} />}
+                                        {user && <UserSettingsDropdown user={{...user}} />}
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +130,7 @@ const NetworkActivity: React.FC = () => {
                     </PaginatedTable>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

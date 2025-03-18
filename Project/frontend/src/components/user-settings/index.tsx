@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { UserProps } from "../../common/interfaces";
 
-const UserSettingsDropdown: React.FC<UserProps & { operation?: () => void }> = ({ user }) => {
+interface UserSettingsDropdownProps {
+    user: UserProps;
+    operation?: () => void;
+}
+
+const UserSettingsDropdown: React.FC<UserSettingsDropdownProps> = ({ user }) => {
     const [isProfileClicked, setIsProfileClicked] = useState(false);
 
     async function logoutUser() {
