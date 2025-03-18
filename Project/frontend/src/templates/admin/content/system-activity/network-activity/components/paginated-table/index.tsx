@@ -130,10 +130,15 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
                     </thead>
                     <tbody>
                         {currentRows.map((row, index) => (
-                            <tr key={index} className="text-gray-700">
+                            <tr
+                                key={index}
+                                className={`text-gray-700 cursor-pointer hover:bg-gray-300`}
+                            >
                                 {thead.map((head, index) => (
                                     <td key={index} className="px-6 py-4 text-left">
-                                        {head === "User ID" ? (
+                                        {head === "User ID" ||
+                                         head === "user_id" ||
+                                         head === "userId" ? (
                                             <div className="flex flex-row">
                                                 <span>{row[head] as number}</span>
                                                 <span
