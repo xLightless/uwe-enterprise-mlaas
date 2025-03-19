@@ -19,7 +19,7 @@ function Nav() {
 
     return (
         <>
-            <nav className="w-screen p-2 lg:px-52 bg-slate-100">
+            <nav className="w-full p-2 lg:px-52 bg-slate-100">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center gap-5">
                         <div className="h-12 w-12 rounded-lg bg-slate-300"></div>
