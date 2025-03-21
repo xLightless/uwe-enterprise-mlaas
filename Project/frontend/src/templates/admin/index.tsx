@@ -1,4 +1,4 @@
-import React, { JSX, ReactNode, useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCommentNodes,
