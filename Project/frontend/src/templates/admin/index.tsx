@@ -1,4 +1,4 @@
-import React, { JSX, useState } from 'react';
+import React, { JSX, ReactNode, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCommentNodes,
@@ -19,7 +19,22 @@ import Recovery from './content/manage-accounts/recovery';
 import DataRegulation from './content/manage-accounts/data-regulation';
 import { Invoices, Billing } from './content/finances';
 import { RoleProvider } from '../../common/contexts/role';
+import { UserProvider } from '../../common/contexts/user';
 
+/**
+ * Wraps all providers and contexts of admin dashboard in a single component.
+ * @param param0
+ * @returns
+ */
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    return (
+        <UserProvider>
+            <RoleProvider>
+                {children}
+            </RoleProvider>
+        </UserProvider>
+    )
+};
 
 const AdminDashboard: React.FC = () => {
     const componentMapping: { [key: string]: React.FC } = {
@@ -95,7 +110,6 @@ const AdminDashboard: React.FC = () => {
      * Creates a map of components and render
      * them based on the sidebar item clicked.
      */
-    // const DisplayComponent = displayChoice ? componentMapping[displayChoice] : NetworkActivity;
     const DisplayComponent = componentMapping[displayChoice];
 
     return (
@@ -113,9 +127,9 @@ const AdminDashboard: React.FC = () => {
                     Wrap the admin dashboard with role context
                     to allow cached permissible states.
                 */}
-                <RoleProvider>
+                <Providers>
                     <DisplayComponent />
-                </RoleProvider>
+                </Providers>
             </div>
         </Dashboard>
     )

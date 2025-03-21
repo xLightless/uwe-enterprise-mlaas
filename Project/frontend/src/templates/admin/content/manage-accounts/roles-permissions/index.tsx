@@ -7,6 +7,7 @@ import { rolesResponse, usersResponse } from "../../../../../common/data";
 import { useRoleContext } from "../../../../../common/contexts/role";
 import { Permission, Role, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
+import { useUserContext } from "../../../../../common/contexts/user";
 
 /**
  * This component creates a series of permissible options to be assigned to a role.
@@ -160,6 +161,18 @@ const RolePermissions: React.FC = () => {
     const [filteredTableData, setFilteredTableData] = useState<UserProps[]>([]);
 
     const roleContext = useRoleContext();
+    const userContext = useUserContext();
+
+    async function fetchUser(userId: number) {
+
+        // Replace with actual fetch request
+        const foundUser = usersResponse.tbody.find(user => user.user_id === userId);
+        if (foundUser) {
+            userContext.setUser(foundUser as UserProps);
+        }
+
+        console.log("fetched user: ", foundUser);
+    };
 
     useEffect(() => {
         const tableHeadsToExclude = ["is_verified", "phone_number", "is_active", "is_staff", "is_admin", "is_superuser"];
@@ -176,8 +189,6 @@ const RolePermissions: React.FC = () => {
             }
             return filteredRow;
         });
-
-        console.log(filteredData);
 
         setFilteredTableData(filteredData);
 
@@ -220,6 +231,36 @@ const RolePermissions: React.FC = () => {
     const handleRemoveRole = (role: Role) => {
         roleContext.removeRole(role);
         setRoles(roles.filter((r) => r.roleId !== role.roleId));
+    };
+
+    /**
+     * Sets the clicked user id into context to manage
+     * the user's attributes, specifically roles & perms.
+     * @param userId
+     */
+    const onUserIdClick = (userId: number) => {
+        console.log("onclicked user id: ", userId);
+
+        // Fetch the user from the database
+        // fetchUser(userId);
+        const user = usersResponse.tbody.find(
+            user => user.user_id === userId
+        ) as UserProps;
+
+        console.log("fetched user from onclicked user id: ", user);
+
+        if (user) userContext.setUser(user);
+
+    };
+
+    /**
+     * Updates the user's role in the database.
+     */
+    const updateUserRole = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Replace with actual fetch request
+        console.log("Updated user role: ", userContext.user);
     };
 
     return (
@@ -322,8 +363,43 @@ const RolePermissions: React.FC = () => {
                         tbody={filteredTableData as TableRow[]}
                         placeHolder="Search for a user..."
                         maxRowsPerPage={4}
+                        onUserIdClick={(userId) => onUserIdClick(userId)}
                     >
-                        <></>
+                        <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
+                            <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                                <h1 className="font-bold">Assign '{userContext.user?.userId}' a new role</h1>
+                            </div>
+
+                            <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Role</th>
+                                            <td>
+                                                <select
+                                                    className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                    value={userContext.user?.roleId}
+                                                    onChange={(e) => userContext.setUser({ ...userContext.user, roleId: parseInt(e.target.value) })}
+                                                >
+                                                    {roles.map((role, index) => (
+                                                        <option key={index} value={role.roleId}>{role.roleName}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <button
+                                    type="submit"
+                                    className="cursor-pointer"
+                                    onClick={updateUserRole}
+                                >
+                                    <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
+                                </button>
+                            </form>
+
+                        </div>
                     </PaginatedTable>
                 </div>
             </div>
