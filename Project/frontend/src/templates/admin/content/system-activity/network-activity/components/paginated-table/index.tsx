@@ -5,12 +5,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import Overlay from "../../../../../../../components/overlay";
 
-const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({ thead, tbody, maxRowsPerPage, onUserIdClick, children, placeHolder }) => {
+const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
+    thead,
+    tbody,
+    maxRowsPerPage,
+    children,
+    placeHolder,
+    onCloseValue,
+    onClose,
+    onUserIdClick,
+}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [userIdOverlay, setUserIdOverlay] = useState<boolean>(false);
-
 
     const rowsPerPage = maxRowsPerPage ? maxRowsPerPage : 10;
     const totalPages = Math.ceil(tbody.length / rowsPerPage);
@@ -43,10 +50,6 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
 
     function isItemSelected(item: string) {
         return selectedItems.includes(item);
-    }
-
-    function toggleUserIdOverlay() {
-        setUserIdOverlay(!userIdOverlay);
     }
 
     return (
@@ -145,7 +148,7 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
                                                     className="ml-4 text-blue-500 hover:text-blue-400 cursor-pointer"
                                                     onClick={() => {
                                                         if (onUserIdClick) {
-                                                            toggleUserIdOverlay();
+                                                            onClose();
                                                             onUserIdClick(row[head] as number);
                                                         }
                                                     }}
@@ -160,8 +163,8 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
                         ))}
                     </tbody>
 
-                    {userIdOverlay &&
-                        <Overlay onClose={toggleUserIdOverlay}>
+                    {onCloseValue &&
+                        <Overlay onClose={onClose}>
                             <div className="mx-auto max-w-7xl bg-white rounded-md shadow p-4 h-fit">
                                 {children}
                             </div>

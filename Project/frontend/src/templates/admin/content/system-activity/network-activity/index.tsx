@@ -11,6 +11,8 @@ const NetworkActivity: React.FC = () => {
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
 
+    const [overlay, setOverlay] = useState<boolean>(false);
+
 
     async function fetchNetworkActivity() {
 
@@ -27,9 +29,9 @@ const NetworkActivity: React.FC = () => {
             phoneNumber: "123-456-7890",
             roleId: 1,
             userId: userId,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            lastLogin: new Date(),
+            createdAt: String(new Date()),
+            // updatedAt: String(new Date()),
+            lastLogin: String(new Date()),
             isVerified: true,
             isActive: true,
             isAdmin: true,
@@ -93,8 +95,16 @@ const NetworkActivity: React.FC = () => {
                     <PaginatedTable
                         thead={data.thead}
                         tbody={data.tbody}
-                        onUserIdClick={onUserIdClick}
+                        onUserIdClick={
+                            (userId) => {
+                                onUserIdClick(userId);
+                                setOverlay(true);
+                            }
+                        }
                         placeHolder={"Search network activity..."}
+
+                        onCloseValue={overlay}
+                        onClose={() => setOverlay(false)}
                     >
                         {/* User ID overlay. */}
                         <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">

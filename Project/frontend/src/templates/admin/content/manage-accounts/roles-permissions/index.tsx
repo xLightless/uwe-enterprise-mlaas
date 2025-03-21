@@ -154,6 +154,7 @@ const Roles: React.FC<RolesProps> = ({ roles, onRemoveRole }) => {
 
 const RolePermissions: React.FC = () => {
     const [toggleNewRoleCreation, setToggleNewRoleCreation] = useState(false);
+    const [isUpdateRoleOpen, setUpdateRoleOpen] = useState(false);
     const [roles, setRoles] = useState<Role[]>([]);
     const [newRoleName, setNewRoleName] = useState<string>("");
 
@@ -161,24 +162,22 @@ const RolePermissions: React.FC = () => {
     const [filteredTableData, setFilteredTableData] = useState<UserProps[]>([]);
 
     const roleContext = useRoleContext();
-    const userContext = useUserContext();
+    const { setUser, getUser } = useUserContext();
 
     async function fetchUser(userId: number) {
 
         // Replace with actual fetch request
-        const foundUser = usersResponse.tbody.find(user => user.user_id === userId);
-        if (foundUser) {
-            userContext.setUser(foundUser as UserProps);
-        }
+        const foundUser = usersResponse.tbody.find(user => user.userId === userId);
+        const foundRole = rolesResponse.find(role => role.roleName === foundUser?.roleName);
 
-        console.log("fetched user: ", foundUser);
+        if (foundUser) {
+            const user: UserProps = {...foundUser, roleId: foundRole?.roleId};
+            setUser(user);
+        }
     };
 
     useEffect(() => {
-        const tableHeadsToExclude = ["is_verified", "phone_number", "is_active", "is_staff", "is_admin", "is_superuser"];
-
-        // Filter the table heads
-        const filteredHeads = usersResponse.thead.filter((head) => !tableHeadsToExclude.includes(head));
+        const filteredHeads = ["userId", "fullName", "roleName", "email"];
         setFilteredTableHeads(filteredHeads);
 
         // Filter the table data by excluding the unwanted columns
@@ -239,18 +238,10 @@ const RolePermissions: React.FC = () => {
      * @param userId
      */
     const onUserIdClick = (userId: number) => {
-        console.log("onclicked user id: ", userId);
 
         // Fetch the user from the database
-        // fetchUser(userId);
-        const user = usersResponse.tbody.find(
-            user => user.user_id === userId
-        ) as UserProps;
-
-        console.log("fetched user from onclicked user id: ", user);
-
-        if (user) userContext.setUser(user);
-
+        fetchUser(userId);
+        setUpdateRoleOpen(true);
     };
 
     /**
@@ -259,8 +250,24 @@ const RolePermissions: React.FC = () => {
     const updateUserRole = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Replace with actual fetch request
-        console.log("Updated user role: ", userContext.user);
+        const currentUser = getUser();
+        if (!currentUser) return;
+
+        /**
+         * Replace with the actual post request.
+         *
+         * Gets the modified user object from the clicked state, then
+         * updates the user's role ID in the database, followed by
+         * re-rendering the new role name of the ID on the interface.
+         */
+        const updatedRoleId = currentUser.roleId;
+        const userIndex = usersResponse.tbody.findIndex(user => user.userId === currentUser.userId);
+        const updatedRoleName = rolesResponse.find(role => role.roleId === updatedRoleId)?.roleName;
+        if (!updatedRoleName) return;
+        usersResponse.tbody[userIndex].roleName = updatedRoleName;
+        setFilteredTableData([...usersResponse.tbody]);
+
+        setUpdateRoleOpen(false);
     };
 
     return (
@@ -363,43 +370,50 @@ const RolePermissions: React.FC = () => {
                         tbody={filteredTableData as TableRow[]}
                         placeHolder="Search for a user..."
                         maxRowsPerPage={4}
-                        onUserIdClick={(userId) => onUserIdClick(userId)}
+                        onUserIdClick={(userId) => {
+                            onUserIdClick(userId);
+                            setUpdateRoleOpen(true);
+                        }}
+
+                        onCloseValue={isUpdateRoleOpen}
+                        onClose={() => setUpdateRoleOpen(false)}
                     >
-                        <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
-                            <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                                <h1 className="font-bold">Assign '{userContext.user?.userId}' a new role</h1>
+                        {isUpdateRoleOpen &&
+                            <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
+                                <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                                    <h1 className="font-bold">Updating the role of '{getUser()?.email}'</h1>
+                                </div>
+
+                                <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>Role</th>
+                                                <td>
+                                                    <select
+                                                        className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                        value={getUser()?.roleId}
+                                                        onChange={(e) => setUser({ ...getUser(), roleId: parseInt(e.target.value) })}
+                                                    >
+                                                        {roles.map((role, index) => (
+                                                            <option key={index} value={role.roleId}>{role.roleName}</option>
+                                                        ))}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <button
+                                        type="submit"
+                                        className="cursor-pointer"
+                                        onClick={(e) => updateUserRole(e)}
+                                    >
+                                        <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
+                                    </button>
+                                </form>
                             </div>
-
-                            <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <th>Role</th>
-                                            <td>
-                                                <select
-                                                    className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                                    value={userContext.user?.roleId}
-                                                    onChange={(e) => userContext.setUser({ ...userContext.user, roleId: parseInt(e.target.value) })}
-                                                >
-                                                    {roles.map((role, index) => (
-                                                        <option key={index} value={role.roleId}>{role.roleName}</option>
-                                                    ))}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <button
-                                    type="submit"
-                                    className="cursor-pointer"
-                                    onClick={updateUserRole}
-                                >
-                                    <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
-                                </button>
-                            </form>
-
-                        </div>
+                        }
                     </PaginatedTable>
                 </div>
             </div>

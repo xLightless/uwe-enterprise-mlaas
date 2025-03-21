@@ -4,30 +4,35 @@ import { UserProps } from "../../interfaces";
 
 
 interface UserContextProps {
-    user: UserProps | null;
     setUser: (user: UserProps) => void;
     removeUser: () => void;
+    getUser: () => UserProps | null;
 }
 
 const UserContext = createContext<UserContextProps>({
-    user: {} as UserProps,
     setUser: () => {},
-    removeUser: () => {}
+    removeUser: () => {},
+    getUser: () => null,
 });
 
 const UserProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-    const [user, setUser] = useState<UserProps | null>(null);
+    const [user, setUserData] = useState<UserProps | null>(null);
 
-    const setUserData = (user: UserProps) => {
-        setUser(user);
+    const setUser = (user: UserProps) => {
+        setUserData(user);
     };
 
-    const removeUserData = () => {
-        setUser(null);
+    const removeUser = () => {
+        setUserData(null);
     };
+
+    const getUser = () => {
+        if (user) return user;
+        return null;
+    }
 
     return (
-        <UserContext.Provider value={{user, setUser: setUserData, removeUser: removeUserData}}>
+        <UserContext.Provider value={{setUser, removeUser, getUser}}>
             {children}
         </UserContext.Provider>
     );

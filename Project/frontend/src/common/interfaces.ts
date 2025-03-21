@@ -36,6 +36,9 @@ export interface ReactChildProp {
      * @param userId
      */
     onUserIdClick?: (userId: number) => void;
+
+    onCloseValue: boolean;
+    onClose: () => void;
 };
 
 export interface Permission {
@@ -56,9 +59,8 @@ export interface UserProps {
     email?: string;
     password?: string;
     phoneNumber?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    lastLogin?: Date;
+    createdAt?: string;
+    lastLogin?: string;
     isVerified?: boolean;
     isActive?: boolean;
     isAdmin?: boolean;
