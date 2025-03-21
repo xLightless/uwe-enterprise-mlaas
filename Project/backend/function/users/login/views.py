@@ -49,5 +49,5 @@ def get_user_profile(request):
     user = request.user
     serializer = UserDetailSerializer(user)
     response = serializer.data
-    response.roles = user.get_permissions()
+    response["permissions"] = user.get_permissions()
     return Response(response)
