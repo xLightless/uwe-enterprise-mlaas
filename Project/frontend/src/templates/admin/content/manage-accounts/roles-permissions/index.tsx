@@ -381,7 +381,7 @@ const RolePermissions: React.FC = () => {
                         {isUpdateRoleOpen &&
                             <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
                                 <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                                    <h1 className="font-bold">Updating the role of '{getUser()?.email}'</h1>
+                                    <h1 className="font-bold">Updating the role of {`${getUser()?.email}`}</h1>
                                 </div>
 
                                 <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">

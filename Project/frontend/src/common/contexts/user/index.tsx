@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { UserProps } from "../../interfaces";
 
 
@@ -15,7 +15,11 @@ const UserContext = createContext<UserContextProps>({
     getUser: () => null,
 });
 
-const UserProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+interface UserProviderProps {
+    children: React.ReactNode;
+};
+
+const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUserData] = useState<UserProps | null>(null);
 
     const setUser = (user: UserProps) => {
