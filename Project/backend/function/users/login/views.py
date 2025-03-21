@@ -37,7 +37,8 @@ def login_user(request):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': user_serializer.data,
-            'role_id': serializer.validated_data['role_id']
+            'role_id': serializer.validated_data['role_id'],
+            "permissions": user.get_permissions()
         })
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,4 +48,6 @@ def login_user(request):
 def get_user_profile(request):
     user = request.user
     serializer = UserDetailSerializer(user)
-    return Response(serializer.data)
+    response = serializer.data
+    response.roles = user.get_permissions()
+    return Response(response)

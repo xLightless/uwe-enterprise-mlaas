@@ -13,6 +13,11 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 
+
+# fudge twilio...
+DEBUG_SKIP_TWILIO = True
+
+
 @swagger_auto_schema(
     method="post",
     request_body=swu.request("password:string","password2:string","email:string","full_name:string","phone_number:string"),
@@ -32,11 +37,12 @@ def register_user(request):
 
         # Send SMS OTP using Twilio
 
-        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
-            to=f"+44{phone_number}",
-            channel='sms'
-        )
+        if not DEBUG_SKIP_TWILIO:
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
+                to=f"+44{phone_number}",
+                channel='sms'
+            )
 
         return Response({
 
@@ -64,15 +70,17 @@ def verify_otp(request):
         )
 
     try:
-        # Verify OTP using Twilio
-        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
+        
+        if not DEBUG_SKIP_TWILIO:
+            # Verify OTP using Twilio
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
 
-            to=f"+44{phone_number}",
-            code=otp # Ensure 'code' parameter is not None
-        )
+                to=f"+44{phone_number}",
+                code=otp # Ensure 'code' parameter is not None
+            )
 
-        if verification_check.status == "approved":
+        if DEBUG_SKIP_TWILIO or verification_check.status == "approved":
             # Retrieve cached user data
             cache_key = f"user_data_{phone_number}"
             user_data = cache.get(cache_key)
@@ -93,7 +101,8 @@ def verify_otp(request):
                         "message": "User verified and registered successfully.",
                         "user": serializer.data,
                         "refresh": str(refresh),
-                        "access": str(refresh.access_token)
+                        "access": str(refresh.access_token),
+                        "permissions": user.get_permissions()
                     }, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
