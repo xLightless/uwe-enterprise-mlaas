@@ -1,0 +1,3 @@
+[submodule "project/backend/services/machinelearning/uwe-enterprise-mlaas-models"]
+	path = project/backend/services/machinelearning/uwe-enterprise-mlaas-models
+	url = https://github.com/xLightless/uwe-enterprise-mlaas-models.git
