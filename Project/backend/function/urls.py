@@ -22,10 +22,10 @@ urlpatterns = [
     path('auth/verify/', verify_otp, name='verify'),
     path('auth/login/', login_user, name='login'),
     path('auth/profile/', get_user_profile, name='profile'),
-    #path('auth/me/')
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # Include Djoser URLs
     path('auth/', include('djoser.urls')),
     # Swagger Docs
-    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui')
 ]
