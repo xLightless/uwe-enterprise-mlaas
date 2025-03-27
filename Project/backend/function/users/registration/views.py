@@ -36,7 +36,6 @@ def register_user(request):
         cache.set(cache_key, serializer.validated_data, timeout=300)
 
         # Send SMS OTP using Twilio
-
         if not DEBUG_SKIP_TWILIO:
             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
             client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
@@ -70,12 +69,10 @@ def verify_otp(request):
         )
 
     try:
-        
         if not DEBUG_SKIP_TWILIO:
             # Verify OTP using Twilio
             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
             verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
-
                 to=f"+44{phone_number}",
                 code=otp # Ensure 'code' parameter is not None
             )
@@ -107,7 +104,6 @@ def verify_otp(request):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({"error": "User data not found in cache."}, status=status.HTTP_400_BAD_REQUEST)
-
         return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
