@@ -43,6 +43,32 @@ def login_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@swagger_auto_schema(
+    method="post",
+    responses={201: "Successfully logged out. Redirect to index page."}
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    try:
+        # Get the refresh token from the request data
+        refresh_token = request.data.get("refresh_token")
+        token = RefreshToken(refresh_token)
+        
+        # Blacklist the refresh token 
+        token.blacklist()
+
+        return Response(
+            {"message": "Successfully logged out. Redirect to index page."},
+            status=status.HTTP_205_RESET_CONTENT
+        )
+    except Exception as e:
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
