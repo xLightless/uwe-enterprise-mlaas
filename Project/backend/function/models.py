@@ -107,6 +107,11 @@ class Users(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    def get_permissions(self):
+        return Permission.objects.filter(
+            rolepermission__role=self.role
+        ).values_list('permission_name', flat=True)
+
     def has_permission(self, permission_name):
         return Permission.objects.filter(
             permission_name=permission_name,
