@@ -133,9 +133,9 @@ const PastClaims: React.FC = () => {
         setComments("");
     };
 
-    const handleSubmitRating = () => {
-        handleCloseRatingPopup();
-    };
+    //const handleSubmitRating = () => {
+    //    handleCloseRatingPopup();
+    //};
 
     return (
         <div className="container-primary p-5">
