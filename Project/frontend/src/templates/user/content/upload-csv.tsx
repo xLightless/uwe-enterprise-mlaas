@@ -13,7 +13,7 @@ const UploadCSV: React.FC = () => {
 
                 <div className="flex flex-col gap-5">
                     <p className="text-sm">By submitting a claim, you agree to our <a href="#" className="text-blue-500">Terms and Conditions.</a></p>
-                    <button type="submit" className="cursor-pointer py-2 px-4 max-w-[150px] place-self-center rounded-md font-bold text-2xl text-white bg-blue-500 hover:bg-blue-400">Submit</button>
+                    <button type="submit" className="cursor-pointer py-2 px-4 max-w-[150px] place-self-center rounded-md font-bold text-2xl text-white bg-green-500 hover:bg-green-400">Submit</button>
                 </div>
             </form>
         </div>

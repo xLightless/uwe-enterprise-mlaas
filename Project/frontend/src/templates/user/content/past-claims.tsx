@@ -1,6 +1,43 @@
 import React, { useState } from "react";
 
-const dummyClaims = [
+type ClaimDetails = {
+    gender: string;
+    driverAge: number;
+    vehicleType: string;
+    vehicleAge: number;
+    passengers: number;
+    exceptional: string;
+    accidentType: string;
+    accidentDate: string;
+    weatherConditions: string;
+    policeReport: string;
+    witness: string;
+    accidentDescription: string;
+    dominantInjury: string;
+    prognosis: number;
+    whiplash: string;
+    psychological: string;
+    injuryDescription: string;
+    assetDamage: number;
+    earningsLoss: number;
+    usageLoss: number;
+    generalFixes: number;
+    specialFixes: number;
+    tripCosts: number;
+    journeyExpenses: number;
+    medications: number;
+    rehabilitation: number;
+    therapy: number;
+};
+
+type Claim = {
+    claimId: string;
+    claimDate: string;
+    settlementAmount: string;
+    details: ClaimDetails;
+};
+
+const dummyClaims: Claim[] = [
     {
         claimId: "CLM001",
         claimDate: "2023-09-15",
@@ -35,6 +72,7 @@ const dummyClaims = [
             therapy: 0,
         },
     },
+
     {
         claimId: "CLM002",
         claimDate: "2023-08-20",
@@ -72,14 +110,31 @@ const dummyClaims = [
 ];
 
 const PastClaims: React.FC = () => {
-    const [selectedClaim, setSelectedClaim] = useState<any | null>(null);
+    const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
+    const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
+    const [rating, setRating] = useState<number | null>(null);
+    const [comments, setComments] = useState("");
 
-    const handleViewDetails = (claim: any) => {
+    const handleViewDetails = (claim: Claim) => {
         setSelectedClaim(claim);
     };
 
     const handleCloseDetails = () => {
         setSelectedClaim(null);
+    };
+
+    const handleOpenRatingPopup = () => {
+        setIsRatingPopupOpen(true);
+    };
+
+    const handleCloseRatingPopup = () => {
+        setIsRatingPopupOpen(false);
+        setRating(null);
+        setComments("");
+    };
+
+    const handleSubmitRating = () => {
+        handleCloseRatingPopup();
     };
 
     return (
@@ -95,7 +150,11 @@ const PastClaims: React.FC = () => {
                             <p className="font-bold">Settlement Amount: {claim.settlementAmount}</p>
                         </div>
 
-                        <button onClick={() => handleViewDetails(claim)} className="cursor-pointer px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-400">Details</button>
+                        <div className="flex flex-col lg:flex-row gap-3">
+                            <button onClick={() => handleViewDetails(claim)} className="cursor-pointer px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-400">Details</button>
+
+                            <button onClick={handleOpenRatingPopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-400">Feedback</button>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -136,6 +195,35 @@ const PastClaims: React.FC = () => {
                         </div>
 
                         <button onClick={handleCloseDetails} className="cursor-pointer mt-4 text-white px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-400">Close</button>
+                    </div>
+                </div>
+            )}
+
+            {isRatingPopupOpen && (
+                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-50">
+                    <div className="p-5 max-w-md w-full rounded-md shadow-lg border bg-white">
+                        <h2 className="mb-4 text-xl font-bold">Leave Feedback</h2>
+
+                        <form className="flex flex-col gap-4">
+                            <label className="font-bold">Rating (1: Horrible - 5: Amazing):
+                                <select value={rating || ""} onChange={(e) => setRating(Number(e.target.value))} className="p-2 w-full rounded-md border">
+                                    <option value="" disabled hidden>Select a rating</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </label>
+
+                            <label className="font-bold">Comments:<textarea value={comments} onChange={(e) => setComments(e.target.value)} placeholder="Leave your comments here..." className="p-2 w-full rounded-md border"/></label>
+
+                            <div className="flex justify-end gap-3 mt-4">
+                                <button type="button" onClick={handleCloseRatingPopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-gray-500 hover:bg-gray-400">Cancel</button>
+
+                                <button type="button" className="cursor-pointer px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-400">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

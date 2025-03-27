@@ -1,6 +1,43 @@
 import React, { useState } from "react";
 
-const ongoingClaim = {
+type ClaimDetails = {
+    gender: string;
+    driverAge: number;
+    vehicleType: string;
+    vehicleAge: number;
+    passengers: number;
+    exceptional: string;
+    accidentType: string;
+    accidentDate: string;
+    weatherConditions: string;
+    policeReport: string;
+    witness: string;
+    accidentDescription: string;
+    dominantInjury: string;
+    prognosis: number;
+    whiplash: string;
+    psychological: string;
+    injuryDescription: string;
+    assetDamage: number;
+    earningsLoss: number;
+    usageLoss: number;
+    generalFixes: number;
+    specialFixes: number;
+    tripCosts: number;
+    journeyExpenses: number;
+    medications: number;
+    rehabilitation: number;
+    therapy: number;
+};
+
+type Claim = {
+    claimId: string;
+    claimDate: string;
+    settlementAmount: string;
+    details: ClaimDetails;
+};
+
+const ongoingClaim: Claim = {
     claimId: "CLM003",
     claimDate: "2023-10-01",
     settlementAmount: "Pending",
@@ -13,7 +50,7 @@ const ongoingClaim = {
         exceptional: "Yes",
         accidentType: "Head-on collision",
         accidentDate: "2023-09-28",
-        weatherConditions: "snowy",
+        weatherConditions: "Snowy",
         policeReport: "Yes",
         witness: "No",
         accidentDescription: "The truck collided head-on with another vehicle on a snowy road.",
@@ -36,10 +73,12 @@ const ongoingClaim = {
 };
 
 const OngoingClaims: React.FC = () => {
-    const [selectedClaim, setSelectedClaim] = useState<any | null>(null);
+    const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
     const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
+    const [isRefusePopupOpen, setIsRefusePopupOpen] = useState(false);
+    const [refuseComments, setRefuseComments] = useState("");
 
-    const handleViewDetails = (claim: any) => {
+    const handleViewDetails = (claim: Claim) => {
         setSelectedClaim(claim);
     };
 
@@ -53,6 +92,15 @@ const OngoingClaims: React.FC = () => {
 
     const handleCloseUploadPopup = () => {
         setIsUploadPopupOpen(false);
+    };
+
+    const handleOpenRefusePopup = () => {
+        setIsRefusePopupOpen(true);
+    };
+
+    const handleCloseRefusePopup = () => {
+        setIsRefusePopupOpen(false);
+        setRefuseComments("");
     };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,9 +124,13 @@ const OngoingClaims: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col lg:flex-row gap-3">
+                        <button className="cursor-pointer px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-400">Accept</button>
+
+                        <button onClick={handleOpenRefusePopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-400">Refuse</button>
+
                         <button onClick={() => handleViewDetails(ongoingClaim)} className="cursor-pointer px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-400">Details</button>
 
-                        <button onClick={handleOpenUploadPopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-400">Upload Evidence</button>
+                        <button onClick={handleOpenUploadPopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-teal-500 hover:bg-teal-400">Upload Evidence</button>
                     </div>
                 </div>
             </div>
@@ -131,6 +183,26 @@ const OngoingClaims: React.FC = () => {
                         <input type="file" onChange={handleFileUpload} className="cursor-pointer block w-full file:cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-500 hover:file:bg-blue-100"/>
                         
                         <button onClick={handleCloseUploadPopup} className="cursor-pointer mt-4 text-white px-4 py-2 rounded-md bg-gray-500 hover:bg-gray-400">Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {isRefusePopupOpen && (
+                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-50">
+                    <div className="p-5 max-w-md w-full rounded-md shadow-lg border bg-white">
+                        <h2 className="text-xl font-bold mb-4">Refuse Claim</h2>
+
+                        <form className="flex flex-col gap-5">
+                            <input type="file" onChange={handleFileUpload} className="cursor-pointer block w-full file:cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-500 hover:file:bg-blue-100"/>
+
+                            <label className="font-bold">Reason for Refusal:<textarea value={refuseComments} onChange={(e) => setRefuseComments(e.target.value)} placeholder="Leave your reasons here..." className="p-2 w-full rounded-md border"/></label>
+
+                            <div className="flex justify-end gap-3 mt-4">
+                                <button type="button" onClick={handleCloseRefusePopup} className="cursor-pointer px-4 py-2 rounded-md text-white bg-gray-500 hover:bg-gray-400">Cancel</button>
+
+                                <button type="button" className="cursor-pointer px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-400">Refuse</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
