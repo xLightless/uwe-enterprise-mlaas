@@ -10,7 +10,7 @@ class Model(models.Model):
     is_active = models.BooleanField(default=False)
     num_accepted_claims = models.IntegerField(default=0)
     num_rejected_claims = models.IntegerField(default=0)
-    model_file = models.FileField(upload_to='models/', blank=True, null=True) 
+    model_file = models.FileField(upload_to='models/', blank=True, null=True)
 
     class Meta:
         db_table = 'Models'
@@ -28,10 +28,10 @@ class Prediction(models.Model):
 class UserModelFeedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
-    settlement_amount = models.DecimalField(max_digits=10, decimal_places=2, 
+    settlement_amount = models.DecimalField(max_digits=10, decimal_places=2,
                                             default=0)
-    expected_amount = models.DecimalField(max_digits=10, decimal_places=2, 
-                                            default=0)
+    expected_amount = models.DecimalField(max_digits=10, decimal_places=2,
+                                          default=0)
     feedback_rating = models.SmallIntegerField(default=0)
     comments = models.TextField(blank=True, null=True)
 

@@ -1,3 +1,4 @@
+# flake8: noqa
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import pickle

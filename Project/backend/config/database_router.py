@@ -23,8 +23,8 @@ class MultiDatabaseRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         """Allow relations if both models are in the same database."""
-        db_set = {"users_db", "insurance_db", "ml_db", 
-                "payments_db", "traffic_db"}
+        db_set = {"users_db", "insurance_db", "ml_db",
+                    "payments_db", "traffic_db"}
         if obj1._state.db in db_set and obj2._state.db in db_set:
             return True
         return None
