@@ -10,6 +10,7 @@ class Role(models.Model):
 
     class Meta:
         db_table = 'Roles'
+        app_label = 'users'
 
     def __str__(self):
         return self.role_name
@@ -21,6 +22,7 @@ class Permission(models.Model):
 
     class Meta:
         db_table = 'Permissions'
+        app_label = 'users'
 
     def __str__(self):
         return self.permission_name
@@ -33,6 +35,7 @@ class RolePermission(models.Model):
 
     class Meta:
         db_table = 'RolePermissions'
+        app_label = 'users'
 
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name, password=None, role=None, phone_number=None):
@@ -103,6 +106,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'Users'
+        app_label = 'users'
 
     def __str__(self):
         return self.email
