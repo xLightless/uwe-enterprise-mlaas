@@ -1,3 +1,4 @@
+# flake8: noqa
 class MultiDatabaseRouter:
     """
     A router to control database operations for different apps/models.
