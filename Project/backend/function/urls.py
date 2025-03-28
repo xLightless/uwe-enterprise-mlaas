@@ -1,6 +1,7 @@
 from django.urls import path, include
 from function.users.registration.views import register_user, verify_otp
-from function.users.login.views import login_user, get_user_profile
+from function.users.login.views import login_user, get_user_profile, \
+    logout_user
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from rest_framework import permissions
@@ -23,6 +24,7 @@ urlpatterns = [
     path('auth/login/', login_user, name='login'),
     path('auth/profile/', get_user_profile, name='profile'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/logout/', logout_user, name='logout'),
     # Include Djoser URLs
     path('auth/', include('djoser.urls')),
     # Swagger Docs
