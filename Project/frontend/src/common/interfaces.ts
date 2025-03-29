@@ -27,6 +27,10 @@ export interface SearchBarProps {
     placeHolder: string;
 }
 
+export interface FilterByProps {
+    filterOptions?: string[];
+}
+
 export interface ReactChildProp {
     children: React.ReactNode;
 

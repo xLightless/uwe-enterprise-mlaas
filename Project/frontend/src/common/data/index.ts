@@ -302,7 +302,7 @@ export const usersResponse = {
       "lastLogin": "2025-03-15T12:00:00",
       "isVerified": true,
       "phoneNumber": "12345678901",
-      "isActive": true,
+      "isActive": false,
       "isStaff": true,
       "isAdmin": true,
       "isSuperuser": true

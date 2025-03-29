@@ -5,10 +5,7 @@ import { TableData } from "../../../../../common/interfaces";
 
 
 const Recovery: React.FC = () => {
-    const [data, setTableData] = useState<TableData>({
-        thead: [],
-        tbody: []
-    });
+    const [data, setTableData] = useState<TableData | null>(null);
 
     const fetchAccounts = async () => {
         const users = usersResponse.tbody.map(user => ({
@@ -30,17 +27,19 @@ const Recovery: React.FC = () => {
             thead: thead,
             tbody: users
         }
+
+        // setTableData(newUserResponse);
         return newUserResponse;
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await fetchAccounts();
-            setTableData(data);
-        };
+    const fetchData = async () => {
+        const accountUsers =  await fetchAccounts();
+        setTableData(accountUsers);
+    };
 
+    useEffect(() => {
         fetchData();
-    }, [])
+    }, []);
 
     return (
         <>
@@ -58,16 +57,27 @@ const Recovery: React.FC = () => {
                     </div>
                 </div>
                 {/* Table of Accounts */}
-                <PaginatedTable
+                {data &&
+                    <PaginatedTable
                         thead={data.thead}
                         tbody={data.tbody}
                         placeHolder={"Search network activity..."}
                         onCloseValue={false}
                         onClose={() => {}}
+                        filterOptions={
+                            [
+                                "isVerified",
+                                "isActive",
+                                "isStaff",
+                                "isAdmin",
+                                "isSuperuser"
+                            ]
+                        }
                     >
 
                         <></>
-                </PaginatedTable>
+                    </PaginatedTable>
+                }
             </div>
         </>
     )
