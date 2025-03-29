@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
+import React, { useEffect, useState } from "react";
+import { FilterByProps, ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
 import Searchbar from "../../../../../../../components/searchbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import Overlay from "../../../../../../../components/overlay";
 
-const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
+const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & FilterByProps> = ({
     thead,
     tbody,
     maxRowsPerPage,
@@ -14,6 +14,7 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
     onCloseValue,
     onClose,
     onUserIdClick,
+    filterOptions
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
@@ -43,14 +44,6 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
     function onFilterBy() {
         setSelectedFilteredBy(!selectedFilteredBy);
     };
-
-    // function onItemFilterSelection(item: string) {
-    //     if (selectedItems.includes(item)) {
-    //         setSelectedFilterItems(selectedItems.filter(item_ => item_ !== item));
-    //     } else {
-    //         setSelectedFilterItems([...selectedItems, item]);
-    //     }
-    // }
 
     function applyFilter(filterItems: string[], query: string) {
         let filtered = tbody;
@@ -115,48 +108,48 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
                         applyFilter(selectedItems, e);
                     }}/>
 
-                    <div className="relative h-full w-fit flex justify-center items-center space-x-4">
-                        <div
-                            className="relative bg-gray-700 w-[200px] flex justify-center items-center rounded space-x-4 cursor-pointer px-2"
-                            onClick={onFilterBy}
-                        >
-                            <input
-                                id="filter-control"
-                                className="w-full h-full py-2 bg-gray-700 text-white text-sm"
-                                type="text"
-                                value={selectedItems.join(", ") || "Filter by..."}
-                                disabled={true}
-                            />
-                            <label
-                                htmlFor="filter-control"
+                        <div className="relative h-full w-fit flex justify-center items-center space-x-4">
+                            <div
+                                className="relative bg-gray-700 w-[200px] flex justify-center items-center rounded space-x-4 cursor-pointer px-2"
                                 onClick={onFilterBy}
-                                className="cursor-pointer"
                             >
-                                <FontAwesomeIcon icon={faPlus} className="text-white"/>
-                            </label>
+                                <input
+                                    id="filter-control"
+                                    className="w-full h-full py-2 bg-gray-700 text-white text-sm"
+                                    type="text"
+                                    value={selectedItems.join(", ") || "Filter by..."}
+                                    disabled={true}
+                                />
+                                <label
+                                    htmlFor="filter-control"
+                                    onClick={onFilterBy}
+                                    className="cursor-pointer"
+                                >
+                                    <FontAwesomeIcon icon={faPlus} className="text-white"/>
+                                </label>
+                            </div>
+
+                            {selectedFilteredBy && filterOptions && filterOptions.length > 0 &&
+                            <div
+                                className="absolute top-full w-[200px] left-0 bg-white shadow-lg rounded z-10"
+                                onMouseLeave={onFilterBy}
+                            >
+
+                                {/* Multi Select Items */}
+                                <ul>
+                                    {filterOptions.map((head, index) => (
+                                        <li key={index} className="px-4 py-2 flex justify-between items-center">
+                                            <span>{head}</span>
+                                            <input
+                                                type="checkbox"
+                                                checked={isFilterItemSelected(head)}
+                                                onChange={() => onItemFilterSelection(head)}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>}
                         </div>
-
-                        {selectedFilteredBy &&
-                        <div
-                            className="absolute top-full w-[200px] left-0 bg-white shadow-lg rounded z-10"
-                            onMouseLeave={onFilterBy}
-                        >
-
-                            {/* Multi Select Items */}
-                            <ul>
-                                {thead.map((head, index) => (
-                                    <li key={index} className="px-4 py-2 flex justify-between items-center">
-                                        <span>{head}</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={isFilterItemSelected(head)}
-                                            onChange={() => onItemFilterSelection(head)}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>}
-                    </div>
                 </div>
 
                 {/* Pagination Buttons */}

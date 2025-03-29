@@ -6,7 +6,7 @@ import UserSettingsDropdown from "../../../../../components/user-settings";
 import NetworkConnectionsChart from "./components/charts/connections";
 
 const NetworkActivity: React.FC = () => {
-    const [data, setNetworkActivityData] = useState<TableData>(response);
+    const [data, setNetworkActivityData] = useState<TableData | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
@@ -92,52 +92,54 @@ const NetworkActivity: React.FC = () => {
 
                 {/* Paginated Table Data */}
                 <div className="w-full h-full my-4">
-                    <PaginatedTable
-                        thead={data.thead}
-                        tbody={data.tbody}
-                        onUserIdClick={
-                            (userId) => {
-                                onUserIdClick(userId);
-                                setOverlay(true);
+                    {data &&
+                        <PaginatedTable
+                            thead={data.thead}
+                            tbody={data.tbody}
+                            onUserIdClick={
+                                (userId) => {
+                                    onUserIdClick(userId);
+                                    setOverlay(true);
+                                }
                             }
-                        }
-                        placeHolder={"Search network activity..."}
+                            placeHolder={"Search network activity..."}
 
-                        onCloseValue={overlay}
-                        onClose={() => setOverlay(false)}
-                    >
-                        {/* User ID overlay. */}
-                        <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
-                            <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                                <h1 className="font-bold">User ID Information</h1>
-                            </div>
+                            onCloseValue={overlay}
+                            onClose={() => setOverlay(false)}
+                        >
+                            {/* User ID overlay. */}
+                            <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
+                                <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                                    <h1 className="font-bold">User ID Information</h1>
+                                </div>
 
-                            <div className="grid grid-cols-2 h-36">
-                                <table className="">
-                                    <tbody className="text-left">
-                                        <tr className="w-fit">
-                                            <th className="text-black">First Name:</th>
-                                            <td>John</td>
-                                        </tr>
-                                        <tr className="text-black">
-                                            <th>Last Name:</th>
-                                            <td>Smith</td>
-                                        </tr>
-                                        <tr className="text-black">
-                                            <th>User Role:</th>
-                                            <td>Insurer</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div className="grid grid-cols-2 h-36">
+                                    <table className="">
+                                        <tbody className="text-left">
+                                            <tr className="w-fit">
+                                                <th className="text-black">First Name:</th>
+                                                <td>John</td>
+                                            </tr>
+                                            <tr className="text-black">
+                                                <th>Last Name:</th>
+                                                <td>Smith</td>
+                                            </tr>
+                                            <tr className="text-black">
+                                                <th>User Role:</th>
+                                                <td>Insurer</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
-                                <div className="w-full h-full flex justify-end items-start">
-                                    <div>
-                                        {user && <UserSettingsDropdown user={{...user}} />}
+                                    <div className="w-full h-full flex justify-end items-start">
+                                        <div>
+                                            {user && <UserSettingsDropdown user={{...user}} />}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </PaginatedTable>
+                        </PaginatedTable>
+                    }
                 </div>
             </div>
         </>
