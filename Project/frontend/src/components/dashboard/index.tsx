@@ -55,8 +55,6 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
     const [isHambugerClicked, setIsHamburgerClicked] = useState(false);
     const [dashboardSearchTerm, setDashboardSearchTerm] = useState<string>("");
 
-    const [filterSearchBar, setFilterSearchBar] = useState<string>("");
-
     function toggleSidebar() {
         setIsHamburgerClicked(!isHambugerClicked);
 
