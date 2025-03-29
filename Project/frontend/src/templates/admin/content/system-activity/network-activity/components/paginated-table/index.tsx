@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FilterByProps, ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
 import Searchbar from "../../../../../../../components/searchbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -201,7 +201,9 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
                                                 >View / Edit</span>
                                             </div>
                                         ) : (
-                                            row[head] instanceof Date ? row[head].toLocaleString() : row[head]
+                                            row[head] instanceof Date ? (
+                                                new Date(row[head]).toLocaleDateString()
+                                            ) : row[head]
                                         )}
                                     </td>
                                 ))}

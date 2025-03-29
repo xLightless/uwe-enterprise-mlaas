@@ -5,7 +5,7 @@ import PaginatedTable from "../../system-activity/network-activity/components/pa
 import { Scrollbar } from "../../../../../components/scrollbar";
 import { rolesResponse, usersResponse } from "../../../../../common/data";
 import { useRoleContext } from "../../../../../common/contexts/role";
-import { Permission, Role, TableRow, UserProps } from "../../../../../common/interfaces";
+import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
 
@@ -159,7 +159,8 @@ const RolePermissions: React.FC = () => {
     const [newRoleName, setNewRoleName] = useState<string>("");
 
     const [filteredTableHeads, setFilteredTableHeads] = useState<string[]>([]);
-    const [filteredTableData, setFilteredTableData] = useState<UserProps[]>([]);
+    // const [filteredTableData, setFilteredTableData] = useState<UserProps[]>([]);
+    const [filteredTableData, setFilteredTableData] = useState<TableData | null>(null);
 
     const roleContext = useRoleContext();
     const { setUser, getUser } = useUserContext();
@@ -177,7 +178,7 @@ const RolePermissions: React.FC = () => {
     };
 
     useEffect(() => {
-        const filteredHeads = ["userId", "fullName", "roleName", "email"];
+        const filteredHeads = ["fullName", "email", "roleName"];
         setFilteredTableHeads(filteredHeads);
 
         // Filter the table data by excluding the unwanted columns
@@ -189,7 +190,11 @@ const RolePermissions: React.FC = () => {
             return filteredRow;
         });
 
-        setFilteredTableData(filteredData);
+        setFilteredTableData({
+            thead: filteredHeads,
+            tbody: filteredData,
+        } as TableData
+        );
 
         const fetchRoles = () => {
             return rolesResponse;
@@ -265,7 +270,11 @@ const RolePermissions: React.FC = () => {
         const updatedRoleName = rolesResponse.find(role => role.roleId === updatedRoleId)?.roleName;
         if (!updatedRoleName) return;
         usersResponse.tbody[userIndex].roleName = updatedRoleName;
-        setFilteredTableData([...usersResponse.tbody]);
+        // setFilteredTableData([...usersResponse.tbody]);
+        setFilteredTableData({
+            thead: filteredTableHeads,
+            tbody: usersResponse.tbody,
+        } as TableData);
 
         setUpdateRoleOpen(false);
     };
@@ -365,9 +374,11 @@ const RolePermissions: React.FC = () => {
                         </div>
                     </div>
 
+                {filteredTableData &&
                     <PaginatedTable
                         thead={filteredTableHeads}
-                        tbody={filteredTableData as TableRow[]}
+                        // tbody={filteredTableData as TableRow[]}
+                        tbody={filteredTableData?.tbody as TableRow[]}
                         placeHolder="Search for a user..."
                         maxRowsPerPage={4}
                         onUserIdClick={(userId) => {
@@ -415,6 +426,7 @@ const RolePermissions: React.FC = () => {
                             </div>
                         }
                     </PaginatedTable>
+                }
                 </div>
             </div>
         </>
