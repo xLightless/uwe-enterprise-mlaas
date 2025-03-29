@@ -106,6 +106,7 @@ const NetworkActivity: React.FC = () => {
 
                             onCloseValue={overlay}
                             onClose={() => setOverlay(false)}
+
                         >
                             {/* User ID overlay. */}
                             <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
