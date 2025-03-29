@@ -17,12 +17,16 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [selectedItems, setSelectedFilterItems] = useState<string[]>([]);
+    const [filteredData, setFilteredData] = useState(tbody);
 
     const rowsPerPage = maxRowsPerPage ? maxRowsPerPage : 10;
-    const totalPages = Math.ceil(tbody.length / rowsPerPage);
+    // const totalPages = Math.ceil(tbody.length / rowsPerPage);
     const startingIndex = (currentPage - 1) * rowsPerPage;
-    const currentRows = tbody.slice(startingIndex, startingIndex + rowsPerPage);
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    const currentRows = filteredData.slice(startingIndex, startingIndex + rowsPerPage);
+    // const currentRows = tbody.slice(startingIndex, startingIndex + rowsPerPage);
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     function onNextPage() {
         if (currentPage < totalPages) {
@@ -40,16 +44,61 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
         setSelectedFilteredBy(!selectedFilteredBy);
     };
 
-    function onItemSelection(item: string) {
+    // function onItemFilterSelection(item: string) {
+    //     if (selectedItems.includes(item)) {
+    //         setSelectedFilterItems(selectedItems.filter(item_ => item_ !== item));
+    //     } else {
+    //         setSelectedFilterItems([...selectedItems, item]);
+    //     }
+    // }
+
+    function applyFilter(filterItems: string[], query: string) {
+        let filtered = tbody;
+
+
+        // Apply search query filtering
+        if (query.trim() !== "") {
+            filtered = filtered.filter(row =>
+                Object.values(row).some(value =>
+                    value?.toString().toLowerCase().includes(query.toLowerCase())
+                )
+            );
+        }
+
+        // Apply column-based filtering
+        if (filterItems.length > 0) {
+            filtered = filtered.filter(row =>
+                filterItems.every(item => {
+                    const value = row[item];
+                    return value !== undefined && value.toString().toLowerCase() === "true";
+                })
+            );
+        }
+
+        setFilteredData(filtered);
+        setCurrentPage(1);
+    }
+
+    function onItemFilterSelection(item: string) {
         if (selectedItems.includes(item)) {
-            setSelectedItems(selectedItems.filter(item_ => item_ !== item));
+            const updatedItems = selectedItems.filter(item_ => item_ !== item);
+            setSelectedFilterItems(updatedItems);
+            applyFilter(updatedItems, searchQuery);
         } else {
-            setSelectedItems([...selectedItems, item]);
+            const updatedItems = [...selectedItems, item];
+            setSelectedFilterItems(updatedItems);
+            applyFilter(updatedItems, searchQuery);
         }
     }
 
-    function isItemSelected(item: string) {
+    function isFilterItemSelected(item: string) {
         return selectedItems.includes(item);
+    }
+
+    function onSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const query = event.target.value;
+        setSearchQuery(query);
+        applyFilter(selectedItems, query);
     }
 
     return (
@@ -60,7 +109,11 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
 
                 {/* Filtering Options */}
                 <div className="order-1 w-full md:w-fit relative w-1/2 grid grid-cols-2 gap-4">
-                    <Searchbar placeholder={placeHolder}/>
+                    <Searchbar placeholder={placeHolder} onSearchChange={(e) => {
+                        onSearchChange({ target: { value: e } } as React.ChangeEvent<HTMLInputElement>);
+                        setSearchQuery(e);
+                        applyFilter(selectedItems, e);
+                    }}/>
 
                     <div className="relative h-full w-fit flex justify-center items-center space-x-4">
                         <div
@@ -96,8 +149,8 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps> = ({
                                         <span>{head}</span>
                                         <input
                                             type="checkbox"
-                                            checked={isItemSelected(head)}
-                                            onChange={() => onItemSelection(head)}
+                                            checked={isFilterItemSelected(head)}
+                                            onChange={() => onItemFilterSelection(head)}
                                         />
                                     </li>
                                 ))}

@@ -1,9 +1,13 @@
+import React from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Searchbar = (
-    { placeholder }:{ placeholder: string }
-) => {
+interface SearchbarProps {
+    placeholder: string;
+    onSearchChange?: (searchTerm: string) => void;
+}
+
+const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onSearchChange }) => {
     return (
         <form onSubmit={(e) => e.preventDefault()} className='w-full'>
             <div className='relative max-w-lg w-full'>
@@ -16,6 +20,7 @@ const Searchbar = (
                     id="search"
                     className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-3xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     placeholder={placeholder}
+                    onChange={(e) => onSearchChange?.(e.target.value)}
                 />
                 <button type='submit' className='sr-only'>Submit</button>
             </div>
