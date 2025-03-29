@@ -279,9 +279,10 @@ export const rolesResponse: Role[] = [
 export const usersResponse = {
   "thead": [
     "userId",
+    "email",
     "roleName",
     "fullName",
-    "email",
+    // "email",
     "createdAt",
     "lastLogin",
     "isVerified",
@@ -302,9 +303,9 @@ export const usersResponse = {
       "isVerified": true,
       "phoneNumber": "12345678901",
       "isActive": true,
-      "isStaff": false,
-      "isAdmin": false,
-      "isSuperuser": false
+      "isStaff": true,
+      "isAdmin": true,
+      "isSuperuser": true
     },
     {
       "userId": 2,
