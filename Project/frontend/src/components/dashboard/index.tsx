@@ -187,7 +187,6 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
                         <div className='w-full flex items-center'>
                             <Searchbar placeholder={`Search dashboard...`}
                                 onSearchChange={(searchTerm) => {
-                                    console.log(searchTerm);
                                     setDashboardSearchTerm(searchTerm);
                                 }}
                                 value={dashboardSearchTerm}
