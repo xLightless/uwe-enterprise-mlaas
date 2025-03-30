@@ -13,7 +13,7 @@ import function.util.swu as swu
 @swagger_auto_schema(
     method="post",
     request_body=swu.request("password:string","email:string"),
-    responses={201: swu.response("token:string","refresh:string","access:string","user:object")}
+    responses={201: swu.response("token:string","refresh:string","access:string")}
 )
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -45,6 +45,7 @@ def login_user(request):
 
 @swagger_auto_schema(
     method="post",
+    request_body=swu.request("refresh:string"),
     responses={201: "Successfully logged out. Redirect to index page."}
 )
 @api_view(['POST'])
@@ -52,7 +53,7 @@ def login_user(request):
 def logout_user(request):
     try:
         # Get the refresh token from the request data
-        refresh_token = request.data.get("refresh_token")
+        refresh_token = request.data.get("refresh")
         token = RefreshToken(refresh_token)
         
         # Blacklist the refresh token 
