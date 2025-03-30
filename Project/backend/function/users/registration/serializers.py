@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from ...models import Users, Role
 from twilio.rest import Client
 from django.conf import settings
+import function.util.debug as DEBUG
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -44,11 +45,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         # Send OTP using Twilio (SMS)
 
-        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
-            to="+44" + validated_data['phone_number'], 
-            channel='sms'
-        )
+        if not DEBUG.SKIP_TWILIO:
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
+                to="+44" + validated_data['phone_number'], 
+                channel='sms'
+            )
 
         return user
 
