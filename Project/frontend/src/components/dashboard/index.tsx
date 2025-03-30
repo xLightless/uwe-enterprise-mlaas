@@ -45,10 +45,19 @@ const OverlayAdminDashboardSidebar: React.FC<OverlayAdminDashboardSidebarProps> 
 
 interface DashboardProps {
     sideBarItems: SidebarItem[];
-    children: React.ReactNode;
     onDisplayUpdate?: (display: string) => void;
+    children: React.ReactNode;
 }
 
+/**
+ * A reusable component for creating dashboard interfaces with dynamic content.
+ * It includes a sidebar for navigation, a search bar, and user settings dropdown.
+ * The sidebar can be toggled on smaller screens, and the search bar allows users to filter content within the dashboard.
+ *
+ * @param {onDisplayUpdate} - A callback function to handle display updates when a sidebar item is clicked.
+ * @param {sideBarItems} - An array of sidebar items to be displayed in the sidebar.
+ * @param {children} - The content to be displayed within the dashboard.
+ */
 const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, children }) => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
