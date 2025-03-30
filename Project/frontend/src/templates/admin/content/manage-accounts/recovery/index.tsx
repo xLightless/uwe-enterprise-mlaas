@@ -14,6 +14,10 @@ const Recovery: React.FC = () => {
     const [data, setTableData] = useState<TableData | null>(null);
     const [heatmapData, setHeatmapData] = useState<ChartData<"matrix"> | null>(null);
 
+    const [newWeekUsers, setNewWeekUsers] = useState<number>(0);
+    const [newMonthUsers, setNewMonthUsers] = useState<number>(0);
+    const [newTotalUsers, setNewTotalUsers] = useState<number>(0);
+
     const fetchAccounts = async () => {
         const users = usersResponse.tbody.map(user => ({
             ...user,
@@ -47,9 +51,39 @@ const Recovery: React.FC = () => {
         setHeatmapData(heatmap as ChartData<"matrix">);
     };
 
+    const fetchUserAnalytics = async (data: TableData) => {
+            // New users this week
+            const newUsersThisWeek = data.tbody.filter((user: UserProps) => {
+                const date = new Date(user.lastLogin as string);
+                const currentDate = new Date();
+                return date.getTime() >= currentDate.getTime() - 7 * 24 * 60 * 60 * 1000;
+            }).length;
+
+            // New users this month
+            const newUsersThisMonth = data.tbody.filter((user: UserProps) => {
+                const date = new Date(user.lastLogin as string);
+                const currentDate = new Date();
+                return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
+            }).length;
+
+            // New users to date
+            const newUsersToDate = data.tbody.length;
+
+            setNewWeekUsers(newUsersThisWeek);
+            setNewMonthUsers(newUsersThisMonth);
+            setNewTotalUsers(newUsersToDate);
+    };
+
+    // On mount, fetch the data, then fetch data analytics and render it.
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (data) {
+            fetchUserAnalytics(data);
+        }
+    }, [data]);
 
     const generateHeatmapData = (tbody: UserProps[]) => {
         const matrixData = tbody.map((user: UserProps) => {
@@ -80,7 +114,6 @@ const Recovery: React.FC = () => {
             }
         }
 
-
         return {
             datasets: [
                 {
@@ -96,7 +129,7 @@ const Recovery: React.FC = () => {
                         return `rgba(255, 0, 0, ${Math.max(0, Math.min(intensity, 1))})`;
                     },
                     height: (ctx: { chart: { width: number } }) => Math.min(Math.max(ctx.chart.width / 50, 2), 24), // Minimum 16px, Maximum 32px
-                    width: (ctx: { chart: { width: number } }) => Math.min(Math.max(ctx.chart.width / 50, 2), 24 ),  // Minimum 16px, Maximum 32px
+                    width: (ctx: { chart: { width: number } }) => Math.min(Math.max(ctx.chart.width / 50, 2), 24),  // Minimum 16px, Maximum 32px
                 }
             ]
         };
@@ -180,15 +213,18 @@ const Recovery: React.FC = () => {
         <>
             <div className="w-full h-full grid grid-rows-[0.2fr_0.5fr_1fr] gap-4">
                 {/* Account Management stats */}
-                <div className="w-full h-full grid grid-cols-1 lg:grid-cols-3 sm: gap-x-4 gap-y-4">
-                    <div className="w-full h-full bg-white rounded shadow-md flex justify-center items-center">
-                        <h1 className="font-bold text-xl">New Users This Week</h1>
+                <div className="w-full h-full grid xs:grid-rows-3 lg:grid-cols-3 gap-2 sm:gap-4">
+                    <div className="order-1 w-full h-full bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-md flex flex-col justify-center items-center p-2 sm:p-4 hover:scale-105 transition-transform duration-300">
+                        <h1 className="font-bold text-sm sm:text-lg mb-1 sm:mb-2">New Users This Week</h1>
+                        <p className="text-lg sm:text-2xl font-extrabold">{data ? newWeekUsers : "N/A"}</p>
                     </div>
-                    <div className="w-full h-full bg-white rounded shadow-md flex justify-center items-center">
-                        <h1 className="font-bold text-xl">New Users This Month</h1>
+                    <div className="order-2 w-full h-full bg-gradient-to-r from-green-500 to-green-700 text-white rounded-lg shadow-md flex flex-col justify-center items-center p-2 sm:p-4 hover:scale-105 transition-transform duration-300">
+                        <h1 className="font-bold text-sm sm:text-lg mb-1 sm:mb-2">New Users This Month</h1>
+                        <p className="text-lg sm:text-2xl font-extrabold">{data ? newMonthUsers : "N/A"}</p>
                     </div>
-                    <div className="w-full h-full bg-white rounded shadow-md flex justify-center items-center">
-                        <h1 className="font-bold text-xl">New Users To Date</h1>
+                    <div className="order-3 w-full h-full bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-lg shadow-md flex flex-col justify-center items-center p-2 sm:p-4 hover:scale-105 transition-transform duration-300">
+                        <h1 className="font-bold text-sm sm:text-lg mb-1 sm:mb-2">Users To Date</h1>
+                        <p className="text-lg sm:text-2xl font-extrabold">{data ? newTotalUsers : "N/A"}</p>
                     </div>
                 </div>
 
