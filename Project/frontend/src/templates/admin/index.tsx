@@ -115,7 +115,7 @@ const AdminDashboard: React.FC = () => {
     return (
         // searchBarOptions={componentMapping}
         <Dashboard sideBarItems={sidebarItems} onDisplayUpdate={onSidebarUpdate}>
-            <div className="grid grid-rows-[auto_1fr] w-full h-full overflow-hidden gap-y-4">
+            <div className="grid grid-rows-[auto_1fr] w-full h-full gap-y-4">
                 {/* Descriptor */}
                 <div className="flex items-center justify-start">
                     <h1 className="font-bold">
