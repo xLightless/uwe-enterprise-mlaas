@@ -84,7 +84,6 @@ const Recovery: React.FC = () => {
         return {
             datasets: [
                 {
-                    label: "Last Login Heatmap",
                     data: matrixData,
                     backgroundColor: (ctx: { raw: { v: number } }) => {
                         const value = ctx.raw.v;
@@ -96,8 +95,8 @@ const Recovery: React.FC = () => {
                         const intensity = (value - daysInMonth) / (max - daysInMonth);
                         return `rgba(255, 0, 0, ${Math.max(0, Math.min(intensity, 1))})`;
                     },
-                    height: 15,
-                    width: 15,
+                    height: (ctx: { chart: { width: number } }) => Math.min(Math.max(ctx.chart.width / 50, 2), 24), // Minimum 16px, Maximum 32px
+                    width: (ctx: { chart: { width: number } }) => Math.min(Math.max(ctx.chart.width / 50, 2), 24 ),  // Minimum 16px, Maximum 32px
                 }
             ]
         };
@@ -110,9 +109,9 @@ const Recovery: React.FC = () => {
             x: {
                 type: "linear",
                 title: {
-                    display: true,
+                    display: false,
                     text: "Days in the Month",
-                    padding: 20,
+                    padding: 15,
                 },
                 min: 1,
                 max: 31,
@@ -120,7 +119,7 @@ const Recovery: React.FC = () => {
                     display: false,
                 },
                 ticks: {
-                    display: true,
+                    display: false,
                     stepSize: 1,
                 },
             },
@@ -133,6 +132,7 @@ const Recovery: React.FC = () => {
                 },
                 ticks: {
                     display: true,
+                    padding: 15,
                     callback: (value) => {
                         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                         return days[value as number];
@@ -141,6 +141,9 @@ const Recovery: React.FC = () => {
             },
         },
         plugins: {
+            legend: {
+                display: false,
+            },
             tooltip: {
                 callbacks: {
                     label: (context) => {
@@ -189,13 +192,13 @@ const Recovery: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded shadow-md flex justify-center items-center">
+                <div className="w-full bg-white rounded shadow-md flex justify-center items-center overflow-x-auto">
                     {heatmapData && (
                         <Chart
                             type="matrix"
                             data={heatmapData}
                             options={heatmapOptions}
-                            className="max-w-screen"
+                            className="max-w-full py-2"
                         />
                     )}
                 </div>
