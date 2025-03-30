@@ -28,7 +28,7 @@ def request(*props):
     )
 
 
-def response(*props):
+def response(*props, **objects):
     # quickly generates a response schema out of the given strings "name:type"
     # example: "email:string", "password:string"
 
@@ -38,6 +38,9 @@ def response(*props):
         data = prop.split(":")
         datatype = getattr(openapi, "TYPE_"+data[1].upper())
         properties[data[0]] = openapi.Schema(type=datatype)
+
+    for key, obj in objects.items():
+        properties[key] = obj
 
     return openapi.Schema(
         type=openapi.TYPE_OBJECT,
