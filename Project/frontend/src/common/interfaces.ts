@@ -14,7 +14,7 @@ export interface SidebarItem {
 };
 
 export interface TableRow {
-    [key: string]: string | number | Date | boolean;
+    [key: string]: string | number | Date | boolean | JSX.Element | null;
 }
 
 export interface TableData {
@@ -65,9 +65,11 @@ export interface UserProps {
     phoneNumber?: string;
     createdAt?: string;
     lastLogin?: string;
-    isVerified?: boolean;
-    isActive?: boolean;
-    isAdmin?: boolean;
-    isStaff?: boolean;
-    isSuperuser?: boolean;
+    isVerified?: boolean | string;
+    isActive?: boolean | string;
+    isAdmin?: boolean | string;
+    isStaff?: boolean | string;
+    isSuperuser?: boolean | string;
+
+    actions?: JSX.Element;
 }

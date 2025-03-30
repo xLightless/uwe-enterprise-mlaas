@@ -3,7 +3,6 @@ import './App.css'
 
 import Home from './templates/home/Home';
 import AdminDashboard from './templates/admin';
-import UserDashboard from './templates/user';
 import TestDashboard from './templates/examples/dashboard';
 
 function App() {
@@ -12,7 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/test" element={<TestDashboard />} />
       </Routes>
     </Router>
