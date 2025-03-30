@@ -12,10 +12,7 @@ from function.models import Users
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
-
-
-# fudge twilio...
-DEBUG_SKIP_TWILIO = True
+import function.util.debug as DEBUG
 
 
 @swagger_auto_schema(
@@ -36,7 +33,7 @@ def register_user(request):
         cache.set(cache_key, serializer.validated_data, timeout=300)
 
         # Send SMS OTP using Twilio
-        if not DEBUG_SKIP_TWILIO:
+        if not DEBUG.SKIP_TWILIO:
             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
             client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
                 to=f"+44{phone_number}",
@@ -69,7 +66,7 @@ def verify_otp(request):
         )
 
     try:
-        if not DEBUG_SKIP_TWILIO:
+        if not DEBUG.SKIP_TWILIO:
             # Verify OTP using Twilio
             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
             verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
@@ -77,7 +74,7 @@ def verify_otp(request):
                 code=otp # Ensure 'code' parameter is not None
             )
 
-        if DEBUG_SKIP_TWILIO or verification_check.status == "approved":
+        if DEBUG.SKIP_TWILIO or verification_check.status == "approved":
             # Retrieve cached user data
             cache_key = f"user_data_{phone_number}"
             user_data = cache.get(cache_key)
