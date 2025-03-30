@@ -164,6 +164,7 @@ const RolePermissions: React.FC = () => {
 
     const roleContext = useRoleContext();
     const { setUser, getUser } = useUserContext();
+    const [toggleEditUser, setToggleEditUser] = useState(false);
 
     async function fetchUser(userId: number) {
 
@@ -177,16 +178,51 @@ const RolePermissions: React.FC = () => {
         }
     };
 
+
+    // Opens the user settings editor for the selected user.
+    const editUser = (user: UserProps) => {
+        setToggleEditUser(true);
+        setUser(user);
+    };
+
+    // Deletes the selected user account in the database.
+    const deleteAccount = (user: UserProps) => {
+
+        // Replace with actual delete logic
+        console.log("Deleting account:", user.userId);
+    }
+
     useEffect(() => {
-        const filteredHeads = ["fullName", "email", "roleName"];
+        const filteredHeads = ["fullName", "email", "roleName", "actions"];
         setFilteredTableHeads(filteredHeads);
 
         // Filter the table data by excluding the unwanted columns
         const filteredData = usersResponse.tbody.map((row) => {
             const filteredRow: TableRow = {};
             for (const head of filteredHeads) {
-                filteredRow[head] = row[head as keyof typeof row];
+                if (head === "actions") {
+                    // Add actions column with Edit and Delete buttons
+                    filteredRow[head] = (
+                        <div className="flex flex-row gap-2">
+                            <button
+                                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                                onClick={() => editUser(row as UserProps)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition"
+                                onClick={() => deleteAccount(row as UserProps)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    );
+                } else {
+                    filteredRow[head] = row[head as keyof typeof row];
+                }
             }
+
             return filteredRow;
         });
 
@@ -281,6 +317,58 @@ const RolePermissions: React.FC = () => {
 
     return (
         <>
+            {toggleEditUser &&
+                <Overlay onClose={() => setToggleEditUser(false)}>
+                    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
+                        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                            <h1 className="font-bold">User ID Information</h1>
+                        </div>
+
+                        <div className="grid grid-cols-1 h-36">
+                            <table className="">
+                                <tbody className="text-left">
+                                    <tr className="w-fit">
+                                        <th className="text-black">Full Name:</th>
+                                        <td>{getUser()?.fullName}</td>
+                                    </tr>
+                                    <tr className="text-black">
+                                        <th><label htmlFor="roleName" className="font-bold">Role Name: </label></th>
+                                        <td>
+                                            <select
+                                                id="roleName"
+                                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                value={getUser()?.roleId || ""}
+                                                onChange={(e) => setUser({ ...getUser(), roleId: parseInt(e.target.value) })}
+                                            >
+                                                {roles.map((role, index) => (
+                                                    <option key={index} value={role.roleId}>
+                                                        {role.roleName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="flex justify-end">
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    updateUserRole(e);
+                                    setToggleEditUser(false);
+                                }}
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </Overlay>
+            }
+
             {toggleNewRoleCreation &&
                 <Overlay onClose={() => setToggleNewRoleCreation(false)}>
                     <div className="mx-auto max-w-7xl bg-white rounded-md shadow p-4 h-fit space-y-4">
@@ -377,7 +465,6 @@ const RolePermissions: React.FC = () => {
                 {filteredTableData &&
                     <PaginatedTable
                         thead={filteredTableHeads}
-                        // tbody={filteredTableData as TableRow[]}
                         tbody={filteredTableData?.tbody as TableRow[]}
                         placeHolder="Search for a user..."
                         maxRowsPerPage={4}

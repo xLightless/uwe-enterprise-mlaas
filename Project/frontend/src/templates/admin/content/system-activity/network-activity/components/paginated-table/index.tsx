@@ -63,7 +63,9 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
             filtered = filtered.filter(row =>
                 filterItems.every(item => {
                     const value = row[item];
-                    return value !== undefined && value.toString().toLowerCase() === "true";
+                    if (value) {
+                        return value !== undefined && value.toString().toLowerCase() === "true";
+                    }
                 })
             );
         }
@@ -203,7 +205,9 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
                                         ) : (
                                             row[head] instanceof Date ? (
                                                 new Date(row[head]).toLocaleDateString()
-                                            ) : row[head]
+                                            ) : (
+                                                row[head]
+                                            )
                                         )}
                                     </td>
                                 ))}
