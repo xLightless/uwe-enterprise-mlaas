@@ -6,6 +6,8 @@ import { TableData, UserProps } from "../../../../../common/interfaces";
 import { Chart as ChartJS, ChartData, ChartOptions } from "chart.js/auto";
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
 import { Chart } from "react-chartjs-2";
+import { useUserContext } from "../../../../../common/contexts/user";
+import Overlay from "../../../../../components/overlay";
 
 ChartJS.register(MatrixController, MatrixElement);
 
@@ -18,25 +20,57 @@ const Recovery: React.FC = () => {
     const [newMonthUsers, setNewMonthUsers] = useState<number>(0);
     const [newTotalUsers, setNewTotalUsers] = useState<number>(0);
 
+    const [toggleEditUser, setToggleEditUser] = useState<boolean>(false);
+    const userContext = useUserContext();
+
+    // Opens the user settings editor for the selected user.
+    const editUser = (user: UserProps) => {
+        setToggleEditUser(true);
+        userContext.setUser(user);
+    };
+
+    // Deletes the selected user account in the database.
+    const deleteAccount = (user: UserProps) => {
+
+        // Replace with actual delete logic
+        console.log("Deleting account:", user.userId);
+    }
+
     const fetchAccounts = async () => {
         const users = usersResponse.tbody.map(user => ({
             ...user,
+            actions: (
+                <div className="flex flex-row gap-2">
+                    <button
+                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                        onClick={() => editUser(user as UserProps)}
+                    >
+                        Edit
+                    </button>
+                    <button
+                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition"
+                        onClick={() => deleteAccount(user as UserProps)}
+                    >
+                        Delete
+                    </button>
+                </div>
+            ),
             isVerified: user.isVerified ? "True" : "False",
             isActive: user.isActive ? "True" : "False",
             isStaff: user.isStaff ? "True" : "False",
             isAdmin: user.isAdmin ? "True" : "False",
             isSuperuser: user.isSuperuser ? "True" : "False",
-            // lastLogin: user.lastLogin ? new Date(user.lastLogin).getTime() : ""
-        }));
+        })) as UserProps[];
+
+        console.log("Users:", users);
 
         const thead = usersResponse.thead.filter(
             column => column
             !== "userId"
-
         );
 
         const newUserResponse = {
-            thead: thead,
+            thead: [...thead, "actions"],
             tbody: users
         }
 
@@ -45,7 +79,8 @@ const Recovery: React.FC = () => {
 
     const fetchData = async () => {
         const accountUsers = await fetchAccounts();
-        setTableData(accountUsers);
+        setTableData(accountUsers as TableData);
+        console.log("Account Users:", accountUsers);
 
         const heatmap = generateHeatmapData(accountUsers.tbody as unknown as UserProps[]);
         setHeatmapData(heatmap as ChartData<"matrix">);
@@ -211,6 +246,120 @@ const Recovery: React.FC = () => {
 
     return (
         <>
+            {toggleEditUser &&
+                <Overlay onClose={() => setToggleEditUser(false)}>
+    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
+        {/* Header */}
+        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+            <h1 className="font-bold">Edit User Information</h1>
+        </div>
+
+        {/* User Information Table */}
+        <div className="grid grid-cols-1">
+            <table className="w-full text-left">
+                <tbody>
+                    {/* Full Name */}
+                    <tr className="">
+                        <th className="text-black pr-4">Full Name:</th>
+                        <td>
+                            <input
+                                type="text"
+                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                value={userContext.getUser()?.fullName || ""}
+                                onChange={(e) =>
+                                    userContext.setUser({
+                                        ...userContext.getUser(),
+                                        fullName: e.target.value,
+                                    })
+                                }
+                            />
+                        </td>
+                    </tr>
+
+                    {/* Email */}
+                    <tr>
+                        <th className="text-black pr-4">Email:</th>
+                        <td>
+                            <input
+                                type="email"
+                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                value={userContext.getUser()?.email || ""}
+                                onChange={(e) =>
+                                    userContext.setUser({
+                                        ...userContext.getUser(),
+                                        email: e.target.value,
+                                    })
+                                }
+                            />
+                        </td>
+                    </tr>
+
+                    {/* Phone Number */}
+                    <tr>
+                        <th className="text-black pr-4">Phone Number:</th>
+                        <td>
+                            <input
+                                type="text"
+                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                value={userContext.getUser()?.phoneNumber || ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (/^\d*$/.test(value)) {
+                                        userContext.setUser({
+                                            ...userContext.getUser(),
+                                            phoneNumber: value,
+                                        });
+                                    }
+                                }}
+                            />
+                        </td>
+                    </tr>
+
+                    {/* Boolean Fields */}
+                    {[
+                        { label: "Is Verified", key: "isVerified" },
+                        { label: "Is Active", key: "isActive" },
+                        { label: "Is Staff", key: "isStaff" },
+                        { label: "Is Admin", key: "isAdmin" },
+                        { label: "Is Superuser", key: "isSuperuser" },
+                    ].map((field) => (
+                        <tr key={field.key}>
+                            <th className="text-black pr-4">{field.label}:</th>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    checked={!!userContext.getUser()?.[field.key as keyof UserProps]}
+                                    onChange={(e) =>
+                                        userContext.setUser({
+                                            ...userContext.getUser(),
+                                            [field.key]: e.target.checked,
+                                        })
+                                    }
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+
+        {/* Save Changes Button */}
+        <div className="flex justify-end mt-4">
+            <button
+                type="button"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                onClick={() => {
+                    // Save changes logic here
+                    setToggleEditUser(false);
+                }}
+            >
+                Save Changes
+            </button>
+        </div>
+    </div>
+</Overlay>
+            }
+
             <div className="w-full h-full grid grid-rows-[0.2fr_0.5fr_1fr] gap-4">
                 {/* Account Management stats */}
                 <div className="w-full h-full grid xs:grid-rows-3 lg:grid-cols-3 gap-2 sm:gap-4">
@@ -257,7 +406,6 @@ const Recovery: React.FC = () => {
                             ]
                         }
                     >
-
                         <></>
                     </PaginatedTable>
                 }

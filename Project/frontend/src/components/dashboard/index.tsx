@@ -110,7 +110,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
     }, [isHambugerClicked]);
 
     return (
-        <div className='relative bg-gray-200 w-full h-screen overflow-hidden'>
+        <div className='relative w-full h-screen overflow-hidden'>
             <div className={`grid grid-cols-1 h-full ${showSidebar ? 'lg:grid-cols-[250px_1fr]' : ''}`}>
 
 
