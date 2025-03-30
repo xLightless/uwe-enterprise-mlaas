@@ -14,13 +14,21 @@ export interface SidebarItem {
 };
 
 export interface TableRow {
-    [key: string]: string | number | Date;
+    [key: string]: string | number | Date | boolean;
 }
 
 export interface TableData {
     thead: string[];
     tbody: TableRow[];
     maxRowsPerPage?: number;
+}
+
+export interface SearchBarProps {
+    placeHolder: string;
+}
+
+export interface FilterByProps {
+    filterOptions?: string[];
 }
 
 export interface ReactChildProp {
@@ -32,23 +40,34 @@ export interface ReactChildProp {
      * @param userId
      */
     onUserIdClick?: (userId: number) => void;
+
+    onCloseValue: boolean;
+    onClose: () => void;
+};
+
+export interface Permission {
+    permissionId?: number;
+    name: string;
+}
+
+export interface Role {
+    roleId: number;
+    roleName: string;
+    permissions: Permission[];
 };
 
 export interface UserProps {
-    user: {
-        userId?: number;
-        roleId?: number;
-        fullName?: string;
-        email?: string;
-        password?: string;
-        phoneNumber?: string;
-        created_at?: Date;
-        updated_at?: Date;
-        last_login?: Date;
-        isVerified?: boolean;
-        isActive?: boolean;
-        isAdmin?: boolean;
-        isStaff?: boolean;
-        isSuperuser?: boolean;
-    }
+    userId?: number;
+    roleId?: number;
+    fullName?: string;
+    email?: string;
+    password?: string;
+    phoneNumber?: string;
+    createdAt?: string;
+    lastLogin?: string;
+    isVerified?: boolean;
+    isActive?: boolean;
+    isAdmin?: boolean;
+    isStaff?: boolean;
+    isSuperuser?: boolean;
 }

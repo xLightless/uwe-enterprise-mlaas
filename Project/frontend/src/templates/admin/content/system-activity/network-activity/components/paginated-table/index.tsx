@@ -1,21 +1,33 @@
 import React, { useState } from "react";
-import { ReactChildProp, TableData } from "../../../../../../../common/interfaces";
+import { FilterByProps, ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
 import Searchbar from "../../../../../../../components/searchbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import Overlay from "../../../../../../../components/overlay";
 
-const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, maxRowsPerPage, onUserIdClick, children }) => {
+const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & FilterByProps> = ({
+    thead,
+    tbody,
+    maxRowsPerPage,
+    children,
+    placeHolder,
+    onCloseValue,
+    onClose,
+    onUserIdClick,
+    filterOptions
+}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [userIdOverlay, setUserIdOverlay] = useState<boolean>(false);
-
+    const [selectedItems, setSelectedFilterItems] = useState<string[]>([]);
+    const [filteredData, setFilteredData] = useState(tbody);
 
     const rowsPerPage = maxRowsPerPage ? maxRowsPerPage : 10;
-    const totalPages = Math.ceil(tbody.length / rowsPerPage);
+    // const totalPages = Math.ceil(tbody.length / rowsPerPage);
     const startingIndex = (currentPage - 1) * rowsPerPage;
-    const currentRows = tbody.slice(startingIndex, startingIndex + rowsPerPage);
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    const currentRows = filteredData.slice(startingIndex, startingIndex + rowsPerPage);
+    // const currentRows = tbody.slice(startingIndex, startingIndex + rowsPerPage);
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     function onNextPage() {
         if (currentPage < totalPages) {
@@ -33,20 +45,53 @@ const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, ma
         setSelectedFilteredBy(!selectedFilteredBy);
     };
 
-    function onItemSelection(item: string) {
+    function applyFilter(filterItems: string[], query: string) {
+        let filtered = tbody;
+
+
+        // Apply search query filtering
+        if (query.trim() !== "") {
+            filtered = filtered.filter(row =>
+                Object.values(row).some(value =>
+                    value?.toString().toLowerCase().includes(query.toLowerCase())
+                )
+            );
+        }
+
+        // Apply column-based filtering
+        if (filterItems.length > 0) {
+            filtered = filtered.filter(row =>
+                filterItems.every(item => {
+                    const value = row[item];
+                    return value !== undefined && value.toString().toLowerCase() === "true";
+                })
+            );
+        }
+
+        setFilteredData(filtered);
+        setCurrentPage(1);
+    }
+
+    function onItemFilterSelection(item: string) {
         if (selectedItems.includes(item)) {
-            setSelectedItems(selectedItems.filter(item_ => item_ !== item));
+            const updatedItems = selectedItems.filter(item_ => item_ !== item);
+            setSelectedFilterItems(updatedItems);
+            applyFilter(updatedItems, searchQuery);
         } else {
-            setSelectedItems([...selectedItems, item]);
+            const updatedItems = [...selectedItems, item];
+            setSelectedFilterItems(updatedItems);
+            applyFilter(updatedItems, searchQuery);
         }
     }
 
-    function isItemSelected(item: string) {
+    function isFilterItemSelected(item: string) {
         return selectedItems.includes(item);
     }
 
-    function toggleUserIdOverlay() {
-        setUserIdOverlay(!userIdOverlay);
+    function onSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const query = event.target.value;
+        setSearchQuery(query);
+        applyFilter(selectedItems, query);
     }
 
     return (
@@ -57,50 +102,54 @@ const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, ma
 
                 {/* Filtering Options */}
                 <div className="order-1 w-full md:w-fit relative w-1/2 grid grid-cols-2 gap-4">
-                    <Searchbar placeholder="Search network activity..."/>
+                    <Searchbar placeholder={placeHolder} onSearchChange={(e) => {
+                        onSearchChange({ target: { value: e } } as React.ChangeEvent<HTMLInputElement>);
+                        setSearchQuery(e);
+                        applyFilter(selectedItems, e);
+                    }}/>
 
-                    <div className="relative h-full w-fit flex justify-center items-center space-x-4">
-                        <div
-                            className="relative bg-gray-700 w-[200px] flex justify-center items-center rounded space-x-4 cursor-pointer px-2"
-                            onClick={onFilterBy}
-                        >
-                            <input
-                                id="filter-control"
-                                className="w-full h-full py-2 bg-gray-700 text-white text-sm"
-                                type="text"
-                                value={selectedItems.join(", ") || "Filter by..."}
-                                disabled={true}
-                            />
-                            <label
-                                htmlFor="filter-control"
+                        <div className="relative h-full w-fit flex justify-center items-center space-x-4">
+                            <div
+                                className="relative bg-gray-700 w-[200px] flex justify-center items-center rounded space-x-4 cursor-pointer px-2"
                                 onClick={onFilterBy}
-                                className="cursor-pointer"
                             >
-                                <FontAwesomeIcon icon={faPlus} className="text-white"/>
-                            </label>
+                                <input
+                                    id="filter-control"
+                                    className="w-full h-full py-2 bg-gray-700 text-white text-sm"
+                                    type="text"
+                                    value={selectedItems.join(", ") || "Filter by..."}
+                                    disabled={true}
+                                />
+                                <label
+                                    htmlFor="filter-control"
+                                    onClick={onFilterBy}
+                                    className="cursor-pointer"
+                                >
+                                    <FontAwesomeIcon icon={faPlus} className="text-white"/>
+                                </label>
+                            </div>
+
+                            {selectedFilteredBy && filterOptions && filterOptions.length > 0 &&
+                            <div
+                                className="absolute top-full w-[200px] left-0 bg-white shadow-lg rounded z-10"
+                                onMouseLeave={onFilterBy}
+                            >
+
+                                {/* Multi Select Items */}
+                                <ul>
+                                    {filterOptions.map((head, index) => (
+                                        <li key={index} className="px-4 py-2 flex justify-between items-center">
+                                            <span>{head}</span>
+                                            <input
+                                                type="checkbox"
+                                                checked={isFilterItemSelected(head)}
+                                                onChange={() => onItemFilterSelection(head)}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>}
                         </div>
-
-                        {selectedFilteredBy &&
-                        <div
-                            className="absolute top-full w-[200px] left-0 bg-white shadow-lg rounded z-10"
-                            onMouseLeave={onFilterBy}
-                        >
-
-                            {/* Multi Select Items */}
-                            <ul>
-                                {thead.map((head, index) => (
-                                    <li key={index} className="px-4 py-2 flex justify-between items-center">
-                                        <span>{head}</span>
-                                        <input
-                                            type="checkbox"
-                                            checked={isItemSelected(head)}
-                                            onChange={() => onItemSelection(head)}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>}
-                    </div>
                 </div>
 
                 {/* Pagination Buttons */}
@@ -130,24 +179,31 @@ const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, ma
                     </thead>
                     <tbody>
                         {currentRows.map((row, index) => (
-                            <tr key={index} className="text-gray-700">
+                            <tr
+                                key={index}
+                                className={`text-gray-700 cursor-pointer hover:bg-gray-300`}
+                            >
                                 {thead.map((head, index) => (
                                     <td key={index} className="px-6 py-4 text-left">
-                                        {head === "User ID" ? (
+                                        {head === "User ID" ||
+                                         head === "user_id" ||
+                                         head === "userId" ? (
                                             <div className="flex flex-row">
                                                 <span>{row[head] as number}</span>
                                                 <span
                                                     className="ml-4 text-blue-500 hover:text-blue-400 cursor-pointer"
                                                     onClick={() => {
                                                         if (onUserIdClick) {
-                                                            toggleUserIdOverlay();
+                                                            onClose();
                                                             onUserIdClick(row[head] as number);
                                                         }
                                                     }}
                                                 >View / Edit</span>
                                             </div>
                                         ) : (
-                                            row[head] instanceof Date ? row[head].toLocaleString() : row[head]
+                                            row[head] instanceof Date ? (
+                                                new Date(row[head]).toLocaleDateString()
+                                            ) : row[head]
                                         )}
                                     </td>
                                 ))}
@@ -155,8 +211,8 @@ const PaginatedTable: React.FC<TableData & ReactChildProp> = ({ thead, tbody, ma
                         ))}
                     </tbody>
 
-                    {userIdOverlay &&
-                        <Overlay onClose={toggleUserIdOverlay}>
+                    {onCloseValue &&
+                        <Overlay onClose={onClose}>
                             <div className="mx-auto max-w-7xl bg-white rounded-md shadow p-4 h-fit">
                                 {children}
                             </div>

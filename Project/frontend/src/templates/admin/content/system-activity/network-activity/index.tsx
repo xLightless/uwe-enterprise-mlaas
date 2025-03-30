@@ -6,10 +6,12 @@ import UserSettingsDropdown from "../../../../../components/user-settings";
 import NetworkConnectionsChart from "./components/charts/connections";
 
 const NetworkActivity: React.FC = () => {
-    const [data, setNetworkActivityData] = useState<TableData>(response);
+    const [data, setNetworkActivityData] = useState<TableData | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
+
+    const [overlay, setOverlay] = useState<boolean>(false);
 
 
     async function fetchNetworkActivity() {
@@ -22,21 +24,19 @@ const NetworkActivity: React.FC = () => {
 
         // Replace with actual fetch request
         const userProp: UserProps = {
-            user: {
-                fullName: "John Smith",
-                email: "john.smith@example.com",
-                phoneNumber: "123-456-7890",
-                roleId: 1,
-                userId: userId,
-                created_at: new Date(),
-                updated_at: new Date(),
-                last_login: new Date(),
-                isVerified: true,
-                isActive: true,
-                isAdmin: true,
-                isStaff: true,
-                isSuperuser: true,
-            }
+            fullName: "John Smith",
+            email: "john.smith@example.com",
+            phoneNumber: "123-456-7890",
+            roleId: 1,
+            userId: userId,
+            createdAt: String(new Date()),
+            // updatedAt: String(new Date()),
+            lastLogin: String(new Date()),
+            isVerified: true,
+            isActive: true,
+            isAdmin: true,
+            isStaff: true,
+            isSuperuser: true,
         }
 
         setUser(userProp ? userProp : null);
@@ -81,15 +81,7 @@ const NetworkActivity: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full h-full grid grid-rows-[auto_1fr]">
-            {/* Descriptor */}
-            <div className="w-full flex items-center justify-start">
-                <h1 className="font-bold">
-                    Dashboard
-                    <span className="typography"> / Network Activity</span>
-                </h1>
-            </div>
-
+        <>
             {/* Network Traffic Analytics and Data */}
             <div className="w-full h-full grid grid-rows-[0.25fr_1fr]">
 
@@ -100,46 +92,58 @@ const NetworkActivity: React.FC = () => {
 
                 {/* Paginated Table Data */}
                 <div className="w-full h-full my-4">
-                    <PaginatedTable
-                        thead={data.thead}
-                        tbody={data.tbody}
-                        onUserIdClick={onUserIdClick}
-                    >
-                        {/* User ID overlay. */}
-                        <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
-                            <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                                <h1 className="font-bold">User ID Information</h1>
-                            </div>
+                    {data &&
+                        <PaginatedTable
+                            thead={data.thead}
+                            tbody={data.tbody}
+                            onUserIdClick={
+                                (userId) => {
+                                    onUserIdClick(userId);
+                                    setOverlay(true);
+                                }
+                            }
+                            placeHolder={"Search network activity..."}
 
-                            <div className="grid grid-cols-2 h-36">
-                                <table className="">
-                                    <tbody className="text-left">
-                                        <tr className="w-fit">
-                                            <th className="text-black">First Name:</th>
-                                            <td>John</td>
-                                        </tr>
-                                        <tr className="text-black">
-                                            <th>Last Name:</th>
-                                            <td>Smith</td>
-                                        </tr>
-                                        <tr className="text-black">
-                                            <th>User Role:</th>
-                                            <td>Insurer</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            onCloseValue={overlay}
+                            onClose={() => setOverlay(false)}
 
-                                <div className="w-full h-full flex justify-end items-start">
-                                    <div>
-                                        {user && <UserSettingsDropdown {...user} />}
+                        >
+                            {/* User ID overlay. */}
+                            <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
+                                <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                                    <h1 className="font-bold">User ID Information</h1>
+                                </div>
+
+                                <div className="grid grid-cols-2 h-36">
+                                    <table className="">
+                                        <tbody className="text-left">
+                                            <tr className="w-fit">
+                                                <th className="text-black">First Name:</th>
+                                                <td>John</td>
+                                            </tr>
+                                            <tr className="text-black">
+                                                <th>Last Name:</th>
+                                                <td>Smith</td>
+                                            </tr>
+                                            <tr className="text-black">
+                                                <th>User Role:</th>
+                                                <td>Insurer</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div className="w-full h-full flex justify-end items-start">
+                                        <div>
+                                            {user && <UserSettingsDropdown user={{...user}} />}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </PaginatedTable>
+                        </PaginatedTable>
+                    }
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

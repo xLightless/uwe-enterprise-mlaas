@@ -113,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
     let indexes = 0;
 
     return (
-    <div className="border-r shadow-lg bg-gray-800 w-[250px] h-full flex flex-col">
+    <div className="border-r shadow-lg bg-gray-800 w-[250px] h-screen flex flex-col fixed">
         <div className="h-[65px] border-b border-gray-200 flex items-center justify-center">
             <h1 className="!text-white font-bold text-xl">Company Name</h1>
         </div>
