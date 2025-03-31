@@ -53,7 +53,13 @@ export const registerUser = async (userData: {
 
         return response.data
     } catch (error) {
-        throw (error as any).response.data
+        console.error('Registration failed:', error)
+
+        if (axios.isAxiosError(error) && error.response) {
+            throw error.response.data;
+        }
+
+        throw { error: 'Registration failed' };
     }
 }
 
@@ -166,7 +172,7 @@ export const refreshAccessToken = async () => {
         if (axios.isAxiosError(error) && error.response) {
             throw error.response.data;
         }
-        
+
         throw { error: 'Failed to refresh access token' };
     }
 }
