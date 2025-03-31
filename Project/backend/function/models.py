@@ -4,9 +4,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils import timezone
 
 class Role(models.Model):
-    role_id = models.AutoField(primary_key=True, db_column='role_id')
-    role_name = models.CharField(max_length=75, db_column='role_name')
-
+    role_id = models.AutoField(primary_key=True)  # Auto-incrementing role ID
+    role_name = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'Roles'

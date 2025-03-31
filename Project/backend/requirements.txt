@@ -25,3 +25,5 @@ sqlparse==0.4.4
 typing_extensions==4.10.0
 urllib3==2.3.0
 twilio==7.2.0
+scikit-learn
+pandas
