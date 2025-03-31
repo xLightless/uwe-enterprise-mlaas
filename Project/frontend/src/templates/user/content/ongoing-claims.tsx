@@ -136,7 +136,7 @@ const OngoingClaims: React.FC = () => {
             </div>
 
             {selectedClaim && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-50 overflow-auto">
+                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-[100] overflow-auto">
                     <div className="p-5 pt-10 max-w-2xl w-full rounded-md shadow-lg border bg-white">
                         <h2 className="text-xl font-bold mb-4">Claim Details</h2>
 
@@ -176,7 +176,7 @@ const OngoingClaims: React.FC = () => {
             )}
 
             {isUploadPopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-50">
+                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-[100]">
                     <div className="p-5 max-w-md w-full rounded-md shadow-lg border bg-white">
                         <h2 className="text-xl font-bold mb-4">Upload Supporting Evidence</h2>
 
@@ -188,7 +188,7 @@ const OngoingClaims: React.FC = () => {
             )}
 
             {isRefusePopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-50">
+                <div className="fixed inset-0 flex justify-center items-center p-5 overlay/20 backdrop-blur-sm z-[100]">
                     <div className="p-5 max-w-md w-full rounded-md shadow-lg border bg-white">
                         <h2 className="text-xl font-bold mb-4">Refuse Claim</h2>
 

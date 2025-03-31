@@ -1,14 +1,16 @@
-import React from "react"
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import mail_icon from '../../assets/mail_icon.svg'
 import pwd_icon from '../../assets/pwd_icon.svg'
 import { loginUser } from '../../repositories/auth'
 
-function Login() {
+function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const [error, setError] = useState('')
+
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -17,8 +19,11 @@ function Login() {
             const data = await loginUser({ email, password })
 
             console.log('Logged in successfully:', data)
+
+            toggleAuthForms()
+            navigate("/user-dashboard")
         } catch (err) {
-            setError(err.message || 'Login failed')
+            setError((err instanceof Error ? err.message : 'Login failed'))
         }
     }
 

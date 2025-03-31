@@ -5,7 +5,7 @@ import AuthForms from '../../templates/auth/AuthForms'
 import close_icon from '../../assets/close.svg'
 import burger_icon from '../../assets/burger.svg'
 
-function Nav() {
+const Nav: React.FC = () => {
     const [showAuthForms, setShowAuthForms] = useState(false)
     const [showBurgerMenu, setShowBurgerMenu] = useState(false)
 
