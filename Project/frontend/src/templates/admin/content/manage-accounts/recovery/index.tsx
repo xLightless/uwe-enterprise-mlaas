@@ -33,31 +33,102 @@ const Recovery: React.FC = () => {
     const [checkConfirmPassword, setCheckConfirmPassword] = useState<string>("");
     const [creationStatusMessage, setCreationStatusMessage] = useState<string>("");
 
+    const [checkAccountRole, setCheckAccountRole] = useState<string>("");
+
     // Create a new user account in the database, on form submission.
     function createNewUser(e: React.FormEvent, newAccount: UserProps | null) {
         e.preventDefault();
-        if (checkConfirmPassword == newAccount?.password) {
-            if (
-                newAccount &&
-                newAccount.email &&
-                newAccount.password &&
-                newAccount.roleId !== -1 &&
-                newAccount.fullName &&
-                newAccount.phoneNumber
-            ) {
-                // Replace with actual create logic
 
+        alert(
+            `${newAccount?.email} | ${newAccount?.password} | ${newAccount?.roleId} | ${newAccount?.fullName} | ${newAccount?.phoneNumber}`
+        )
 
-                setCreationStatusMessage("User account created successfully!");
-
-            } else {
-                setCreationStatusMessage("Failed to create user account. Please fill in all fields.");
-            }
-
-        } else {
-            setCreationStatusMessage("Failed to create user account.");
+        // Check for missing or invalid fields first
+        if (!newAccount) {
+            setCreationStatusMessage("Failed to create user account. Please fill in all fields.");
+            return;
         }
-    };
+
+        if (!newAccount.email) {
+            setCreationStatusMessage("Please enter an email address.");
+            return;
+        }
+
+        if (!newAccount.password) {
+            setCreationStatusMessage("Please enter a password.");
+            return;
+        }
+
+        if (checkConfirmPassword !== newAccount.password) {
+            setCreationStatusMessage("Passwords do not match.");
+            return;
+        }
+
+        if (!newAccount.roleId || newAccount.roleId === -1) {
+            setCreationStatusMessage("Please select a role for the user.");
+            return;
+        }
+
+        if (!newAccount.fullName) {
+            setCreationStatusMessage("Please enter a full name.");
+            return;
+        }
+
+        if (!newAccount.phoneNumber) {
+            setCreationStatusMessage("Please enter a phone number.");
+            return;
+        }
+
+        // If all validations pass, proceed with account creation
+        switch (checkAccountRole) {
+            case "End User":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: false,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+
+            case "Administrator":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: true,
+                    isSuperuser: true,
+                })
+                break;
+
+            case "AI Engineer":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+
+            case "Finance Team Member":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+        }
+
+        // setCreationStatusMessage("User account created successfully!");
+        // Create a request using the /repositories folder
+    }
 
     // Opens the user settings editor for the selected user.
     const editUser = (user: UserProps) => {
@@ -129,7 +200,9 @@ const Recovery: React.FC = () => {
 
     // Get the role ID from the role name
     const getRoleIdFromName = (roleName: string) => {
-        return roles.find(role => role.roleName === roleName)?.roleId
+        const roleId = roles.find(role => role.roleName === roleName)?.roleId
+        // alert(`Role Name: ${roleName} | Role ID: ${roleId}`);
+        return roleId || -1;
     };
 
     const fetchUserAnalytics = async (data: TableData) => {
@@ -480,7 +553,16 @@ const Recovery: React.FC = () => {
                                 <div className="w-full h-full">
                                     <div className="mb-6">
                                         <label htmlFor="email" className="block mb-2 font-bold text-left">Email address</label>
-                                        <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required />
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="john.doe@company.com"
+                                            onChange={(e) => setNewAccount({
+                                                ...newAccount,
+                                                email: e.target.value,
+                                            })}
+                                            required />
                                     </div>
                                     <div className="mb-6">
                                         <label htmlFor="password" className="block mb-2 font-bold text-left">New password</label>
@@ -556,13 +638,18 @@ const Recovery: React.FC = () => {
                                             id="roleName"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             value={newAccount?.roleId || ""}
-                                            onChange={(e) => setNewAccount({
-                                                ...newAccount,
-                                                roleId: getRoleIdFromName(e.target.value) || -1,
-                                            })}
+                                            onChange={(e) => {
+                                                setNewAccount({
+                                                    ...newAccount,
+                                                    roleId: getRoleIdFromName(e.target.value) || -1,
+                                                });
+
+                                                setCheckAccountRole(e.target.value);
+                                            }}
                                         >
+                                            <option value="" disabled>Select a role</option>
                                             {roles.map((role, index) => (
-                                                <option key={index} value={role.roleId}>
+                                                <option key={index} value={role.roleName}>
                                                     {role.roleName}
                                                 </option>
                                             ))}
@@ -570,18 +657,20 @@ const Recovery: React.FC = () => {
                                     </div>
 
                                     <div className="mb-6">
-                                        <button
-                                            type="submit"
-                                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        <div className="mb-6">
+                                            <button
+                                                type="submit"
+                                                className="w-full py-1 bg-gray-700 rounded text-white w-24 h-fit cursor-pointer hover:bg-gray-800"
                                             >
-                                                Submit
-                                        </button>
+                                                    <span className="text-xs sm:text-xs md:text-md">Submit</span>
+                                            </button>
+                                        </div>
 
-                                        {creationStatusMessage &&
-                                            <div>
+                                        <div className="h-full">
+                                            {creationStatusMessage &&
                                                 <h1 className="text-black font-bold">{creationStatusMessage}</h1>
-                                            </div>
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
