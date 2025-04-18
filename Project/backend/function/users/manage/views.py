@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
 from function.models import Users
+from function.permissions import HasRole
 
 @swagger_auto_schema(
     method="get",
@@ -95,7 +96,7 @@ def admin_update_user(request, user_id):
     responses={204: "User successfully deleted"}
 )
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([HasRole("Admin")])
 def delete_user(request, user_id):
     """Delete a user (Admin only)"""
     try:
