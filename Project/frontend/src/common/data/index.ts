@@ -575,3 +575,329 @@ export const usersResponse = {
     }
   ]
 }
+
+
+// CREATE TABLE public."AuditLogs" (
+//     audit_id integer NOT NULL,
+//     user_id integer NOT NULL,
+//     created_at timestamp without time zone NOT NULL,
+//     crud_action_type character varying(75) NOT NULL,
+//     table_name character varying(255) NOT NULL,
+//     table_column character varying(255) NOT NULL,
+//     table_record_id integer NOT NULL,
+//     action_details text NOT NULL
+// );
+export const auditLogResponse = {
+  "thead": [
+    "Audit ID",
+    "User ID",
+    "Created At",
+    "CRUD Action Type",
+    "Table Name",
+    "Table Column",
+    "Table Record ID",
+    "Action Details"
+  ],
+  "tbody": [
+    {
+      "Audit ID": 1,
+      "User ID": 1,
+      "Created At": "2025-01-01T10:00:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "users",
+      "Table Column": "email",
+      "Table Record ID": 1,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 2,
+      "User ID": 2,
+      "Created At": "2025-01-02T11:00:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "orders",
+      "Table Column": "status",
+      "Table Record ID": 15,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 3,
+      "User ID": 3,
+      "Created At": "2025-01-03T12:30:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "products",
+      "Table Column": "name",
+      "Table Record ID": 8,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 4,
+      "User ID": 4,
+      "Created At": "2025-01-04T14:00:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "categories",
+      "Table Column": "name",
+      "Table Record ID": 3,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 5,
+      "User ID": 5,
+      "Created At": "2025-01-05T15:45:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "users",
+      "Table Column": "password",
+      "Table Record ID": 12,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 6,
+      "User ID": 6,
+      "Created At": "2025-01-06T16:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "orders",
+      "Table Column": "total",
+      "Table Record ID": 22,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 7,
+      "User ID": 7,
+      "Created At": "2025-01-07T17:00:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "users",
+      "Table Column": "email",
+      "Table Record ID": 5,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 8,
+      "User ID": 8,
+      "Created At": "2025-01-08T18:15:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "products",
+      "Table Column": "price",
+      "Table Record ID": 10,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 9,
+      "User ID": 9,
+      "Created At": "2025-01-09T19:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "reviews",
+      "Table Column": "rating",
+      "Table Record ID": 45,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 10,
+      "User ID": 10,
+      "Created At": "2025-01-10T20:00:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "categories",
+      "Table Column": "name",
+      "Table Record ID": 7,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 11,
+      "User ID": 11,
+      "Created At": "2025-01-11T21:00:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "users",
+      "Table Column": "username",
+      "Table Record ID": 18,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 12,
+      "User ID": 12,
+      "Created At": "2025-01-12T22:30:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "orders",
+      "Table Column": "payment_status",
+      "Table Record ID": 30,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 13,
+      "User ID": 13,
+      "Created At": "2025-01-13T23:45:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "products",
+      "Table Column": "description",
+      "Table Record ID": 12,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 14,
+      "User ID": 14,
+      "Created At": "2025-01-14T08:00:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "categories",
+      "Table Column": "name",
+      "Table Record ID": 9,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 15,
+      "User ID": 15,
+      "Created At": "2025-01-15T09:15:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "users",
+      "Table Column": "phone",
+      "Table Record ID": 20,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 16,
+      "User ID": 16,
+      "Created At": "2025-01-16T10:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "orders",
+      "Table Column": "total",
+      "Table Record ID": 35,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 17,
+      "User ID": 17,
+      "Created At": "2025-01-17T11:45:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "users",
+      "Table Column": "email",
+      "Table Record ID": 25,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 18,
+      "User ID": 18,
+      "Created At": "2025-01-18T12:00:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "products",
+      "Table Column": "stock",
+      "Table Record ID": 40,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 19,
+      "User ID": 19,
+      "Created At": "2025-01-19T13:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "reviews",
+      "Table Column": "comment",
+      "Table Record ID": 50,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 20,
+      "User ID": 20,
+      "Created At": "2025-01-20T14:45:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "categories",
+      "Table Column": "description",
+      "Table Record ID": 13,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 21,
+      "User ID": 21,
+      "Created At": "2025-01-21T15:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "users",
+      "Table Column": "address",
+      "Table Record ID": 28,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 22,
+      "User ID": 22,
+      "Created At": "2025-01-22T16:00:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "orders",
+      "Table Column": "delivery_date",
+      "Table Record ID": 42,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 23,
+      "User ID": 23,
+      "Created At": "2025-01-23T17:15:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "products",
+      "Table Column": "category",
+      "Table Record ID": 16,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 24,
+      "User ID": 24,
+      "Created At": "2025-01-24T18:30:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "categories",
+      "Table Column": "parent_category",
+      "Table Record ID": 7,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 25,
+      "User ID": 25,
+      "Created At": "2025-01-25T19:45:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "users",
+      "Table Column": "last_login",
+      "Table Record ID": 33,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 26,
+      "User ID": 26,
+      "Created At": "2025-01-26T20:00:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "orders",
+      "Table Column": "discount",
+      "Table Record ID": 48,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 27,
+      "User ID": 27,
+      "Created At": "2025-01-27T21:15:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "users",
+      "Table Column": "profile_picture",
+      "Table Record ID": 19,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 28,
+      "User ID": 28,
+      "Created At": "2025-01-28T22:30:00",
+      "CRUD Action Type": "UPDATE",
+      "Table Name": "products",
+      "Table Column": "weight",
+      "Table Record ID": 55,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 29,
+      "User ID": 29,
+      "Created At": "2025-01-29T23:45:00",
+      "CRUD Action Type": "INSERT",
+      "Table Name": "reviews",
+      "Table Column": "title",
+      "Table Record ID": 60,
+      "Action Details": ""
+    },
+    {
+      "Audit ID": 30,
+      "User ID": 30,
+      "Created At": "2025-01-30T23:59:00",
+      "CRUD Action Type": "DELETE",
+      "Table Name": "categories",
+      "Table Column": "icon",
+      "Table Record ID": 22,
+      "Action Details": ""
+    }
+  ]
+}

@@ -205,13 +205,13 @@ const RolePermissions: React.FC = () => {
                     filteredRow[head] = (
                         <div className="flex flex-row gap-2">
                             <button
-                                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                                className="hover:cursor-pointer bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
                                 onClick={() => editUser(row as UserProps)}
                             >
                                 Edit
                             </button>
                             <button
-                                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition"
+                                className="hover:cursor-pointer bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition"
                                 onClick={() => deleteAccount(row as UserProps)}
                             >
                                 Delete

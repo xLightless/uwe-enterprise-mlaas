@@ -17,7 +17,7 @@ import MLAAS_Traffic from './content/system-activity/mlaas-traffic';
 import RolesPermissions from './content/manage-accounts/roles-permissions';
 import Recovery from './content/manage-accounts/recovery';
 import DataRegulation from './content/manage-accounts/data-regulation';
-import { Invoices, Billing } from './content/finances';
+import { Invoices } from './content/finances';
 import { RoleProvider } from '../../common/contexts/role';
 import { UserProvider } from '../../common/contexts/user';
 
@@ -38,14 +38,18 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const AdminDashboard: React.FC = () => {
     const componentMapping: { [key: string]: React.FC } = {
+        // System Activity
         "Network Activity": NetworkActivity,
         "Audit Logs": AuditLogs,
         "MLAAS Traffic": MLAAS_Traffic,
+
+        // Manage Accounts
         "Roles & Permissions": RolesPermissions,
         "Recovery": Recovery,
         "Data & Regulation": DataRegulation,
-        "Invoices": Invoices,
-        "Billing": Billing,
+
+        // Finances
+        "Invoices & Payments": Invoices,
     };
 
     const sidebarItems: SidebarItem[] = [
@@ -71,8 +75,7 @@ const AdminDashboard: React.FC = () => {
             name: "Review Finances",
             sideBarIcon: <FontAwesomeIcon icon={faCreditCard} />,
             items: [
-                ["Invoices", () => onSidebarUpdate("Invoices"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
-                ["Billing", () => onSidebarUpdate("Billing"), <FontAwesomeIcon key={8} icon={faCreditCard} />],
+                ["Invoices & Payments", () => onSidebarUpdate("Invoices"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
             ] as [string, () => void | null, JSX.Element | null][],
         },
     ];
