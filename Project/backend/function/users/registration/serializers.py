@@ -13,7 +13,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['email', 'password', 'password2', 'full_name', 'phone_number']  
+        fields = ['email', 'password', 'password2', 'full_name', 'phone_number', 'is_admin']  
         extra_kwargs = {
             'full_name': {'required': True},
             'phone_number': {'required': True}, 
@@ -28,10 +28,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
+        is_admin = validated_data["is_admin"]
         default_role, created = Role.objects.get_or_create(
-            role_id=1,
-            defaults={'role_id': 1, 'role_name': 'User'}
+            role_id=is_admin and 4 or 1,
+            defaults={'role_id': is_admin and 4 or 1, 'role_name': is_admin and "Admin" or 'User'}
         )
+        print(default_role, is_admin and 4 or 1)
         user = Users(
             email=validated_data['email'],
             full_name=validated_data['full_name'],
@@ -41,6 +43,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         )
         user.set_password(validated_data['password'])
+        if is_admin:
+            user.is_admin = True
+            user.is_staff = True
         user.save()
 
         # Send OTP using Twilio (SMS)

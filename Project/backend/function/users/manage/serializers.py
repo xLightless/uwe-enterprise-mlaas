@@ -22,13 +22,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         ]
     
     def validate(self, data):
-        # Password change validation
+        # Current password must be provided to change password
         if 'new_password' in data and 'current_password' not in data:
             raise serializers.ValidationError(
                 "Current password is required to set a new password"
             )
         
-        # Verify current password if changing password
+        # Check if password is correct
         if 'current_password' in data:
             user = self.instance
             if not user.check_password(data['current_password']):

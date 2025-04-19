@@ -480,7 +480,7 @@ const Recovery: React.FC = () => {
                 </Overlay>
             }
 
-            <div className="w-full h-full grid grid-rows-[0.2fr_0.5fr_min-content_1fr] gap-4">
+            <div className="w-full h-full grid grid-rows-[0.2fr_0.5fr_1fr] gap-4">
                 {/* Account Management stats */}
                 <div className="w-full h-full grid xs:grid-rows-3 lg:grid-cols-3 gap-2 sm:gap-4">
                     <div className="order-1 w-full h-full bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-md flex flex-col justify-center items-center p-2 sm:p-4 hover:scale-105 transition-transform duration-300">
@@ -680,30 +680,24 @@ const Recovery: React.FC = () => {
 
                 {/* Table of Accounts */}
                 {data &&
-                    <div className="w-full">
-                        <div className="p-2"><h1 className="text-left font-bold text-black">Manage User Accounts</h1></div>
-                        <div>
-
-                        <PaginatedTable
-                            thead={data.thead}
-                            tbody={data.tbody}
-                            placeHolder={"Search network activity..."}
-                            onCloseValue={false}
-                            onClose={() => {}}
-                            filterOptions={
-                                [
-                                    "isVerified",
-                                    "isActive",
-                                    "isStaff",
-                                    "isAdmin",
-                                    "isSuperuser"
-                                ]
-                            }
-                        >
-                            <></>
-                        </PaginatedTable>
-                        </div>
-                    </div>
+                    <PaginatedTable
+                        thead={data.thead}
+                        tbody={data.tbody}
+                        placeHolder={"Search network activity..."}
+                        onCloseValue={false}
+                        onClose={() => {}}
+                        filterOptions={
+                            [
+                                "isVerified",
+                                "isActive",
+                                "isStaff",
+                                "isAdmin",
+                                "isSuperuser"
+                            ]
+                        }
+                    >
+                        <></>
+                    </PaginatedTable>
                 }
             </div>
         </>
