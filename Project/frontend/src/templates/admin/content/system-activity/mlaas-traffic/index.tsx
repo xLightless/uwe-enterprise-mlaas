@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { getModels } from "../../../../../repositories/models";
+import { updateUserDetails } from "../../../../../repositories/user";
+import { loginUser } from "../../../../../repositories/auth";
 
 // CREATE TABLE public."ModelUsageLogs" (
 //     usage_id integer NOT NULL,
@@ -14,8 +17,26 @@ import React from "react";
 
 
 const MLAASTraffic: React.FC = () => {
+    const [data, setData] = useState<any>(null);
+
+    async function fetchModels() {
+        const models = await getModels();
+        console.log(models);
+        setData(models);
+    }
+
     return (
-        <>MLAAS</>
+        <>
+        <div className="w-full h-52">
+            <button
+                className="p-4 h-fit w-fit btn bg-blue-500 text-white rounded-md hover:bg-blue-400 cursor-pointer"
+                onClick={fetchModels}
+            >
+                Swap Models
+            </button>
+            <p className="text-lg text-blue-500">{data}</p>
+        </div>
+        </>
     )
 };
 

@@ -4,12 +4,12 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.utils import timezone
 
 class Role(models.Model):
-    role_id = models.AutoField(primary_key=True, db_column='role_id')
-    role_name = models.CharField(max_length=75, db_column='role_name')
-
+    role_id = models.AutoField(primary_key=True)  # Auto-incrementing role ID
+    role_name = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'Roles'
+        app_label = 'users'
 
     def __str__(self):
         return self.role_name
@@ -21,6 +21,7 @@ class Permission(models.Model):
 
     class Meta:
         db_table = 'Permissions'
+        app_label = 'users'
 
     def __str__(self):
         return self.permission_name
@@ -33,6 +34,7 @@ class RolePermission(models.Model):
 
     class Meta:
         db_table = 'RolePermissions'
+        app_label = 'users'
 
 class UserManager(BaseUserManager):
     def create_user(self, email, full_name, password=None, role=None, phone_number=None):
@@ -103,6 +105,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'Users'
+        app_label = 'users'
 
     def __str__(self):
         return self.email

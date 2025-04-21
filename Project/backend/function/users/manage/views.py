@@ -31,7 +31,7 @@ def update_user_profile(request):
     """Update the current user's profile information"""
     user = request.user
     serializer = UserProfileSerializer(user, data=request.data, partial=True)
-    
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -63,7 +63,7 @@ def get_user_by_id(request, user_id):
         return Response(serializer.data)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"}, 
+            {"error": "User not found"},
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -79,14 +79,14 @@ def admin_update_user(request, user_id):
     try:
         user = Users.objects.get(user_id=user_id)
         serializer = AdminUserUpdateSerializer(user, data=request.data, partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"}, 
+            {"error": "User not found"},
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -104,6 +104,6 @@ def delete_user(request, user_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"}, 
+            {"error": "User not found"},
             status=status.HTTP_404_NOT_FOUND
         )
