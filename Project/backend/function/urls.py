@@ -7,9 +7,6 @@ from function.Model_management.views import (
     add_model, delete_model, view_models, set_active_model, model_detail,
     view_model_statistics, view_model_feedback
 )
-from function.users.account_management.views import (
-    create_user, delete_user, view_user_details, update_user_details
-)
 
 from function.users.role_management.views import (view_roles, view_role_detail,
                                             add_role, update_role, delete_role)
@@ -64,14 +61,12 @@ urlpatterns = [
     path('permissions/', view_all_permissions, name='view_all_permissions'),
     path('permissions/role/<int:role_id>/', view_permissions_by_role, name='view_permissions_by_role'),
 
-    # Account management endpoints
-    path('users/create/', create_user, name='create_user'),
-    path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
-    path('users/<int:user_id>/details/', view_user_details, name='view_user_details'),
-    path('users/<int:user_id>/update/', update_user_details, name='update_user_details'),
-
     # Djoser authentication
     path('auth/', include('djoser.urls')),
+
+    # Swagger Docs
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui')
 
 
 ]

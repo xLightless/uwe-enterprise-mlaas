@@ -1,0 +1,244 @@
+{
+    "Claims": [
+        {
+            "claim_id": 1,
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-20T22:24:30"
+        },
+        {
+            "claim_id": 2,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-21T55:01:06"
+        },
+        {
+            "claim_id": 3,
+            "injury_prognosis": "7 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T43:47:48"
+        },
+        {
+            "claim_id": 4,
+            "injury_prognosis": "4 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-20T36:32:06"
+        },
+        {
+            "claim_id": 5,
+            "injury_prognosis": "3 months",
+            "injury_description": "Concussion and bruised ribs.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-21T13:07:06"
+        },
+        {
+            "claim_id": 6,
+            "injury_prognosis": "6 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T18:12:30"
+        },
+        {
+            "claim_id": 7,
+            "injury_prognosis": "6 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": false,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T24:57:54"
+        },
+        {
+            "claim_id": 8,
+            "injury_prognosis": "8 months",
+            "injury_description": "Concussion and bruised ribs.",
+            "police_report_filed": false,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T00:13:42"
+        },
+        {
+            "claim_id": 9,
+            "injury_prognosis": "6 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T07:57:30"
+        },
+        {
+            "claim_id": 10,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-21T37:18:12"
+        },
+        {
+            "claim_id": 11,
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-20T22:24:30"
+        },
+        {
+            "claim_id": 12,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-21T55:01:06"
+        },
+        {
+            "claim_id": 13,
+            "injury_prognosis": "7 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T43:47:48"
+        },
+        {
+            "claim_id": 14,
+            "injury_prognosis": "4 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-20T36:32:06"
+        },
+        {
+            "claim_id": 15,
+            "injury_prognosis": "3 months",
+            "injury_description": "Fractured wrist from a fall.",
+            "police_report_filed": false,
+            "num_witnesses": 2,
+            "claim_date": "2025-04-22T10:15:00"
+        },
+        {
+            "claim_id": 16,
+            "injury_prognosis": "4 months",
+            "injury_description": "Sprained ankle during a workplace accident.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T11:30:00"
+        },
+        {
+            "claim_id": 17,
+            "injury_prognosis": "5 months",
+            "injury_description": "Back strain from lifting heavy equipment.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T12:45:00"
+        },
+        {
+            "claim_id": 18,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor laceration from sharp object.",
+            "police_report_filed": false,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T13:00:00"
+        },
+        {
+            "claim_id": 19,
+            "injury_prognosis": "6 months",
+            "injury_description": "Concussion from a fall.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T14:15:00"
+        },
+        {
+            "claim_id": 20,
+            "injury_prognosis": "1 month",
+            "injury_description": "Burns from chemical exposure.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T15:30:00"
+        },
+        {
+            "claim_id": 21,
+            "injury_prognosis": "3 months",
+            "injury_description": "Knee injury from sports activity.",
+            "police_report_filed": false,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T16:00:00"
+        },
+        {
+            "claim_id": 22,
+            "injury_prognosis": "4 months",
+            "injury_description": "Shoulder dislocation during a fall.",
+            "police_report_filed": true,
+            "num_witnesses": 2,
+            "claim_date": "2025-04-22T17:15:00"
+        },
+        {
+            "claim_id": 23,
+            "injury_prognosis": "5 months",
+            "injury_description": "Fractured ankle from a slip.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T18:30:00"
+        },
+        {
+            "claim_id": 24,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor burn from hot surface.",
+            "police_report_filed": false,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T19:45:00"
+        },
+        {
+            "claim_id": 25,
+            "injury_prognosis": "6 months",
+            "injury_description": "Herniated disc from lifting.",
+            "police_report_filed": true,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-22T20:00:00"
+        },
+        {
+            "claim_id": 26,
+            "injury_prognosis": "1 month",
+            "injury_description": "Cut from broken glass.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T21:15:00"
+        },
+        {
+            "claim_id": 27,
+            "injury_prognosis": "3 months",
+            "injury_description": "Torn ligament in the knee.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-22T22:30:00"
+        },
+        {
+            "claim_id": 28,
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash from rear-end collision.",
+            "police_report_filed": true,
+            "num_witnesses": 2,
+            "claim_date": "2025-04-22T23:45:00"
+        },
+        {
+            "claim_id": 29,
+            "injury_prognosis": "4 months",
+            "injury_description": "Fractured collarbone from a fall.",
+            "police_report_filed": false,
+            "num_witnesses": 0,
+            "claim_date": "2025-04-23T00:15:00"
+        },
+        {
+            "claim_id": 30,
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor concussion from sports.",
+            "police_report_filed": true,
+            "num_witnesses": 1,
+            "claim_date": "2025-04-23T01:00:00"
+        }
+    ]
+}

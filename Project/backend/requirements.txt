@@ -27,3 +27,4 @@ urllib3==2.3.0
 twilio==7.2.0
 scikit-learn
 pandas
+drf_yasg

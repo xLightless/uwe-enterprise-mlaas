@@ -37,9 +37,9 @@ def view_models(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def set_active_model(request, model_id):
-    Model.objects.update(is_active=False)  
+    Model.objects.update(is_active=False)
     model = get_object_or_404(Model, model_id=model_id)
-    model.is_active = True  
+    model.is_active = True
     model.save()
     return Response({"message": f"Model with ID {model_id} set as active."}, status=status.HTTP_200_OK)
 
