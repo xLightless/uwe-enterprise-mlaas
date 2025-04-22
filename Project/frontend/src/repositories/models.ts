@@ -15,9 +15,9 @@ const authModels = axios.create({
  * @async
  * @function getModels
  * @throws Will throw an error if the request fails.
- * @returns {Promise<any>} - A promise that resolves to the list of models.
+ * @returns {Promise<JSONResponse>} - A promise that resolves to the list of models.
  */
-const getModels = async (): Promise<any> => {
+const getModels = async (): Promise<JSONResponse> => {
     try {
         const response = await models.get('/view/');
         return response.data;

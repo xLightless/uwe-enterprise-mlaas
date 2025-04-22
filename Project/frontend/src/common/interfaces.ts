@@ -74,7 +74,7 @@ export interface UserProps {
     actions?: JSX.Element;
 }
 
-export interface JSONResponse<T = any> {
+export interface JSONResponse<T = unknown> {
     status: string
     message: string
     data?: T

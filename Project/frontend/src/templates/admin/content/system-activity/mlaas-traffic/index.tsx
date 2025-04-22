@@ -1,23 +1,9 @@
 import React, { useState } from "react";
 import { getModels } from "../../../../../repositories/models";
-import { updateUserDetails } from "../../../../../repositories/user";
-import { loginUser } from "../../../../../repositories/auth";
-
-// CREATE TABLE public."ModelUsageLogs" (
-//     usage_id integer NOT NULL,
-//     user_id integer NOT NULL,
-//     model_id integer NOT NULL,
-//     num_predictions integer NOT NULL,
-//     model_duration interval NOT NULL,
-//     created_at timestamp without time zone NOT NULL
-// );
-
-// Swap models on demand
-//
-
+import { JSONResponse } from "../../../../../common/interfaces";
 
 const MLAASTraffic: React.FC = () => {
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<JSONResponse | null>(null);
 
     async function fetchModels() {
         const models = await getModels();
@@ -34,7 +20,7 @@ const MLAASTraffic: React.FC = () => {
             >
                 Swap Models
             </button>
-            <p className="text-lg text-blue-500">{data}</p>
+            <p className="text-lg text-blue-500">{JSON.stringify(data)}</p>
         </div>
         </>
     )

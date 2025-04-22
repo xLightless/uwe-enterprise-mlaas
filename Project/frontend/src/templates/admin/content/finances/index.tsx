@@ -4,7 +4,7 @@ import React from "react";
 // Manually create invoices for existing users
 // View system invoices and filter by Id, Date, time, price.
 
-const CreateManualInvoices = () => {
+const CreateManualInvoices: React.FC = () => {
     return (
         <>Create Manual Invoices</>
     )
@@ -18,4 +18,5 @@ const Invoices: React.FC = () => {
 
 export {
     Invoices,
+    CreateManualInvoices
 }

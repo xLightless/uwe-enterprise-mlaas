@@ -1,5 +1,10 @@
+"""
+Permission Management Serializers
+"""
+
 from rest_framework import serializers
 from function.models import Permission, RolePermission
+
 
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
