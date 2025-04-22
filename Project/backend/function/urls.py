@@ -5,6 +5,7 @@ from function.users.login.views import login_user, get_user_profile, \
 from function.users.manage.views import get_user_details, \
     update_user_profile, list_all_users, get_user_by_id, admin_update_user, \
     delete_user
+from function.monitoring.views import recent_activity_logs
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from rest_framework import permissions
@@ -36,6 +37,8 @@ urlpatterns = [
     path('users/<int:user_id>/update/', admin_update_user,
          name='admin-update-user'),
     path('users/<int:user_id>/delete/', delete_user, name='delete-user'),
+    # Monitoring
+    path('logs/activity/', recent_activity_logs, name='recent-activity-logs'),
     # Include Djoser URLs
     path('auth/', include('djoser.urls')),
     # Swagger Docs
