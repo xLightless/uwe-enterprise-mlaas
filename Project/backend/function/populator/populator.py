@@ -45,13 +45,17 @@ def populate():
             users_data = json.load(f)
             insert_data("default", "Roles", users_data["Roles"])
             insert_data("default", "Permissions", users_data["Permissions"])
-            insert_data("default", "RolePermissions", users_data["RolePermissions"])
+            insert_data("default", "RolePermissions",
+                        users_data["RolePermissions"])
             insert_data("default", "Users", users_data["Users"],
-                        {"password": "password_hash", "updated_at": "last_login"},
+                        {"password": "password_hash",
+                         "updated_at": "last_login"},
                         {"phone_number": "07696907"})
             
         with open(parent+"traffic.json") as f:
             traffic_data = json.load(f)
-            insert_data("traffic", "ActivityLogs", traffic_data["ActivityLogs"])
+            insert_data("traffic", "ActivityLogs",
+                        traffic_data["ActivityLogs"])
             insert_data("traffic", "AuditLogs", traffic_data["AuditLogs"])
-            insert_data("traffic", "ModelUsageLogs", traffic_data["ModelUsageLogs"])
+            insert_data("traffic", "ModelUsageLogs",
+                        traffic_data["ModelUsageLogs"])

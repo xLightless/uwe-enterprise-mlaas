@@ -14,7 +14,8 @@ from .serializers import ClaimCreationSerializer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_claim(request):
-    serializer = ClaimCreationSerializer(data=request.data, context={'request': request})
+    serializer = ClaimCreationSerializer(data=request.data,
+                                         context={'request': request})
     if serializer.is_valid():
         result = serializer.save()
         return Response({
