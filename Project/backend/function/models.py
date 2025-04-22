@@ -123,3 +123,21 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     def get_user_id(self):
         return self.user_id
+
+
+class ActivityLog(models.Model):
+    log_id = models.AutoField(primary_key=True, db_column='log_id')
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
+    ip_address = models.GenericIPAddressField()
+    description = models.TextField()
+    status_code = models.CharField(max_length=3)
+    generated_at = models.DateTimeField(auto_now_add=True)
+    event_type = models.CharField(max_length=100)
+    device_info = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'ActivityLogs'
+        ordering = ['-generated_at']
+
+    def __str__(self):
+        return f"{self.event_type} - {self.user.email}"

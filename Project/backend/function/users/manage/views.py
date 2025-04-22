@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
 from function.models import Users
+from function.permissions import has_role
 
 @swagger_auto_schema(
     method="get",
@@ -18,6 +19,8 @@ def get_user_details(request):
     """Get detailed information about the current user"""
     user = request.user
     serializer = UserProfileSerializer(user)
+    response = serializer.data
+    response["permissions"] = user.get_permissions()
     return Response(serializer.data)
 
 @swagger_auto_schema(
@@ -42,7 +45,7 @@ def update_user_profile(request):
     responses={200: UserProfileSerializer(many=True)}
 )
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([has_role("Admin")])
 def list_all_users(request):
     """List all users (Admin only)"""
     users = Users.objects.all()
@@ -54,7 +57,7 @@ def list_all_users(request):
     responses={200: UserProfileSerializer}
 )
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([has_role("Admin")])
 def get_user_by_id(request, user_id):
     """Get user details by ID (Admin only)"""
     try:
@@ -73,7 +76,7 @@ def get_user_by_id(request, user_id):
     responses={200: AdminUserUpdateSerializer}
 )
 @api_view(['PUT'])
-@permission_classes([IsAdminUser])
+@permission_classes([has_role("Admin")])
 def admin_update_user(request, user_id):
     """Update any user's details (Admin only)"""
     try:
@@ -95,7 +98,7 @@ def admin_update_user(request, user_id):
     responses={204: "User successfully deleted"}
 )
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([has_role("Admin")])
 def delete_user(request, user_id):
     """Delete a user (Admin only)"""
     try:

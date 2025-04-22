@@ -1,5 +1,8 @@
+"""
+function/urls.py
+"""
+
 # flake8: noqa
-# function/urls.py
 from django.urls import path, include
 from function.users.registration.views import register_user, verify_otp
 from function.users.login.views import login_user
@@ -14,6 +17,12 @@ from function.prediction.views import predict
 from function.users.perm_management.views import (
     create_permission, delete_permission, view_all_permissions, view_permissions_by_role)
 
+from function.users.login.views import login_user, get_user_profile, \
+    logout_user
+from function.users.manage.views import get_user_details, \
+    update_user_profile, list_all_users, get_user_by_id, admin_update_user, \
+    delete_user
+from function.monitoring.views import recent_activity_logs
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from rest_framework import permissions
@@ -34,7 +43,21 @@ urlpatterns = [
     path('auth/register/', register_user, name='register'),
     path('auth/verify/', verify_otp, name='verify'),
     path('auth/login/', login_user, name='login'),
+    path('auth/profile/', get_user_profile, name='profile'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/logout/', logout_user, name='logout'),
+
+    # Include Djoser URLs
+    path('auth/', include('djoser.urls')),
+
+    # USER MANAGEMENT
+    path('users/me/', get_user_details, name='user-details'),
+    path('users/me/update/', update_user_profile, name='update-profile'),
+    path('users/', list_all_users, name='list-users'),
+    path('users/<int:user_id>/', get_user_by_id, name='user-by-id'),
+    path('users/<int:user_id>/update/', admin_update_user,
+         name='admin-update-user'),
+    path('users/<int:user_id>/delete/', delete_user, name='delete-user'),
 
     # Model management endpoints
     path('auth/add_models/', add_model, name='add_model'),
@@ -61,8 +84,8 @@ urlpatterns = [
     path('permissions/', view_all_permissions, name='view_all_permissions'),
     path('permissions/role/<int:role_id>/', view_permissions_by_role, name='view_permissions_by_role'),
 
-    # Djoser authentication
-    path('auth/', include('djoser.urls')),
+    # Monitoring
+    path('logs/activity/', recent_activity_logs, name='recent-activity-logs'),
 
     # Swagger Docs
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0),
