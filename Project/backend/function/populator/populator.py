@@ -6,13 +6,14 @@ control_name = "populated1"
 
 
 def insert_data(db, t, data, mapping={}, override={}):
+    """Insert data into the database table."""
     with connections[db].cursor() as cursor:
         for p_item in data:
             item = p_item | override
 
             print(item)
-            keys = [mapping.get(s, s) for s in item.keys()] 
-            
+            keys = [mapping.get(s, s) for s in item.keys()]
+
             spam = ("%s, "*len(keys))[:-2]
             values = ", ".join(keys)
 
@@ -23,15 +24,17 @@ def insert_data(db, t, data, mapping={}, override={}):
 
 
 def is_populated():
+    """Check if the control table exists in the database."""
     with connections['default'].cursor() as cursor:
         cursor.execute(f"""
-            SELECT 1 FROM information_schema.tables 
+            SELECT 1 FROM information_schema.tables
             WHERE table_name = '{control_name}'
         """)
         return bool(cursor.fetchone())
 
 
 def populate():
+    """Populate the database with initial data."""
     with connections['default'].cursor() as cursor:
         # Create control table if needed
         cursor.execute(f"""
@@ -41,7 +44,7 @@ def populate():
         """)
 
     with connections['default'].cursor() as cursor:
-        with open(parent+"users.json") as f:
+        with open(parent+"users.json", encoding="UTF-8") as f:
             users_data = json.load(f)
             insert_data("default", "Roles", users_data["Roles"])
             insert_data("default", "Permissions", users_data["Permissions"])
@@ -51,8 +54,8 @@ def populate():
                         {"password": "password_hash",
                          "updated_at": "last_login"},
                         {"phone_number": "07696907"})
-            
-        with open(parent+"traffic.json") as f:
+
+        with open(parent+"traffic.json", encoding="UTF-8") as f:
             traffic_data = json.load(f)
             insert_data("traffic", "ActivityLogs",
                         traffic_data["ActivityLogs"])
