@@ -38,7 +38,7 @@ def create_permission(request):
         return Response(
             {
                 "message": ("Permission created and attached" +
-                            "to role successfully."),
+                            " to role successfully."),
                 "data": serializer.data
             },
             status=status.HTTP_201_CREATED

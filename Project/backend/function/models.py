@@ -60,26 +60,26 @@ class UserManager(BaseUserManager):
         return user
 
 
-    def create_superuser(self, email, full_name, password=None, phone_number=None):
 
-        admin_role, created = Role.objects.get_or_create(
-            role_id=4,
-            defaults={'role_id': 4, 'role_name': 'Admin'}
-        )
+    # def create_superuser(self, email, full_name, password=None, phone_number=None):
 
-        user = self.create_user(
-            email,
-            full_name=full_name,
-            password=password,
-            role=admin_role,
-            phone_number=phone_number,
-        )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
+    #     admin_role, created = Role.objects.get_or_create(
+    #         role_id=4,
+    #         defaults={'role_id': 4, 'role_name': 'Admin'}
+    #     )
 
+    #     user = self.create_user(
+    #         email,
+    #         full_name=full_name,
+    #         password=password,
+    #         role=admin_role,
+    #         phone_number=phone_number,
+    #     )
+    #     user.is_admin = True
+    #     user.is_staff = True
+    #     user.is_superuser = True
+    #     user.save(using=self._db)
+    #     return user
 
 class Users(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True, db_column='user_id')
@@ -94,9 +94,9 @@ class Users(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+
+    # Disable builtins
+    is_superuser = None
 
     objects = UserManager()
 

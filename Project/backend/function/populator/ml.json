@@ -1,7 +1,6 @@
 {
         "Models": [
         {
-            "model_id": 1,
             "model_name": "ClaimPredictor",
             "model_description": "A machine learning model to predict claim acceptance likelihood.",
             "model_version": 1.0,
@@ -12,7 +11,6 @@
             "model_file": "claim_predictor_v1.pkl"
         },
         {
-            "model_id": 2,
             "model_name": "SettlementEstimator",
             "model_description": "A regression model to estimate settlement values for claims.",
             "model_version": 2.1,
@@ -23,7 +21,6 @@
             "model_file": "settlement_estimator_v2.pkl"
         },
         {
-            "model_id": 3,
             "model_name": "FraudDetector",
             "model_description": "A classification model to detect fraudulent claims.",
             "model_version": 1.5,
@@ -34,7 +31,6 @@
             "model_file": "fraud_detector_v1_5.pkl"
         },
         {
-            "model_id": 4,
             "model_name": "WeatherImpactAnalyzer",
             "model_description": "A model to analyze the impact of weather conditions on accidents.",
             "model_version": 1.2,
@@ -45,7 +41,6 @@
             "model_file": "weather_impact_analyzer_v1_2.pkl"
         },
         {
-            "model_id": 5,
             "model_name": "DriverRiskProfiler",
             "model_description": "A model to profile driver risk based on historical data.",
             "model_version": 3.0,
