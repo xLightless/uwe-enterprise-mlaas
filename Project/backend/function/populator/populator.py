@@ -13,6 +13,7 @@ from psycopg2.errors import (
     UniqueViolation
 )
 import json
+import os
 
 parent = __file__[:-12]
 control_name = "populated1"
@@ -109,6 +110,21 @@ def get_empty_tables(databases: list[str]):
     return empty_tables
 
 
+def normalize_primary_key(table_name: str) -> str:
+    """
+        Normalize the primary key by converting PascalCase
+        to snake_case, removing plurals and then lowercasing.
+    """
+    snake_case = ""
+    for i, char in enumerate(table_name):
+        if char.isupper() and i > 0:
+            snake_case += "_"
+        snake_case += char.lower()
+    if snake_case.endswith('s'):
+        snake_case = snake_case[:-1]
+    return f"{snake_case}_id"
+
+
 def populate(db_map: dict[str, list[str]]):
     """
         Populate the database with initial data, retrying if FK
@@ -135,6 +151,9 @@ def populate(db_map: dict[str, list[str]]):
 
             try:
                 with connections[db].cursor() as cursor:
+                    # Normalize the primary key
+                    normalized_primary_key = normalize_primary_key(table)
+
                     # Create the table if it doesn't exist
                     name = db.split('_db')[0]
                     json_path = parent + f"{name}.json"
@@ -145,7 +164,7 @@ def populate(db_map: dict[str, list[str]]):
                             column_definitions = [
                                 f'"{col}" TEXT' for col in columns
                             ]
-                            primary_key = f'"{name}_id" SERIAL PRIMARY KEY'
+                            primary_key = f'"{normalized_primary_key}" SERIAL PRIMARY KEY'
                             column_definitions.insert(0, primary_key)
 
                             cursor.execute(f"""
@@ -160,12 +179,7 @@ def populate(db_map: dict[str, list[str]]):
 
                     if count == 0:
                         print(f"Populating {db}.{table}...")
-
                         insert_data(db, table, data[table])
-
-                        cursor.execute(
-                            f"INSERT INTO {control_name} (id) VALUES (1)"
-                        )
             except ForeignKeyViolation:
                 pass
 
@@ -181,7 +195,8 @@ def populate(db_map: dict[str, list[str]]):
                     if table in attempted_once:
                         print(
                             f"Skipping {db}.{table} " +
-                            "Cannot be inserted yet, relies on another table"
+                            "Cannot be inserted yet, relies on another table",
+                            e
                         )
                     else:
                         print(f"FK violation in {db}.{table}, retrying later.")

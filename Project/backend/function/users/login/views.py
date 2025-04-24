@@ -26,6 +26,9 @@ def login_user(request):
     print(is_serializer_valid)
     if is_serializer_valid:
         user = serializer.validated_data['user']
+
+        print("Validated Data:", serializer.validated_data)
+
         user.last_login = timezone.now()
         user.save()
 

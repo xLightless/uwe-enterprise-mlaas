@@ -12,21 +12,21 @@
             "injury_description": "Minor cuts and scrapes.",
             "police_report_filed": true,
             "witness_present": true,
-            "claim_date": "2025-04-21T55:01:06"
+            "claim_date": "2025-04-21T07:01:06"
         },
         {
             "injury_prognosis": "7 months",
             "injury_description": "Whiplash and minor bruises.",
             "police_report_filed": true,
             "witness_present": false,
-            "claim_date": "2025-04-22T43:47:48"
+            "claim_date": "2025-04-22T19:47:48"
         },
         {
             "injury_prognosis": "4 months",
             "injury_description": "Minor cuts and scrapes.",
             "police_report_filed": true,
             "witness_present": true,
-            "claim_date": "2025-04-20T36:32:06"
+            "claim_date": "2025-04-20T12:32:06"
         },
         {
             "injury_prognosis": "3 months",
@@ -47,7 +47,7 @@
             "injury_description": "Whiplash and minor bruises.",
             "police_report_filed": false,
             "witness_present": false,
-            "claim_date": "2025-04-22T24:57:54"
+            "claim_date": "2025-04-22T00:57:54"
         },
         {
             "injury_prognosis": "8 months",
@@ -68,7 +68,7 @@
             "injury_description": "Minor cuts and scrapes.",
             "police_report_filed": true,
             "witness_present": true,
-            "claim_date": "2025-04-21T37:18:12"
+            "claim_date": "2025-04-21T13:18:12"
         },
         {
             "injury_prognosis": "5 months",
@@ -82,21 +82,21 @@
             "injury_description": "Minor cuts and scrapes.",
             "police_report_filed": true,
             "witness_present": true,
-            "claim_date": "2025-04-21T55:01:06"
+            "claim_date": "2025-04-21T07:01:06"
         },
         {
             "injury_prognosis": "7 months",
             "injury_description": "Whiplash and minor bruises.",
             "police_report_filed": true,
             "witness_present": false,
-            "claim_date": "2025-04-22T43:47:48"
+            "claim_date": "2025-04-22T19:47:48"
         },
         {
             "injury_prognosis": "4 months",
             "injury_description": "Minor cuts and scrapes.",
             "police_report_filed": true,
             "witness_present": true,
-            "claim_date": "2025-04-20T36:32:06"
+            "claim_date": "2025-04-20T12:32:06"
         },
         {
             "injury_prognosis": "3 months",

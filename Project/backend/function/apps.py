@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 from function.populator.populator import (
     get_empty_tables,
-    # is_populated,
     populate
 )
 
@@ -10,7 +9,8 @@ class ProjectConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'function'
 
-    def ready(sef):
+    def ready(self):
+        """Validated the databases and populates them if they are empty."""
         databases = [
             'users_db',
             'traffic_db',
@@ -30,5 +30,5 @@ class ProjectConfig(AppConfig):
                   "Populating empty databases..." +
                   " *********************")
             populate(db_tables)
-            print("************************************* " +
+            print("**************************************" +
                   "***********************************")
