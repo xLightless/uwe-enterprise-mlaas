@@ -178,6 +178,7 @@ def get_column_definitions(
     return column_definitions
 
 
+# noqa: C901
 def populate(
     db_map: dict[str, list[str]]
 ) -> None:

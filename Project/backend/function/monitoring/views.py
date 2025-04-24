@@ -7,7 +7,7 @@ from function.models import ActivityLog
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from function.monitoring.serializers import ActivityLogSerializer
+from .serializers import ActivityLogSerializer
 
 
 @api_view(['GET'])
