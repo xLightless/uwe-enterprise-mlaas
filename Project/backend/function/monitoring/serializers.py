@@ -5,7 +5,7 @@ import json
 
 class ActivityLogSerializer(serializers.ModelSerializer):
     device_info = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = ActivityLog
         fields = [

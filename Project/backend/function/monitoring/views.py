@@ -1,14 +1,18 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from function.models import ActivityLog
-from .serializers import ActivityLogSerializer
+"""
+Monitoring views for the function app.
+"""
+
 from django.core.cache import cache
-from function.permissions import has_role
+from function.models import ActivityLog
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from function.monitoring.serializers import ActivityLogSerializer
 
 
 @api_view(['GET'])
 # @permission_classes([has_role("Admin")]) DO NOT LOCK THIS I NEED IT
-def recent_activity_logs(request):
+def recent_activity_logs():
     """
     Returns the 20 most recent activity logs
     Accessible only by admin users
