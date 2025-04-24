@@ -12,18 +12,34 @@ class ProjectConfig(AppConfig):
     def ready(self):
         """Validated the databases and populates them if they are empty."""
         databases = [
-            'users_db',
-            'traffic_db',
-            'payments_db',
-            'ml_db',
+            # 'users_db',
+            # 'traffic_db',
+            # 'payments_db',
+            # 'ml_db',
             'insurance_db'
         ]
 
         db_tables = get_empty_tables(databases)
+        # if len(db_tables) > 0:
+        #     empty_db_tables = {}
+        #     for db, tables in db_tables.items():
+        #         if len(tables) > 0:
+        #             empty_db_tables[db] = tables
+
         if len(db_tables) > 0:
             empty_db_tables = {}
             for db, tables in db_tables.items():
                 if len(tables) > 0:
+                    # Not an optimal solution, but ensures that
+                    # "UserAccidents" is processed before "UserClaims"
+                    if ("UserAccident" in tables):
+                        tables.remove("UserAccident")
+                        tables.insert(0, "UserAccident")
+                    if ("UserClaims" in tables) and (
+                        "UserAccident" not in tables
+                    ):
+                        tables.remove("UserClaims")
+                        tables.append("UserClaims")
                     empty_db_tables[db] = tables
 
             print("********************* " +

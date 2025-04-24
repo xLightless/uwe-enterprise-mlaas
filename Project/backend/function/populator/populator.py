@@ -12,14 +12,21 @@ from psycopg2.errors import (
     ForeignKeyViolation,
     UniqueViolation
 )
+
+from dateutil.parser import parse
 import json
-import os
 
 parent = __file__[:-12]
 control_name = "populated1"
 
 
-def insert_data(db, t, data, mapping={}, override={}):
+def insert_data(
+    db,
+    t,
+    data,
+    mapping={},
+    override={}
+) -> None:
     """Insert data into the database table."""
     with connections[db].cursor() as cursor:
         for p_item in data:
@@ -37,7 +44,10 @@ def insert_data(db, t, data, mapping={}, override={}):
                            [item[s] for s in item.keys()])
 
 
-def drop_django_tables(databases: list[str], excluded_prefixes: tuple[str]):
+def drop_django_tables(
+    databases: list[str],
+    excluded_prefixes: tuple[str]
+) -> None:
     """Drop Django tables from the databases."""
     for db in databases:
         with connections[db].cursor() as cursor:
@@ -57,7 +67,9 @@ def drop_django_tables(databases: list[str], excluded_prefixes: tuple[str]):
                     )
 
 
-def get_empty_tables(databases: list[str]):
+def get_empty_tables(
+    databases: list[str]
+) -> dict[str, list[str]]:
     """Return a map of databases, their table names, and if they are empty."""
 
     excluded_prefixes = (
@@ -110,7 +122,9 @@ def get_empty_tables(databases: list[str]):
     return empty_tables
 
 
-def normalize_primary_key(table_name: str) -> str:
+def normalize_primary_key(
+    table_name: str
+) -> str:
     """
         Normalize the primary key by converting PascalCase
         to snake_case, removing plurals and then lowercasing.
@@ -125,7 +139,43 @@ def normalize_primary_key(table_name: str) -> str:
     return f"{snake_case}_id"
 
 
-def populate(db_map: dict[str, list[str]]):
+def get_column_definitions(
+    columns,
+    data,
+    table
+) -> list[str]:
+    """
+    Get the column definitions for the table.
+
+    This function is used for revaluation of the column types,
+    especially when an error has been thrown. Rather than populating
+    with TEXT, we will try to determine the type of the column.
+    """
+    column_definitions = []
+    for col in columns:
+        first_value = data[table][0][col]
+        if isinstance(first_value, int):
+            column_type = "INTEGER"
+        elif isinstance(first_value, float):
+            column_type = "DOUBLE PRECISION"
+        elif isinstance(first_value, bool):
+            column_type = "BOOLEAN"
+        elif isinstance(first_value, str):
+            try:
+                parse(first_value)
+                column_type = "TIMESTAMP"
+            except (ValueError, TypeError):
+                column_type = "TEXT"
+        else:
+            column_type = "TEXT"
+        column_definitions.append(f'"{col}" {column_type}')
+    return column_definitions
+
+
+def populate(
+    db_map: dict[str, list[str]]
+) -> None:
+
     """
         Populate the database with initial data, retrying if FK
         constraints fail.
@@ -161,10 +211,14 @@ def populate(db_map: dict[str, list[str]]):
                         data = json.load(f)
                         if table in data:
                             columns = data[table][0].keys()
-                            column_definitions = [
-                                f'"{col}" TEXT' for col in columns
-                            ]
-                            primary_key = f'"{normalized_primary_key}" SERIAL PRIMARY KEY'
+                            column_definitions = get_column_definitions(
+                                columns, data, table
+                            )
+
+                            primary_key = (
+                                f'"{normalized_primary_key}" '
+                                f'SERIAL PRIMARY KEY'
+                            )
                             column_definitions.insert(0, primary_key)
 
                             cursor.execute(f"""
