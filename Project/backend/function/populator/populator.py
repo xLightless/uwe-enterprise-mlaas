@@ -1,5 +1,7 @@
 """
 This script populates the database with initial data from JSON files.
+
+Written by Ksawery Buczek (22031584), Reece Turner (22036698).
 """
 
 from django.db import (
@@ -162,9 +164,13 @@ def get_column_definitions(
             column_type = "BOOLEAN"
         elif isinstance(first_value, str):
             try:
-                parse(first_value)
-                column_type = "TIMESTAMP"
-            except (ValueError, TypeError):
+                # Check if the string is numeric and too large
+                if first_value.isdigit() and int(first_value) > 2**31 - 1:
+                    column_type = "TEXT"
+                else:
+                    parse(first_value)
+                    column_type = "TIMESTAMP"
+            except (ValueError, TypeError, OverflowError):
                 column_type = "TEXT"
         else:
             column_type = "TEXT"

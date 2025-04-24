@@ -12,10 +12,10 @@ class ProjectConfig(AppConfig):
     def ready(self):
         """Validated the databases and populates them if they are empty."""
         databases = [
-            # 'users_db',
-            # 'traffic_db',
-            # 'payments_db',
-            # 'ml_db',
+            'users_db',
+            'traffic_db',
+            'payments_db',
+            'ml_db',
             'insurance_db'
         ]
 
