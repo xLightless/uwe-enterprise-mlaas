@@ -178,9 +178,10 @@ def get_column_definitions(
     return column_definitions
 
 
+# flake8: noqa: C901
 def populate(
     db_map: dict[str, list[str]]
-) -> None:  # noqa: C901
+) -> None:
 
     """
         Populate the database with initial data, retrying if FK
