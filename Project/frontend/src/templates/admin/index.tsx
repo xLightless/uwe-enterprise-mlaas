@@ -20,6 +20,7 @@ import DataRegulation from './content/manage-accounts/data-regulation';
 import { Invoices } from './content/finances';
 import { RoleProvider } from '../../common/contexts/role';
 import { UserProvider } from '../../common/contexts/user';
+import ClaimsHandling from './content/claims-handling';
 
 /**
  * Wraps all providers and contexts of admin dashboard in a single component.
@@ -50,6 +51,9 @@ const AdminDashboard: React.FC = () => {
 
         // Finances
         "Invoices & Payments": Invoices,
+
+        // Admin Claims Handling
+        "Claims Handling": ClaimsHandling
     };
 
     const sidebarItems: SidebarItem[] = [
@@ -78,6 +82,13 @@ const AdminDashboard: React.FC = () => {
                 ["Invoices & Payments", () => onSidebarUpdate("Invoices"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
             ] as [string, () => void | null, JSX.Element | null][],
         },
+        {
+            name: "Claims Handling",
+            sideBarIcon: <FontAwesomeIcon icon={faFileInvoice} />,
+            items: [
+                ["Claims Handling", () => onSidebarUpdate("Claims Handling"), <FontAwesomeIcon key={8} icon={faFileInvoice} />],
+            ] as [string, () => void | null, JSX.Element | null][],
+        }
     ];
 
 
