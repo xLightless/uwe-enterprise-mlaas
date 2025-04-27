@@ -23,7 +23,6 @@ def login_user(request):
         data=request.data, context={'request': request})
 
     is_serializer_valid = serializer.is_valid()
-    print(is_serializer_valid)
     if is_serializer_valid:
         user = serializer.validated_data['user']
 
@@ -72,12 +71,19 @@ def logout_user(request):
         token.blacklist()
 
         return Response(
-            {"message": "Successfully logged out. Redirect to index page."},
+            {
+                "status": True,
+                "message": "Successfully logged out. Redirect to index page."
+            },
             status=status.HTTP_205_RESET_CONTENT
         )
     except Exception as e:
         return Response(
-            {"error": str(e)},
+            {
+                "status": False,
+                "message": "Failed to log out. Invalid token.",
+                "error": str(e)
+            },
             status=status.HTTP_400_BAD_REQUEST
         )
 

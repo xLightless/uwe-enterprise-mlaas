@@ -3,11 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
 import { Scrollbar } from "../../../../../components/scrollbar";
-import { rolesResponse, usersResponse } from "../../../../../common/data";
 import { useRoleContext } from "../../../../../common/contexts/role";
-import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
+import { Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
+import { addPermission, getPermissions, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
+import { createRole, deleteRole, getRole } from "../../../../../repositories/roles";
+import { adminUpdateUserDetails, getUsers } from "../../../../../repositories/user";
 
 /**
  * This component creates a series of permissible options to be assigned to a role.
@@ -16,53 +18,57 @@ import { useUserContext } from "../../../../../common/contexts/user";
 const PermissionsList: React.FC = () => {
     const roleContext = useRoleContext();
 
-    const [rolePermissions, setRolePermissions] = useState<Permission[]>([]);
-    const [dbPermissions, setDbPermissions] = useState<Permission[]>([]);
+    const [activePermissions, setActivePermissions] = useState<string[]>([]);
+    const [addPermissions, setAddPermissions] = useState<string[]>([]);
 
-    useEffect(() => {
-        const fetchDbPermissions = () => {
-            const dbPermissions =
-                rolesResponse[0]
-                    .permissions
-                    .concat(rolesResponse[1].permissions)
-                    .concat(rolesResponse[2].permissions);
-
-            const rolePermissions: Permission[] = roleContext.permissions;
-            return { rolePermissions, dbPermissions };
-        };
-
-        const { rolePermissions: newRolePermissions, dbPermissions: newDbPermissions } = fetchDbPermissions();
-        setRolePermissions(newRolePermissions);
-        setDbPermissions(newDbPermissions);
-    }, [roleContext.roleId, roleContext.permissions]); // Re-run when roleId or permissions change
-
-    const getUnassignedUserPermissions = () => {
-        return dbPermissions.filter(permission => !rolePermissions.includes(permission));
-    };
-
-    const setUserPermission = (permission: Permission) => {
-        if (dbPermissions.includes(permission)) {
-            setDbPermissions(dbPermissions.filter(p => p !== permission));
-            setRolePermissions([...rolePermissions, permission]);
-            roleContext.addPermissions([...rolePermissions, permission]);
-        } else if (rolePermissions.includes(permission)) {
-            setRolePermissions(rolePermissions.filter(p => p !== permission));
-            setDbPermissions([...dbPermissions, permission]);
-            roleContext.addPermissions(rolePermissions.filter(p => p !== permission));
+    /**
+     * Update a permission being transposed between the two lists.
+     * @param permissionName - The name of the permission to be added.
+     */
+    const setRolePermission = (permissionName: string) => {
+        const hasPermission = activePermissions.includes(permissionName);
+        if (!hasPermission && roleContext.roleId) {
+            setActivePermissions([...activePermissions, permissionName]);
+            setAddPermissions(addPermissions.filter((p) => p !== permissionName));
+            addPermission(roleContext.roleId, permissionName)
         }
     };
 
-    const removeUserPermission = (permission: Permission) => {
-        setRolePermissions(rolePermissions.filter(p => p !== permission));
-        setDbPermissions([...dbPermissions, permission]);
-        roleContext.addPermissions(rolePermissions.filter(p => p !== permission));
+    /**
+     * Remove a permission from the active list and add it to the available list.
+     * @param permissionName - The name of the permission to be removed.
+     */
+    const removeRolePermission = (permissionName: string) => {
+        const hasPermission = activePermissions.includes(permissionName);
+        if (hasPermission && roleContext.roleId) {
+            setActivePermissions(activePermissions.filter((p) => p !== permissionName));
+            setAddPermissions([...addPermissions, permissionName]);
+            removePermission(roleContext.roleId, permissionName)
+        }
     };
 
-    const nonBindedPermissions = getUnassignedUserPermissions();
+    const getDatabasePermissions = async () => {
+        const permissions = await getPermissions();
+        return permissions;
+    }
+
+    useEffect(() => {
+        const rolePermissions = roleContext.permissions.map((permission) => permission.permissionName);
+        setActivePermissions(rolePermissions);
+
+        const fetchDatabasePermissions = async () => {
+            const dbPermissions = await getDatabasePermissions();
+            const allPermissions = dbPermissions.data ? dbPermissions.data.permissions : [];
+            const activePermsList = roleContext.permissions.map((permission) => permission.permissionName);
+            const filteredDbPerms = allPermissions.filter((perm: string) => !activePermsList.includes(perm));
+
+            setAddPermissions(filteredDbPerms);
+        };
+        fetchDatabasePermissions();
+    }, [roleContext.permissions]); // Re-render when the role permissions change
 
     return (
         <div className="grid grid-cols-[0.5fr_auto_1fr] w-full h-full">
-
             {/* Existing Permissions */}
             <Scrollbar paddingLeft="0">
                 <div className="w-full h-full pl-4 pt-4 pb-4">
@@ -70,20 +76,20 @@ const PermissionsList: React.FC = () => {
                         <h1 className="font-bold typography text-left">Permissions</h1>
                     </div>
                     <div className="h-[calc(50vh)]">
-                            {rolePermissions.map((permission, index) => (
-                                <div key={index} className="flex flex-row justify-between items-center hover:bg-gray-300 cursor-pointer">
-                                    <h1 className="text-sm typography uppercase">{permission.name}</h1>
+                        {activePermissions.map((permissionName, index) => (
+                            <div key={index} className="flex flex-row justify-between items-center hover:bg-gray-300 cursor-pointer">
+                                <h1 className="text-sm typography uppercase">{permissionName}</h1>
 
-                                    {/* Remove the permission */}
-                                    <div className="ml-4 mr-2 flex justify-center items-center">
-                                        <FontAwesomeIcon
-                                            icon={faXmark}
-                                            className="text-red-500 cursor-pointer"
-                                            onClick={() => removeUserPermission(permission)}
-                                        />
-                                    </div>
+                                {/* Remove the permission */}
+                                <div className="ml-4 mr-2 flex justify-center items-center">
+                                    <FontAwesomeIcon
+                                        icon={faXmark}
+                                        className="text-red-500 cursor-pointer"
+                                        onClick={() => removeRolePermission(permissionName)}
+                                    />
                                 </div>
-                            ))}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </Scrollbar>
@@ -91,27 +97,28 @@ const PermissionsList: React.FC = () => {
             <div className="h-full w-0.25 bg-gray-300"></div>
 
             {/* Permissions to add */}
-            <div className="w-full h-full p-4">
-                <div className="flex flex-row justify-start items-center">
-                    <h1 className="font-bold typography text-left">Add Permissions</h1>
-                </div>
-
-                {nonBindedPermissions.map((permission, index) => (
-                    <div key={index} className="flex flex-row justify-between hover:bg-gray-300 cursor-pointer">
-                        <h1 className="text-sm typography uppercase flex">{permission.name}</h1>
-
-                        {/* Add the permission */}
-                        <div className="ml-4 mr-2">
-                            <FontAwesomeIcon
-                                icon={faPlus}
-                                className="text-green-500 cursor-pointer"
-                                onClick={() => setUserPermission(permission)}
-                            />
+            <Scrollbar>
+                <div className="w-full h-full p-4">
+                    <div className="flex flex-row justify-start items-center">
+                            <h1 className="font-bold typography text-left">Add Permissions</h1>
                         </div>
-                    </div>
-                ))
-                }
-            </div>
+
+                    {addPermissions.map((permissionName, index) => (
+                        <div key={index} className="flex flex-row justify-between hover:bg-gray-300 cursor-pointer">
+                            <h1 className="text-sm typography uppercase">{permissionName}</h1>
+
+                            {/* Add the permission */}
+                            <div className="ml-4 mr-2">
+                                <FontAwesomeIcon
+                                    icon={faPlus}
+                                    className="text-green-500 cursor-pointer"
+                                    onClick={() => setRolePermission(permissionName)}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Scrollbar>
         </div>
     )
 };
@@ -155,90 +162,112 @@ const Roles: React.FC<RolesProps> = ({ roles, onRemoveRole }) => {
 const RolePermissions: React.FC = () => {
     const [toggleNewRoleCreation, setToggleNewRoleCreation] = useState(false);
     const [isUpdateRoleOpen, setUpdateRoleOpen] = useState(false);
+
     const [roles, setRoles] = useState<Role[]>([]);
     const [newRoleName, setNewRoleName] = useState<string>("");
 
     const [filteredTableHeads, setFilteredTableHeads] = useState<string[]>([]);
-    // const [filteredTableData, setFilteredTableData] = useState<UserProps[]>([]);
     const [filteredTableData, setFilteredTableData] = useState<TableData | null>(null);
+
+    const filteredHeads = ["full_name", "email", "is_active", "role_name", "actions"];
 
     const roleContext = useRoleContext();
     const { setUser, getUser } = useUserContext();
     const [toggleEditUser, setToggleEditUser] = useState(false);
 
-    async function fetchUser(userId: number) {
+    const [hasTabledUpdated, setHasTableUpdated] = useState(false);
 
-        // Replace with actual fetch request
-        const foundUser = usersResponse.tbody.find(user => user.userId === userId);
-        const foundRole = rolesResponse.find(role => role.roleName === foundUser?.roleName);
-
-        if (foundUser) {
-            const user: UserProps = {...foundUser, roleId: foundRole?.roleId};
-            setUser(user);
-        }
+    function updateFilteredTableData(newData: TableData) {
+        console.log("Updating filtered table data: ", newData);
+        setFilteredTableData({
+            thead: newData.thead,
+            tbody: newData.tbody,
+        } as TableData);
+        setHasTableUpdated(!hasTabledUpdated);
     };
-
 
     // Opens the user settings editor for the selected user.
-    const editUser = (user: UserProps) => {
+    const editUser = (user: TableRow) => {
+        console.log("Editing user: ", user);
         setToggleEditUser(true);
-        setUser(user);
+        setUser({
+            userId: user.user_id,
+            roleId: user.role.role_id,
+            fullName: user.full_name,
+            email: user.email,
+            phoneNumber: user.phone_number,
+            isVerified: user.is_verified,
+            isActive: user.is_active,
+        } as UserProps);
     };
 
-    // Deletes the selected user account in the database.
-    const deleteAccount = (user: UserProps) => {
+    const fetchRolesData = async () => {
+        const fetchRolePermissions = async () => {
+            const rolePermissionData = await getRolePermissions();
+            return rolePermissionData;
+        };
 
-        // Replace with actual delete logic
-        console.log("Deleting account:", user.userId);
+        const fetchedRoles = await fetchRolePermissions();
+        const fetchedRolesData = fetchedRoles.data ? fetchedRoles.data : [];
+
+        const rolesData = fetchedRolesData.map((role: Role) => ({
+            roleId: role.role_id,
+            roleName: role.role_name,
+            permissions: role.permissions.map((permission: unknown) => ({
+                permissionName: permission.permission_name,
+            })),
+        })) as Role[];
+
+        setRoles(rolesData);
     }
 
-    useEffect(() => {
-        const filteredHeads = ["fullName", "email", "roleName", "actions"];
+    /**
+     * Fetches all users from the database and updates the state
+     * to populate, used to populate the paginated table subcomponent.
+     */
+    const fetchRoleUsers = async () => {
+        const fetchedUsers = await getUsers();
+        const users = fetchedUsers.data ? fetchedUsers.data : [];
         setFilteredTableHeads(filteredHeads);
 
-        // Filter the table data by excluding the unwanted columns
-        const filteredData = usersResponse.tbody.map((row) => {
+        const filteredData = users.map((row: unknown) => {
             const filteredRow: TableRow = {};
             for (const head of filteredHeads) {
                 if (head === "actions") {
-                    // Add actions column with Edit and Delete buttons
                     filteredRow[head] = (
                         <div className="flex flex-row gap-2">
                             <button
                                 className="hover:cursor-pointer bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
-                                onClick={() => editUser(row as UserProps)}
+                                onClick={() => editUser(row as TableRow)}
                             >
                                 Edit
                             </button>
-                            <button
-                                className="hover:cursor-pointer bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition"
-                                onClick={() => deleteAccount(row as UserProps)}
-                            >
-                                Delete
-                            </button>
                         </div>
                     );
-                } else {
-                    filteredRow[head] = row[head as keyof typeof row];
                 }
-            }
 
+                else if (head === "full_name") {
+                    filteredRow[head] = row.full_name;
+                } else if (head === "role_name") {
+                    filteredRow[head] = row.role.role_name;
+                } else if (head === "email") {
+                    filteredRow[head] = row.email;
+                }
+                else if (head === "is_active") {
+                    filteredRow[head] = row.is_active === true ? "True" : "False";
+                } else {
+                    filteredRow[head] = row[head];
+                }
+
+            }
             return filteredRow;
         });
 
         setFilteredTableData({
             thead: filteredHeads,
             tbody: filteredData,
-        } as TableData
-        );
-
-        const fetchRoles = () => {
-            return rolesResponse;
-        };
-
-        let fetchedRoles = fetchRoles();
-        setRoles(fetchedRoles);
-    }, []);
+        } as TableData);
+    };
 
     /**
      * Creates a new role on the UI with no permissions, but
@@ -250,14 +279,19 @@ const RolePermissions: React.FC = () => {
 
         if (newRoleName.length > 0 && newRoleName.trim()) {
             const newRole: Role = {
-                roleId: roles.length + 1,
+                // roleId: roles.length + 1,
                 roleName: newRoleName,
                 permissions: [],
             };
 
-            setRoles([...roles, newRole]);
+            // Send the new role to the backend
+            createRole(newRole)
+
+            // Render the new role on the UI
+            setRoles([...roles, {...newRole, roleId: roles.length + 1}]);
             setNewRoleName("");
             setToggleNewRoleCreation(false);
+
         } else {
             console.error("Role name cannot be empty");
         }
@@ -269,51 +303,74 @@ const RolePermissions: React.FC = () => {
      * @param role
      */
     const handleRemoveRole = (role: Role) => {
-        roleContext.removeRole(role);
-        setRoles(roles.filter((r) => r.roleId !== role.roleId));
-    };
+        if (role.roleId) {
+            roleContext.removeRole(role);
+            setRoles(roles.filter((r) => r.roleId !== role.roleId));
 
-    /**
-     * Sets the clicked user id into context to manage
-     * the user's attributes, specifically roles & perms.
-     * @param userId
-     */
-    const onUserIdClick = (userId: number) => {
-
-        // Fetch the user from the database
-        fetchUser(userId);
-        setUpdateRoleOpen(true);
+            deleteRole(role.roleId as number)
+        } else {
+            console.error("Role ID is not defined.");
+        }
     };
 
     /**
      * Updates the user's role in the database.
      */
-    const updateUserRole = (e: React.FormEvent) => {
+    const updateCurrentUserRole = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const currentUser = getUser();
-        if (!currentUser) return;
+        const selectedRoleId = (document.getElementById("roleName") as HTMLSelectElement)?.value;
+        if (
+            !currentUser ||
+            !currentUser.userId ||
+            selectedRoleId.length == 0 ||
+            Number(selectedRoleId) <= 0
+        ) return;
 
         /**
-         * Replace with the actual post request.
-         *
          * Gets the modified user object from the clicked state, then
          * updates the user's role ID in the database, followed by
          * re-rendering the new role name of the ID on the interface.
          */
-        const updatedRoleId = currentUser.roleId;
-        const userIndex = usersResponse.tbody.findIndex(user => user.userId === currentUser.userId);
-        const updatedRoleName = rolesResponse.find(role => role.roleId === updatedRoleId)?.roleName;
-        if (!updatedRoleName) return;
-        usersResponse.tbody[userIndex].roleName = updatedRoleName;
-        // setFilteredTableData([...usersResponse.tbody]);
-        setFilteredTableData({
-            thead: filteredTableHeads,
-            tbody: usersResponse.tbody,
-        } as TableData);
+        const userId = currentUser?.userId
+        delete currentUser['userId'];
+        const updatedUser: UserProps = {
+            ...currentUser,
+            roleId: Number(selectedRoleId),
+        }
+        const updatedUserDetails = await adminUpdateUserDetails(userId, updatedUser)
+        const fetchedUserRole = await getRole(updatedUserDetails.data.role_id)
+        const updatedUserRoleData = fetchedUserRole.data ? fetchedUserRole.data : null;
+        if (updatedUserRoleData && updatedUserDetails.status === 200) {
+            const updatedUserRole = {
+                roleId: updatedUserRoleData.role_id,
+                roleName: updatedUserRoleData.role_name
+            } as Role;
 
-        setUpdateRoleOpen(false);
+            setUpdateRoleOpen(false);
+            updateFilteredTableData({
+                thead: filteredHeads,
+                tbody: filteredTableData?.tbody.map((row) =>
+                    row.user_id === userId
+                        ? {
+                              ...row,
+                              role_name: updatedUserRole.roleName,
+                          }
+                        : row
+                ) || [],
+            });
+
+            console.log("Updated filter current user role: ", filteredTableData);
+        }
     };
+
+    useEffect(() => {
+        fetchRoleUsers();
+        fetchRolesData();
+
+        console.log("Fetching user and role data...")
+    }, [hasTabledUpdated]);
 
     return (
         <>
@@ -337,13 +394,13 @@ const RolePermissions: React.FC = () => {
                                             <select
                                                 id="roleName"
                                                 className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                                value={getUser()?.roleId || ""}
                                                 onChange={(e) => setUser({ ...getUser(), roleId: parseInt(e.target.value) })}
+                                                value={getUser()?.roleId || ""}
                                             >
                                                 {roles.map((role, index) => (
-                                                    <option key={index} value={role.roleId}>
-                                                        {role.roleName}
-                                                    </option>
+                                                        <option key={index} value={role.roleId}>
+                                                            {role.roleName}
+                                                        </option>
                                                 ))}
                                             </select>
                                         </td>
@@ -358,7 +415,7 @@ const RolePermissions: React.FC = () => {
                                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    updateUserRole(e);
+                                    updateCurrentUserRole(e);
                                     setToggleEditUser(false);
                                 }}
                             >
@@ -425,12 +482,20 @@ const RolePermissions: React.FC = () => {
                     </div>
 
                     {/* List of established roles */}
-                    <div className="w-full flex flex-col py-4">
-                        <Scrollbar paddingLeft="4">
-                            <div className="">
-                                <Roles roles={roles} onRemoveRole={handleRemoveRole} />
+                    <div className={`w-full flex flex-col ${roles.length === 0 ? "h-[calc(100%-45px)]" : "py-4"}`}>
+                        {roles &&
+                            <Scrollbar paddingLeft="4">
+                                <div className="">
+                                    <Roles roles={roles} onRemoveRole={handleRemoveRole} />
+                                </div>
+                            </Scrollbar>
+                        }
+
+                        {roles.length === 0 &&
+                            <div className="w-full h-full flex justify-center items-center">
+                                <p className="typography font-bold">No roles found.</p>
                             </div>
-                        </Scrollbar>
+                        }
                     </div>
                 </div>
 
@@ -447,7 +512,7 @@ const RolePermissions: React.FC = () => {
                     <div className="w-full h-[calc(50vh)] flex flex-col">
                         {!roleContext.roleId &&
                             <div className="w-full h-full flex justify-center items-center">
-                                <p className="typography font-bold">Select or create a role to edit permissions</p>
+                                <p className="typography font-bold">{filteredTableData ? `Select or create a role to edit permissions` : `No permission data found.`}</p>
                             </div>
                         }
 
@@ -455,7 +520,7 @@ const RolePermissions: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="col-span-2 bg-gray-200 h-fit">
+                <div className={`col-span-2 bg-gray-200 ${filteredTableData ? "h-fit" : "h-full"}`}>
                     <div className="border-b border-gray-800 py-2 flex flex-row justify-between items-center">
                         <div className="px-4">
                             <h1 className="font-bold typography text-left">Assign a user permissions</h1>
@@ -468,10 +533,6 @@ const RolePermissions: React.FC = () => {
                         tbody={filteredTableData?.tbody as TableRow[]}
                         placeHolder="Search for a user..."
                         maxRowsPerPage={4}
-                        onUserIdClick={(userId) => {
-                            onUserIdClick(userId);
-                            setUpdateRoleOpen(true);
-                        }}
 
                         onCloseValue={isUpdateRoleOpen}
                         onClose={() => setUpdateRoleOpen(false)}
@@ -505,7 +566,7 @@ const RolePermissions: React.FC = () => {
                                     <button
                                         type="submit"
                                         className="cursor-pointer"
-                                        onClick={(e) => updateUserRole(e)}
+                                        onClick={(e) => updateCurrentUserRole(e)}
                                     >
                                         <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
                                     </button>
@@ -513,6 +574,12 @@ const RolePermissions: React.FC = () => {
                             </div>
                         }
                     </PaginatedTable>
+                }
+
+                {!filteredTableData &&
+                    <div className="w-full h-full flex justify-center items-center">
+                        <p className="font-bold">No data to display.</p>
+                    </div>
                 }
                 </div>
             </div>

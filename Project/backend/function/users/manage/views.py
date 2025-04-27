@@ -2,7 +2,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
@@ -45,12 +45,17 @@ def update_user_profile(request):
     responses={200: UserProfileSerializer(many=True)}
 )
 @api_view(['GET'])
-@permission_classes([has_role("Admin")])
+# @permission_classes([has_role("Admin")])
+@permission_classes([AllowAny])
 def list_all_users(request):
     """List all users (Admin only)"""
     users = Users.objects.all()
     serializer = UserProfileSerializer(users, many=True)
-    return Response(serializer.data)
+    return Response({
+        "status": True,
+        "message": "Users retrieved successfully",
+        "data": serializer.data
+    })
 
 @swagger_auto_schema(
     method="get",
@@ -66,7 +71,10 @@ def get_user_by_id(request, user_id):
         return Response(serializer.data)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"},
+            {
+                "status": False,
+                "message": "Cannot retrieve this information. User not found.",
+            },
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -76,12 +84,17 @@ def get_user_by_id(request, user_id):
     responses={200: AdminUserUpdateSerializer}
 )
 @api_view(['PUT'])
-@permission_classes([has_role("Admin")])
+# @permission_classes([has_role("Admin")])
+@permission_classes([AllowAny])
 def admin_update_user(request, user_id):
     """Update any user's details (Admin only)"""
     try:
         user = Users.objects.get(user_id=user_id)
-        serializer = AdminUserUpdateSerializer(user, data=request.data, partial=True)
+        serializer = AdminUserUpdateSerializer(
+            user,
+            data=request.data,
+            partial=True
+        )
 
         if serializer.is_valid():
             serializer.save()
@@ -89,7 +102,10 @@ def admin_update_user(request, user_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"},
+            {
+                "status": False,
+                "message": "Cannot update this user.",
+            },
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -107,6 +123,9 @@ def delete_user(request, user_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Users.DoesNotExist:
         return Response(
-            {"error": "User not found"},
+            {
+                "status": False,
+                "message": "Cannot delete this user."
+            },
             status=status.HTTP_404_NOT_FOUND
         )

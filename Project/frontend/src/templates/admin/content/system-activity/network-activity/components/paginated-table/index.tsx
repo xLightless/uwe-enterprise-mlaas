@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FilterByProps, ReactChildProp, SearchBarProps, TableData } from "../../../../../../../common/interfaces";
 import Searchbar from "../../../../../../../components/searchbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -95,6 +95,20 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
         setSearchQuery(query);
         applyFilter(selectedItems, query);
     }
+
+    /**
+     * When the data (tbody) changes, re-render the table component with
+     * the newest information, while retaining the current page, search query
+     * and inspected rows.
+     */
+    useEffect(() => {
+        if (searchQuery.trim() !== "") {
+            applyFilter(selectedItems, searchQuery);
+        } else {
+            setFilteredData(tbody);
+            console.log(`An update occured on a table with heads ${thead}. `, tbody);
+        }
+    }, [tbody]);
 
     return (
         <div className="w-full h-fit bg-gray-200 rounded shadow-md p-4 grid grid-rows-[auto_1fr_auto grid-cols-1 gap-4">

@@ -58,6 +58,7 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
         setPermissions(permissions);
 
         // TODO: Add the new permission to the permissions table, if not already there.
+
     };
 
     return (

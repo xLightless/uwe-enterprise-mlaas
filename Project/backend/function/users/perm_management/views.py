@@ -15,6 +15,10 @@ from .serializer import PermissionSerializer
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_permission(request):
+    """
+    Create a new permission and attach it to a role.
+    This endpoint requires a role ID to associate the permission with.
+    """
     role_id = request.data.get('role_id')
     if not role_id:
         return Response(
@@ -53,6 +57,10 @@ def create_permission(request):
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_permission(request, permission_id):
+    """
+    Delete a permission by its ID.
+    This endpoint will also remove the permission from any associated roles.
+    """
     try:
         permission = Permission.objects.get(pk=permission_id)
         permission.delete()
@@ -69,7 +77,8 @@ def delete_permission(request, permission_id):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def view_all_permissions(request):
+def view_all_role_permissions(request):
+    """Return a list of all role permissions in the database."""
     role_permissions = RolePermission.objects.all()
     grouped_permissions = {}
 
@@ -79,7 +88,7 @@ def view_all_permissions(request):
         role_name = role_permission.role.role_name
         if role_id not in grouped_permissions:
             grouped_permissions[role_id] = {
-                "role": role_id,
+                "role_id": role_id,
                 "role_name": role_name,
                 "permissions": []
             }
@@ -94,7 +103,21 @@ def view_all_permissions(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+def get_database_permissions(request):
+    """Return an object of all permissions in the database."""
+    permissions = Permission.objects.all()
+    permission_names = [
+        permission.permission_name for permission in permissions
+    ]
+    return Response({"data": {
+        "permissions": permission_names
+    }}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def view_permissions_by_role(request, role_id):
+    """Return a list of permissions associated with a specific role."""
     try:
         role = Role.objects.get(pk=role_id)
         role_permissions = RolePermission.objects.filter(role=role)
@@ -123,6 +146,9 @@ def view_permissions_by_role(request, role_id):
 @api_view(['PUT'])
 @permission_classes([AllowAny])
 def update_permission(request, permission_id):
+    """
+    Update an existing permission by its ID.
+    """
     try:
         # Fetch the permission to be updated
         permission = Permission.objects.get(pk=permission_id)
@@ -160,3 +186,110 @@ def update_permission(request, permission_id):
         {"message": "Permission updated successfully."},
         status=status.HTTP_200_OK
     )
+
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def add_permission(request, role_id):
+    """
+    Add a new permission to a role, if it doesn't already exist.
+    """
+    try:
+        role = Role.objects.get(pk=role_id)
+    except Role.DoesNotExist:
+        return Response(
+            {
+                "status": False,
+                "error": "No role found with this ID."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    permission_name: str = request.data.get('permission_name')
+    if not permission_name:
+        return Response(
+            {
+                "status": False,
+                "error": "Permission name is required."
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    role_permissions = RolePermission.objects.filter(
+        role=role, permission__permission_name=permission_name.lower()
+    )
+    if role_permissions.exists():
+        return Response(
+            {
+                "status": False,
+                "error": "This permission already exists for this role."
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Create the new permission
+    permission = Permission.objects.create(
+        permission_name=permission_name.lower()
+    )
+
+    # Attach the permission to the role
+    RolePermission.objects.create(
+        role=role, permission=permission
+    )
+
+    return Response(
+        {
+            "status": True,
+            "message": "Permission added successfully."
+        },
+        status=status.HTTP_201_CREATED
+    )
+
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def remove_role_permission(request, role_id):
+    """
+    Remove a permission from a role.
+    """
+    try:
+        role = Role.objects.get(pk=role_id)
+    except Role.DoesNotExist:
+        return Response(
+            {
+                "status": False,
+                "error": "No role found with this ID."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    permission_name: str = request.data.get('permission_name')
+    if not permission_name:
+        return Response(
+            {
+                "status": False,
+                "error": "Permission name is required."
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        role_permission = RolePermission.objects.get(
+            role=role, permission__permission_name=permission_name.lower()
+        )
+        role_permission.delete()
+        return Response(
+            {
+                "status": True,
+                "message": "Permission removed successfully."
+            },
+            status=status.HTTP_200_OK
+        )
+    except RolePermission.DoesNotExist:
+        return Response(
+            {
+                "status": False,
+                "error": "This permission does not exist for this role."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )

@@ -47,11 +47,11 @@ export interface ReactChildProp {
 
 export interface Permission {
     permissionId?: number;
-    name: string;
+    permissionName: string;
 }
 
 export interface Role {
-    roleId: number;
+    roleId?: number;
     roleName: string;
     permissions: Permission[];
 };
@@ -67,11 +67,26 @@ export interface UserProps {
     lastLogin?: string;
     isVerified?: boolean | string;
     isActive?: boolean | string;
-    isAdmin?: boolean | string;
-    isStaff?: boolean | string;
-    isSuperuser?: boolean | string;
+
+    // isAdmin?: boolean | string;
+    // isStaff?: boolean | string;
+    // isSuperuser?: boolean | string;
 
     actions?: JSX.Element;
+}
+
+/**
+ * API URL: 'http://localhost:8000/api/users' - Response
+ */
+export interface APIUsersProps {
+    userId: number;
+    email: string;
+    fullName: string;
+    role: Role;
+    phoneNumber: string;
+    isVerified: boolean;
+    createdAt: string;
+    lastLogin: string;
 }
 
 export interface JSONResponse<T = unknown> {

@@ -15,7 +15,14 @@ from function.users.role_management.views import (view_roles, view_role_detail,
                                             add_role, update_role, delete_role)
 from function.prediction.views import predict
 from function.users.perm_management.views import (
-    create_permission, delete_permission, view_all_permissions, view_permissions_by_role)
+    create_permission,
+    delete_permission,
+    add_permission,
+    remove_role_permission,
+    view_all_role_permissions,
+    view_permissions_by_role,
+    get_database_permissions
+)
 
 from function.users.login.views import login_user, get_user_profile, \
     logout_user
@@ -81,8 +88,14 @@ urlpatterns = [
     # role management endpoints
     path('permissions/create/', create_permission, name='create_permission'),
     path('permissions/delete/<int:permission_id>/', delete_permission, name='delete_permission'),
-    path('permissions/', view_all_permissions, name='view_all_permissions'),
+    path('permissions/roles/', view_all_role_permissions, name='view_all_role_permissions'),
+
+    # Role permissions management endpoints
+    path('permissions/', get_database_permissions, name='get_database_permissions'),
     path('permissions/role/<int:role_id>/', view_permissions_by_role, name='view_permissions_by_role'),
+    path('permissions/role/<int:role_id>/update/', add_permission, name='add_permission'),
+    path('permissions/role/<int:role_id>/delete/', remove_role_permission, name='delete_permission'),
+
 
     # Monitoring
     path('logs/activity/', recent_activity_logs, name='recent-activity-logs'),

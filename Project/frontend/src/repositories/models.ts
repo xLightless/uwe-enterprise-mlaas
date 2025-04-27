@@ -18,13 +18,12 @@ const authModels = axios.create({
  * @returns {Promise<JSONResponse>} - A promise that resolves to the list of models.
  */
 const getModels = async (): Promise<JSONResponse> => {
-    try {
-        const response = await models.get('/view/');
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching models:', error);
-        throw error;
-    }
+    return models.get<JSONResponse>('/view/')
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error fetching models:', error);
+            throw error;
+        });
 };
 
 /**
@@ -58,7 +57,7 @@ const deleteModel = async (modelId: number): Promise<void> => {
         .catch(error => {
             console.error('Error deleting model:', error);
             throw error;
-        });
+    });
 };
 
 /**
@@ -75,7 +74,7 @@ const setActiveModel = async (modelId: number): Promise<JSONResponse> => {
         .catch(error => {
             console.error('Error setting active model:', error);
             throw error;
-        });
+    });
 };
 
 /**
@@ -92,7 +91,7 @@ const getModelStatistics = async (modelId: number): Promise<JSONResponse<ModelSt
         .catch(error => {
             console.error('Error fetching model statistics:', error);
             throw error;
-        });
+    });
 };
 
 /**
@@ -109,7 +108,7 @@ const getModelFeedback = async (modelId: number): Promise<JSONResponse> => {
         .catch(error => {
             console.error('Error fetching model feedback:', error);
             throw error;
-        });
+    });
 };
 
 export {

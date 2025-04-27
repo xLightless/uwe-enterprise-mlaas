@@ -17,12 +17,22 @@ import function.util.debug as DEBUG
 
 @swagger_auto_schema(
     method="post",
-    request_body=swu.request("password:string","password2:string","email:string","full_name:string","phone_number:string"),
+    request_body=swu.request(
+        "password:string",
+        "password2:string",
+        "email:string",
+        "full_name:string",
+        "phone_number:string"
+    ),
     responses={201: openapi.Response("Created (Check phone for verification)")}
 )
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
+    """
+    Registers a new user and sends an OTP to the
+    provided phone number for verification.
+    """
 
     serializer = UserCreateSerializer(data=request.data)
     if serializer.is_valid():
@@ -34,15 +44,21 @@ def register_user(request):
 
         # Send SMS OTP using Twilio
         if not DEBUG.SKIP_TWILIO:
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
+            client = Client(
+                settings.TWILIO_ACCOUNT_SID,
+                settings.TWILIO_AUTH_TOKEN
+            )
+            client.verify.services(
+                settings.TWILIO_VERIFY_SERVICE_SID
+            ).verifications.create(
                 to=f"+44{phone_number}",
                 channel='sms'
             )
 
         return Response({
 
-            "message": "User data cached successfully. Please check your phone for verification."
+            "message": "User data cached successfully. " +
+                "Please check your phone for verification."
         }, status=status.HTTP_201_CREATED)
 
     errors = []
@@ -55,8 +71,20 @@ def register_user(request):
 
 @swagger_auto_schema(
     method="post",
-    request_body=swu.request("otp:string","password:string","password2:string","email:string","full_name:string","phone_number:string"),
-    responses={201: swu.response("token:string","refresh:string","access:string","user:object")}
+    request_body=swu.request(
+        "otp:string",
+        "password:string",
+        "password2:string",
+        "email:string",
+        "full_name:string",
+        "phone_number:string"
+    ),
+    responses={201: swu.response(
+        "token:string",
+        "refresh:string",
+        "access:string",
+        "user:object"
+    )}
 )
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -75,8 +103,13 @@ def verify_otp(request):
     try:
         if not DEBUG.SKIP_TWILIO:
             # Verify OTP using Twilio
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            verification_check = client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verification_checks.create(
+            client = Client(
+                settings.TWILIO_ACCOUNT_SID,
+                settings.TWILIO_AUTH_TOKEN
+            )
+            verification_check = client.verify.services(
+                settings.TWILIO_VERIFY_SERVICE_SID
+            ).verification_checks.create(
                 to=f"+44{phone_number}",
                 code=otp # Ensure 'code' parameter is not None
             )
@@ -120,8 +153,17 @@ def verify_otp(request):
                     }, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"error": "User data not found in cache."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"error": "Invalid OTP."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "status": False,
+                "message": "User data not found in cache."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "status": False,
+            "message": "Invalid OTP."
+        }, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({
+            "status": False,
+            "message": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

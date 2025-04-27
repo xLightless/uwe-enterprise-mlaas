@@ -236,42 +236,42 @@ export const rolesResponse: Role[] = [
     roleId: 1,
     roleName: 'End User',
     permissions: [
-      { name: 'upload_text_records' },
-      { name: 'receive_trained_predictions' },
-      { name: 'submit_feedback_prompt' },
-      { name: 'view_logs' }
+      { permissionName: 'upload_text_records' },
+      { permissionName: 'receive_trained_predictions' },
+      { permissionName: 'submit_feedback_prompt' },
+      { permissionName: 'view_logs' }
     ]
   },
   {
     roleId: 2,
     roleName: 'AI Engineer',
     permissions: [
-      { name: 'upload_new_ml_models' },
-      { name: 'crud_models' },
-      { name: 'access_end_user_interactions' },
-      { name: 'export_anonymized_data' },
-      { name: 'view_system_log_metrics' }
+      { permissionName: 'upload_new_ml_models' },
+      { permissionName: 'crud_models' },
+      { permissionName: 'access_end_user_interactions' },
+      { permissionName: 'export_anonymized_data' },
+      { permissionName: 'view_system_log_metrics' }
     ]
   },
   {
     roleId: 3,
     roleName: 'Administrator',
     permissions: [
-      { name: 'manage_user_accounts' },
-      { name: 'manage_roles_permissions' },
-      { name: 'view_network_activity' },
-      { name: 'view_audit_logs' },
-      { name: 'manage_audit_log_compliance' }
+      { permissionName: 'manage_user_accounts' },
+      { permissionName: 'manage_roles_permissions' },
+      { permissionName: 'view_network_activity' },
+      { permissionName: 'view_audit_logs' },
+      { permissionName: 'manage_audit_log_compliance' }
     ]
   },
   {
     roleId: 4,
     roleName: 'Finance Team Member',
     permissions: [
-      { name: 'view_invoices' },
-      { name: 'view_billing' },
-      { name: 'generate_billing_documents' },
-      { name: 'generate_invoices' }
+      { permissionName: 'view_invoices' },
+      { permissionName: 'view_billing' },
+      { permissionName: 'generate_billing_documents' },
+      { permissionName: 'generate_invoices' }
     ]
   }
 ];

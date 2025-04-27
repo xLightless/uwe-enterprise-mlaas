@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from ...models import Role
+from ...models import Role, RolePermission
 from rest_framework.serializers import ModelSerializer
 
 
@@ -23,6 +23,9 @@ class RoleSerializer(ModelSerializer):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def add_role(request):
+    """
+    Add a new role to the system.
+    """
     serializer = RoleSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -39,6 +42,9 @@ def add_role(request):
 @api_view(['PUT'])
 @permission_classes([AllowAny])
 def update_role(request, role_id):
+    """
+    Update an existing role by its ID.
+    """
     role = get_object_or_404(Role, pk=role_id)
     serializer = RoleSerializer(role, data=request.data)
     if serializer.is_valid():
@@ -48,18 +54,39 @@ def update_role(request, role_id):
             status=status.HTTP_200_OK
         )
     return Response(
-        {"error": "Failed to update role.", "details": serializer.errors},
+        {
+            "status": False,
+            "message": "Failed to update role.",
+        },
         status=status.HTTP_400_BAD_REQUEST
     )
 
 
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
-def delete_role(request, role_id):
+def delete_role(role_id):
+    """
+    Delete a role by its ID.
+    This will also delete all associated permissions.
+
+    :param request: The HTTP request object.
+    :param role_id: The ID of the role to delete.
+    """
     role = get_object_or_404(Role, pk=role_id)
+    role_permission = RolePermission.objects.filter(role=role.role_id)
+    if not role_permission.exists():
+        return Response({
+            "status": False,
+            "message": "Cannot delete this role. Role not found."
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    role_permission.delete()
     role.delete()
     return Response(
-        {"message": f"Role with ID {role_id} deleted successfully."},
+        {
+            "status": True,
+            "message": "Role deleted successfully."
+        },
         status=status.HTTP_204_NO_CONTENT
     )
 
@@ -67,10 +94,17 @@ def delete_role(request, role_id):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_roles(request):
+    """
+    Retrieve all roles in the system.
+    """
     roles = Role.objects.all()
     serializer = RoleSerializer(roles, many=True)
     return Response(
-        {"message": "Roles retrieved successfully.", "data": serializer.data},
+        {
+            "status": True,
+            "message": "Roles retrieved successfully.",
+            "data": serializer.data
+        },
         status=status.HTTP_200_OK
     )
 
@@ -78,10 +112,14 @@ def view_roles(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_role_detail(request, role_id):
+    """
+    View an expanded detail of a specific role by its ID.
+    """
     role = get_object_or_404(Role, pk=role_id)
     serializer = RoleSerializer(role)
     return Response(
         {
+            "status": True,
             "message": "Role details retrieved successfully.",
             "data": serializer.data
         },
