@@ -6,13 +6,12 @@ import UserSettingsDropdown from "../../../../../components/user-settings";
 import NetworkConnectionsChart from "./components/charts/connections";
 import { getActivityLogsNext } from "../../../../../repositories/traffic";
 import { getUserDetails } from "../../../../../repositories/user";
-import { useUserContext } from "../../../../../common/contexts/user";
 
 const NetworkActivity: React.FC = () => {
     const [data, setNetworkActivityData] = useState<TableData | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
-    const userContext = useUserContext();
+    // const userContext = useUserContext();
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
 
@@ -42,7 +41,7 @@ const NetworkActivity: React.FC = () => {
 
         console.log("Fetching network activity data...", startIndex, endIndex);
         const fetchedInitialActivityLog = await getActivityLogsNext(previousPage, nextPage);
-        const fetchedActivityLog = fetchedInitialActivityLog.data as Array<Object>;
+        const fetchedActivityLog = fetchedInitialActivityLog.data as Array<unknown>;
 
         // Formats the key value pairs to fix the backend team issues.
         const transformedRows = [];

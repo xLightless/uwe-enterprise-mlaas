@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { APIUsersProps, JSONResponse, UserProps } from '../common/interfaces';
-import { get } from 'http';
 import { getTokenAccess } from '../common/session';
 
 const axiosInstance = axios.create({

@@ -55,6 +55,7 @@ def create_permission(request):
         status=status.HTTP_400_BAD_REQUEST
     )
 
+
 @api_user_agent("Admin has deleted a permission.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])

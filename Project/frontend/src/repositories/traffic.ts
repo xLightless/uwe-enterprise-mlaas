@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { JSONResponse, TableData } from '../common/interfaces';
+import { JSONResponse } from '../common/interfaces';
 import { getTokenAccess } from '../common/session';
 
 const traffic = axios.create({
