@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { APIUsersProps, JSONResponse, UserProps } from '../common/interfaces';
+import { get } from 'http';
+import { getTokenAccess } from '../common/session';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000/api/users',
@@ -52,6 +54,11 @@ const adminUpdateUserDetails = async (userId: number, user: UserProps) => {
             is_verified: filteredData.isVerified,
             is_active: filteredData.isActive,
 
+        },
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
         }
     );
 };
@@ -62,7 +69,13 @@ const adminUpdateUserDetails = async (userId: number, user: UserProps) => {
  * @returns {Promise<JSONResponse>} - A promise that resolves to the user's information.
  */
 const getUserDetails = async (userId: number): Promise<JSONResponse<UserProps>> => {
-    return axiosInstance.get<JSONResponse<UserProps>>(`/${userId}/`)
+    return axiosInstance.get<JSONResponse<UserProps>>(`/${userId}/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching user details:', error);
@@ -76,7 +89,13 @@ const getUserDetails = async (userId: number): Promise<JSONResponse<UserProps>> 
  * @returns {Promise<JSONResponse>} - A promise that resolves to the list of users.
  */
 const getUsers = async (): Promise<JSONResponse<APIUsersProps[]>> => {
-    return axiosInstance.get<JSONResponse<APIUsersProps[]>>('/')
+    return axiosInstance.get<JSONResponse<APIUsersProps[]>>('/',
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching users:', error);

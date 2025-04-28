@@ -1,5 +1,6 @@
 import axios from "axios";
 import { JSONResponse, Permission, Role } from "../common/interfaces";
+import { getTokenAccess } from "../common/session";
 
 
 const permissions = axios.create({
@@ -8,7 +9,13 @@ const permissions = axios.create({
 
 
 const getRolePermissions = async (): Promise<JSONResponse<Role[]>> => {
-    return permissions.get<JSONResponse<Role[]>>("/roles/")
+    return permissions.get<JSONResponse<Role[]>>("/roles/",
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error fetching role permissions:", error);
@@ -17,7 +24,13 @@ const getRolePermissions = async (): Promise<JSONResponse<Role[]>> => {
 }
 
 const getPermissions = async (): Promise<JSONResponse<Permission[]>> => {
-    return permissions.get<JSONResponse<Permission[]>>("/")
+    return permissions.get<JSONResponse<Permission[]>>("/",
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error fetching permissions:", error);
@@ -34,7 +47,12 @@ const getPermissions = async (): Promise<JSONResponse<Permission[]>> => {
 const addPermission = async (roleId: number, permissionName: string): Promise<JSONResponse<Permission>> => {
     return permissions.put<JSONResponse<Permission>>(`/role/${roleId}/update/`, {
         "permission_name": permissionName,
-    })
+        },
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        })
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error adding permission:", error);
@@ -52,7 +70,10 @@ const removePermission = async (roleId: number, permissionName: string): Promise
     return permissions.delete(`/role/${roleId}/delete/`, {
         data: {
             "permission_name": permissionName
-        }
+        },
+        headers: {
+            Authorization: getTokenAccess(true),
+        },
     })
     .then((response) => {
         return {

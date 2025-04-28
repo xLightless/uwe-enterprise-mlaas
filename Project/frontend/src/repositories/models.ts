@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { JSONResponse, ModelProps, ModelStatistics } from '../common/interfaces';
+import { getTokenAccess } from '../common/session';
 
 
 const models = axios.create({
@@ -18,7 +19,13 @@ const authModels = axios.create({
  * @returns {Promise<JSONResponse>} - A promise that resolves to the list of models.
  */
 const getModels = async (): Promise<JSONResponse> => {
-    return models.get<JSONResponse>('/view/')
+    return models.get<JSONResponse>('/view/',
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching models:', error);
@@ -35,7 +42,13 @@ const getModels = async (): Promise<JSONResponse> => {
  * @returns {Promise<void>} - A promise that resolves to the created model.
  */
 const createModel = async (modelProps: ModelProps): Promise<void> => {
-    authModels.post<JSONResponse<ModelProps>>('/add_models/', modelProps)
+    authModels.post<JSONResponse<ModelProps>>('/add_models/', modelProps,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error creating model:', error);
@@ -52,7 +65,13 @@ const createModel = async (modelProps: ModelProps): Promise<void> => {
  * @returns {Promise<void>} - A promise that resolves to the response of the deletion.
  */
 const deleteModel = async (modelId: number): Promise<void> => {
-    return authModels.delete(`/${modelId}/delete/`)
+    return authModels.delete(`/${modelId}/delete/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error deleting model:', error);
@@ -86,7 +105,13 @@ const setActiveModel = async (modelId: number): Promise<JSONResponse> => {
  * @returns {Promise<JSONResponse<ModelStatistics>>} - A promise that resolves to the model statistics.
  */
 const getModelStatistics = async (modelId: number): Promise<JSONResponse<ModelStatistics>> => {
-    return models.get<JSONResponse<ModelStatistics>>(`/${modelId}/statistics/`)
+    return models.get<JSONResponse<ModelStatistics>>(`/${modelId}/statistics/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching model statistics:', error);
@@ -103,7 +128,13 @@ const getModelStatistics = async (modelId: number): Promise<JSONResponse<ModelSt
  * @returns {Promise<JSONResponse>} - A promise that resolves to the feedback data.
  */
 const getModelFeedback = async (modelId: number): Promise<JSONResponse> => {
-    return models.get<JSONResponse>(`/${modelId}/feedback/`)
+    return models.get<JSONResponse>(`/${modelId}/feedback/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching model feedback:', error);

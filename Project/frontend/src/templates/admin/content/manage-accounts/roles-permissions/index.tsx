@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
 import { Scrollbar } from "../../../../../components/scrollbar";
 import { useRoleContext } from "../../../../../common/contexts/role";
-import { Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
+import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
 import { addPermission, getPermissions, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
-import { createRole, deleteRole, getRole } from "../../../../../repositories/roles";
+import { createRole, deleteRole, getRole, getRoles } from "../../../../../repositories/roles";
 import { adminUpdateUserDetails, getUsers } from "../../../../../repositories/user";
 
 /**
@@ -207,17 +207,26 @@ const RolePermissions: React.FC = () => {
             return rolePermissionData;
         };
 
-        const fetchedRoles = await fetchRolePermissions();
-        const fetchedRolesData = fetchedRoles.data ? fetchedRoles.data : [];
+        const fetchedRolePermissions = await fetchRolePermissions();
+        const fetchedRolePermissionsData = fetchedRolePermissions.data ? fetchedRolePermissions.data : [];
 
-        const rolesData = fetchedRolesData.map((role: Role) => ({
-            roleId: role.role_id,
-            roleName: role.role_name,
-            permissions: role.permissions.map((permission: unknown) => ({
-                permissionName: permission.permission_name,
-            })),
-        })) as Role[];
-
+        const fetchedRoles = await getRoles();
+        const fetchedRoleData = fetchedRoles.data ? fetchedRoles.data : [];
+        const rolesData = fetchedRoleData.map((role: Role) => {
+            const matchingRole = fetchedRolePermissionsData.find((r: Role) =>
+                r.role_id === role.role_id
+        );
+            return {
+                roleId: role.role_id,
+                roleName: role.role_name,
+                permissions: matchingRole
+                    ? matchingRole.permissions.map((permission: Permission) => ({
+                          permissionName: permission.permission_name,
+                      }))
+                    : [],
+            };
+        });
+        console.log("Roles data: ", rolesData);
         setRoles(rolesData);
     }
 
@@ -369,7 +378,6 @@ const RolePermissions: React.FC = () => {
         fetchRoleUsers();
         fetchRolesData();
 
-        console.log("Fetching user and role data...")
     }, [hasTabledUpdated]);
 
     return (
@@ -536,6 +544,11 @@ const RolePermissions: React.FC = () => {
 
                         onCloseValue={isUpdateRoleOpen}
                         onClose={() => setUpdateRoleOpen(false)}
+
+                        onNextPageEvent={() => {}}
+                        onPreviousPageEvent={() => {}}
+                        disableNextLastPage={true}
+                        disablePreviousFirstPage={true}
                     >
                         {isUpdateRoleOpen &&
                             <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">

@@ -4,6 +4,7 @@
 
 import axios from "axios";
 import { Role, JSONResponse } from "../common/interfaces";
+import { getTokenAccess } from "../common/session";
 
 const roles = axios.create({
     baseURL: "http://localhost:8000/api/roles"
@@ -18,6 +19,11 @@ const createRole = async (role: Role): Promise<JSONResponse<Role>> => {
     console.log("Creating role:", role);
     return roles.post<JSONResponse<Role>>("/add/", {
         role_name: role.roleName,
+    },
+    {
+        headers: {
+            Authorization: getTokenAccess(true),
+        },
     })
         .then((response) => response.data)
         .catch((error) => {
@@ -32,7 +38,13 @@ const createRole = async (role: Role): Promise<JSONResponse<Role>> => {
  * @returns {Promise<JSONResponse<Role>>} - A promise that resolves to the deleted role.
  */
 const deleteRole = async (roleId: number): Promise<JSONResponse<Role>> => {
-    return roles.delete<JSONResponse<Role>>(`/delete/${roleId}`)
+    return roles.delete<JSONResponse<Role>>(`/delete/${roleId}`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error deleting role:", error);
@@ -46,7 +58,13 @@ const deleteRole = async (roleId: number): Promise<JSONResponse<Role>> => {
  * @returns {Promise<JSONResponse<Role[]>>} - A promise that resolves to the list of roles.
  */
 const getRoles = async (): Promise<JSONResponse<Role[]>> => {
-    return roles.get<JSONResponse<Role[]>>("/")
+    return roles.get<JSONResponse<Role[]>>("/",
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error fetching roles:", error);
@@ -60,7 +78,13 @@ const getRoles = async (): Promise<JSONResponse<Role[]>> => {
  * @returns {Promise<JSONResponse<Role>>} - A promise that resolves to the role information.
  */
 const getRole = async (roleId: number): Promise<JSONResponse<Role>> => {
-    return roles.get<JSONResponse<Role>>(`/${roleId}`)
+    return roles.get<JSONResponse<Role>>(`/${roleId}`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
         .then((response) => response.data)
         .catch((error) => {
             console.error("Error fetching role:", error);
