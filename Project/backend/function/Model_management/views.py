@@ -4,10 +4,13 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
+from function.monitoring.middleware import api_user_agent
 from .ml_models import Model, UserModelFeedback
 from .serializer import ModelSerializer, UserModelFeedbackSerializer
 
 
+@api_user_agent("AI Engineer has added a new model.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def add_model(request):
@@ -29,6 +32,7 @@ def add_model(request):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_user_agent("AI Engineer has deleted a model.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_model(request, model_id):
@@ -43,6 +47,7 @@ def delete_model(request, model_id):
     }, status=status.HTTP_204_NO_CONTENT)
 
 
+@api_user_agent("AI Engineer has viewed all models.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_models(request):
@@ -58,6 +63,7 @@ def view_models(request):
     }, status=status.HTTP_200_OK)
 
 
+@api_user_agent("AI Engineer has set a model as active.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def set_active_model(request, model_id):
@@ -74,6 +80,7 @@ def set_active_model(request, model_id):
     }, status=status.HTTP_200_OK)
 
 
+@api_user_agent("AI Engineer has viewed a model's details.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def model_detail(request, pk):
@@ -109,6 +116,7 @@ def model_detail(request, pk):
         }, status=status.HTTP_204_NO_CONTENT)
 
 
+@api_user_agent("AI Engineer has viewed model statistics.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_model_statistics(request, model_id):
@@ -126,6 +134,7 @@ def view_model_statistics(request, model_id):
         "data": data}, status=status.HTTP_200_OK)
 
 
+@api_user_agent("AI Engineer has viewed model feedback.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_model_feedback(request, model_id):

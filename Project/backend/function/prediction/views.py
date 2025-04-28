@@ -17,6 +17,8 @@ import lime.lime_tabular
 from rest_framework import status
 import datetime
 
+from function.monitoring.middleware import api_user_agent
+
 # Load the model and label encoders once when the server starts
 MODEL_PATH = os.path.join(
     os.path.dirname(__file__),
@@ -122,6 +124,7 @@ def generate(settlement_amount, lime_explanation):
     return generated_response
 
 
+@api_user_agent("User has requested a settlement amount prediction.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def predict(request):

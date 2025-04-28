@@ -5,7 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import Overlay from "../../../../../../../components/overlay";
 
-const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & FilterByProps> = ({
+interface PaginatedTableEventProps {
+    onNextPageEvent: () => void;
+    onPreviousPageEvent: () => void;
+    disableNextLastPage?: boolean;
+    disablePreviousFirstPage?: boolean;
+
+}
+
+const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & FilterByProps & PaginatedTableEventProps> = ({
     thead,
     tbody,
     maxRowsPerPage,
@@ -14,7 +22,11 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
     onCloseValue,
     onClose,
     onUserIdClick,
-    filterOptions
+    filterOptions,
+    onNextPageEvent,
+    onPreviousPageEvent,
+    disableNextLastPage,
+    disablePreviousFirstPage
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
@@ -32,13 +44,22 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
     function onNextPage() {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
+            onNextPageEvent();
+        }
+        else if (!disableNextLastPage) {
+            onNextPageEvent();
         }
     }
 
     function onPreviousPage() {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
+            onPreviousPageEvent();
         }
+        else if (!disablePreviousFirstPage) {
+            onPreviousPageEvent();
+        }
+
     }
 
     function onFilterBy() {
@@ -173,12 +194,12 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
                     <button
                         className="py-1 bg-gray-700 rounded text-white w-24 h-fit cursor-pointer hover:bg-gray-800"
                         onClick={onPreviousPage}
-                        disabled={currentPage === 1}
+                        disabled={disablePreviousFirstPage ? currentPage === 1 : false}
                     ><span className="text-xs sm:text-xs md:text-md">Previous</span></button>
                     <button
                         className="py-1 bg-gray-700 rounded text-white w-24 h-fit cursor-pointer hover:bg-gray-800"
                         onClick={onNextPage}
-                        disabled={currentPage === totalPages}
+                        disabled={disableNextLastPage ? currentPage === totalPages : false}
                     ><span className="text-xs sm:text-xs md:text-md">Next</span></button>
                 </div>
             </div>

@@ -9,6 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+
+from function.monitoring.middleware import api_user_agent
 from ...models import Role, RolePermission
 from rest_framework.serializers import ModelSerializer
 
@@ -20,6 +22,7 @@ class RoleSerializer(ModelSerializer):
         fields = '__all__'
 
 
+@api_user_agent("Creating a new role in the system.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def add_role(request):
@@ -39,6 +42,7 @@ def add_role(request):
     )
 
 
+@api_user_agent("Updating roles by ID.")
 @api_view(['PUT'])
 @permission_classes([AllowAny])
 def update_role(request, role_id):
@@ -62,6 +66,7 @@ def update_role(request, role_id):
     )
 
 
+@api_user_agent("Deleting roles by ID.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_role(role_id):
@@ -91,6 +96,7 @@ def delete_role(role_id):
     )
 
 
+@api_user_agent("User has requested to view all roles.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_roles(request):
@@ -109,6 +115,7 @@ def view_roles(request):
     )
 
 
+@api_user_agent("Get all role details by ID.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_role_detail(request, role_id):

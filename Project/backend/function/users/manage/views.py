@@ -7,8 +7,11 @@ from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
 from function.models import Users
+from function.monitoring.middleware import api_user_agent
 from function.permissions import has_role
 
+
+@api_user_agent("Authenticated user requested their profile.")
 @swagger_auto_schema(
     method="get",
     responses={200: UserProfileSerializer}
@@ -23,11 +26,13 @@ def get_user_details(request):
     response["permissions"] = user.get_permissions()
     return Response(serializer.data)
 
+
 @swagger_auto_schema(
     method="put",
     request_body=UserProfileSerializer,
     responses={200: UserProfileSerializer}
 )
+@api_user_agent("Authenticated user updated their profile.")
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_user_profile(request):
@@ -40,10 +45,12 @@ def update_user_profile(request):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @swagger_auto_schema(
     method="get",
     responses={200: UserProfileSerializer(many=True)}
 )
+@api_user_agent("Admin requested a list of all users.")
 @api_view(['GET'])
 # @permission_classes([has_role("Admin")])
 @permission_classes([AllowAny])
@@ -57,18 +64,25 @@ def list_all_users(request):
         "data": serializer.data
     })
 
+
 @swagger_auto_schema(
     method="get",
     responses={200: UserProfileSerializer}
 )
+@api_user_agent("Admin requested user details by ID.")
 @api_view(['GET'])
-@permission_classes([has_role("Admin")])
+# @permission_classes([has_role("Admin")])
+@permission_classes([AllowAny])
 def get_user_by_id(request, user_id):
     """Get user details by ID (Admin only)"""
     try:
         user = Users.objects.get(user_id=user_id)
         serializer = UserProfileSerializer(user)
-        return Response(serializer.data)
+        return Response({
+            "status": True,
+            "message": "User retrieved successfully",
+            "data": serializer.data
+        })
     except Users.DoesNotExist:
         return Response(
             {
@@ -78,11 +92,13 @@ def get_user_by_id(request, user_id):
             status=status.HTTP_404_NOT_FOUND
         )
 
+
 @swagger_auto_schema(
     method="put",
     request_body=AdminUserUpdateSerializer,
     responses={200: AdminUserUpdateSerializer}
 )
+@api_user_agent("Admin attempted to update user details.")
 @api_view(['PUT'])
 # @permission_classes([has_role("Admin")])
 @permission_classes([AllowAny])
@@ -113,6 +129,7 @@ def admin_update_user(request, user_id):
     method="delete",
     responses={204: "User successfully deleted"}
 )
+@api_user_agent("Admin attempted to delete a user.")
 @api_view(['DELETE'])
 @permission_classes([has_role("Admin")])
 def delete_user(request, user_id):

@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
+
+from function.monitoring.middleware import api_user_agent
 from .serializers import UserLoginSerializer
 from function.serializer import UserDetailSerializer
 from drf_yasg.utils import swagger_auto_schema
@@ -25,8 +27,6 @@ def login_user(request):
     is_serializer_valid = serializer.is_valid()
     if is_serializer_valid:
         user = serializer.validated_data['user']
-
-        print("Validated Data:", serializer.validated_data)
 
         user.last_login = timezone.now()
         user.save()
@@ -58,9 +58,11 @@ def login_user(request):
     request_body=swu.request("refresh:string"),
     responses={201: "Successfully logged out. Redirect to index page."}
 )
+@api_user_agent("User has attempted to logout.")
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
+
     """"Logs out the user by blacklisting the refresh token."""
     try:
         # Get the refresh token from the request data
@@ -88,6 +90,7 @@ def logout_user(request):
         )
 
 
+@api_user_agent("User has requested their profile information.")
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):

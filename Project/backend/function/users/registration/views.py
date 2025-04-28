@@ -7,6 +7,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+
+from function.monitoring.middleware import api_user_agent
 from .serializers import UserCreateSerializer
 from function.models import Users
 from drf_yasg import openapi
@@ -26,6 +28,9 @@ import function.util.debug as DEBUG
     ),
     responses={201: openapi.Response("Created (Check phone for verification)")}
 )
+
+
+@api_user_agent("Registering a new user.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -86,6 +91,7 @@ def register_user(request):
         "user:object"
     )}
 )
+@api_user_agent("Verifying OTP for user registration.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def verify_otp(request):

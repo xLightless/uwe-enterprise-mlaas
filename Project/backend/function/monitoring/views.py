@@ -4,30 +4,43 @@ Monitoring views for the function app.
 
 from django.core.cache import cache
 from function.models import ActivityLog
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+
+from function.monitoring.middleware import api_user_agent
 
 from .serializers import ActivityLogSerializer
 
 
+@api_user_agent("Admin has viewed activity logs of other users.")
 @api_view(['GET'])
-# @permission_classes([has_role("Admin")]) DO NOT LOCK THIS I NEED IT
-def recent_activity_logs():
+@permission_classes([AllowAny])
+def get_activity_logs_next(request, start_index=None, end_index=None):
     """
-    Returns the 20 most recent activity logs
-    Accessible only by admin users
+    Returns the activity logs within the range [start_index: end_index].
     """
-    cache_key = "recent_activity_logs"
-    cached_data = cache.get(cache_key)
+    if start_index is None or end_index is None:
+        return Response({
+            "status": False,
+            "message": "Both start_index and end_index parameters are required"
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-    if cached_data:
-        return Response(cached_data)
+    try:
+        logs = ActivityLog.objects.using('traffic_db').filter(
+            log_id__gte=start_index,
+            log_id__lt=end_index+1
+        ).order_by("-generated_at")
 
-    logs = ActivityLog.objects.using('traffic').all()\
-        .order_by("-generated_at")[:20]
-    serializer = ActivityLogSerializer(logs, many=True)
-
-    # Cache for 5 minutes (300 seconds)
-    cache.set(cache_key, serializer.data, 300)
-
-    return Response(serializer.data)
+        serializer = ActivityLogSerializer(logs, many=True)
+        return Response({
+            "status": True,
+            "message": "Activity logs retrieved successfully",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({
+            "status": False,
+            "message": f"An error occurred: {str(e)}"
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

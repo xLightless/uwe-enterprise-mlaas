@@ -4,40 +4,101 @@ import { TableData, UserProps } from "../../../../../common/interfaces";
 import { response } from "../../../../../common/data";
 import UserSettingsDropdown from "../../../../../components/user-settings";
 import NetworkConnectionsChart from "./components/charts/connections";
+import { getActivityLogsNext } from "../../../../../repositories/traffic";
+import { getUserDetails } from "../../../../../repositories/user";
+import { useUserContext } from "../../../../../common/contexts/user";
 
 const NetworkActivity: React.FC = () => {
     const [data, setNetworkActivityData] = useState<TableData | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
+    const userContext = useUserContext();
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
 
     const [overlay, setOverlay] = useState<boolean>(false);
 
+    const maxRowsPerPage = 10;
+    const startIndex = 0;
+    const endIndex = maxRowsPerPage - 1;
+
+    const [nextPage, setNextPage] = useState<number>(endIndex);
+    const [previousPage, setPreviousPage] = useState<number>(startIndex);
+
+    const heads = [
+        // 'log_id',
+        'user_id',
+        'ip_address',
+        'description',
+        'status_code',
+        'generated_at',
+        'event_type',
+        'device_info'
+]
+
     async function fetchNetworkActivity() {
         // Replace with actual fetch request
-        return response;
+        // return response;
+
+        console.log("Fetching network activity data...", startIndex, endIndex);
+        const fetchedInitialActivityLog = await getActivityLogsNext(previousPage, nextPage);
+        const fetchedActivityLog = fetchedInitialActivityLog.data as Array<Object>;
+
+        // Formats the key value pairs to fix the backend team issues.
+        const transformedRows = [];
+        for (let i = 0; i < fetchedActivityLog.length; i++) {
+            const row = fetchedActivityLog[i];
+            const transformedRow = {
+                log_id: row["log_id"],
+                user_id: row["user"],
+                ip_address: row["ip_address"],
+                description: row["description"],
+                status_code: row["status_code"],
+                generated_at: row["generated_at"],
+                event_type: row["event_type"],
+                device_info: row["device_info"]
+            };
+            transformedRows.push(transformedRow);
+        }
+
+        const initialActivityData = {
+            thead: heads,
+            tbody: transformedRows
+        }
+
+        setNetworkActivityData(initialActivityData);
     };
 
     async function fetchNetworkUser(userId: number) {
 
-        // Replace with actual fetch request
-        const userProp: UserProps = {
-            fullName: "John Smith",
-            email: "john.smith@example.com",
-            phoneNumber: "123-456-7890",
-            roleId: 1,
-            userId: userId,
-            createdAt: String(new Date()),
-            // updatedAt: String(new Date()),
-            lastLogin: String(new Date()),
-            isVerified: true,
-            isActive: true,
-            isAdmin: true,
-            isStaff: true,
-            isSuperuser: true,
-        }
+        // // Replace with actual fetch request
+        // const userProp: UserProps = {
+        //     fullName: "John Smith",
+        //     email: "john.smith@example.com",
+        //     phoneNumber: "123-456-7890",
+        //     roleId: 1,
+        //     userId: userId,
+        //     createdAt: String(new Date()),
+        //     lastLogin: String(new Date()),
+        //     isVerified: true,
+        //     isActive: true,
+        // }
 
-        setUser(userProp ? userProp : null);
+        const fetchedUser = await getUserDetails(userId);
+        const userData = fetchedUser.data;
+        setUser({
+            userId: userData.user_id,
+            fullName: userData.full_name,
+            email: userData.email,
+            phoneNumber: userData.phone_number,
+            roleId: userData.role.role_id,
+            createdAt: String(userData.created_at),
+            lastLogin: String(userData.last_login),
+            isVerified: userData.is_verified,
+            isActive: userData.is_active
+        } as UserProps);
+
+        setUserRole(userData.role.role_name);
     };
 
     /**
@@ -49,10 +110,24 @@ const NetworkActivity: React.FC = () => {
         return fetchNetworkUser(userId);
     };
 
+    const nextPageEvent = () => {
+        console.log("Next page event triggered");
+        setNextPage(nextPage + maxRowsPerPage);
+        setPreviousPage(previousPage + maxRowsPerPage);
+        fetchNetworkActivity();
+
+    };
+
+    const previousPageEvent = () => {
+        console.log("Previous page event triggered");
+        setNextPage(nextPage - maxRowsPerPage);
+        setPreviousPage(previousPage - maxRowsPerPage);
+        fetchNetworkActivity();
+    }
+
     useEffect(() => {
         async function fetchData() {
-            const fetchedNetworkActivity = await fetchNetworkActivity();
-            setNetworkActivityData(fetchedNetworkActivity);
+            await fetchNetworkActivity();
         }
         fetchData();
 
@@ -76,7 +151,7 @@ const NetworkActivity: React.FC = () => {
 
         // Save the connection data into a state to be rendered by the chart.
         setChartData(data);
-    }, []);
+    }, [nextPage, previousPage]);
 
     return (
         <>
@@ -105,6 +180,12 @@ const NetworkActivity: React.FC = () => {
                             onCloseValue={overlay}
                             onClose={() => setOverlay(false)}
 
+                            onNextPageEvent={nextPageEvent}
+                            onPreviousPageEvent={previousPageEvent}
+                            maxRowsPerPage={maxRowsPerPage}
+                            disableNextLastPage={false}
+                            disablePreviousFirstPage={false}
+
                         >
                             {/* User ID overlay. */}
                             <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
@@ -116,16 +197,16 @@ const NetworkActivity: React.FC = () => {
                                     <table className="">
                                         <tbody className="text-left">
                                             <tr className="w-fit">
-                                                <th className="text-black">First Name:</th>
-                                                <td>John</td>
+                                                <th className="text-black">Name:</th>
+                                                <td>{user?.fullName}</td>
                                             </tr>
                                             <tr className="text-black">
-                                                <th>Last Name:</th>
-                                                <td>Smith</td>
+                                                <th>Email:</th>
+                                                <td>{user?.email}</td>
                                             </tr>
                                             <tr className="text-black">
-                                                <th>User Role:</th>
-                                                <td>Insurer</td>
+                                                <th>Role:</th>
+                                                <td>{userRole}</td>
                                             </tr>
                                         </tbody>
                                     </table>

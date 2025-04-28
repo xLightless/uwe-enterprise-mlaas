@@ -9,9 +9,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from function.models import Permission, RolePermission, Role
+from function.monitoring.middleware import api_user_agent
 from .serializer import PermissionSerializer
 
 
+@api_user_agent("Admin has created a new permission.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_permission(request):
@@ -53,7 +55,7 @@ def create_permission(request):
         status=status.HTTP_400_BAD_REQUEST
     )
 
-
+@api_user_agent("Admin has deleted a permission.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def delete_permission(request, permission_id):
@@ -75,6 +77,7 @@ def delete_permission(request, permission_id):
         )
 
 
+@api_user_agent("Admin has requested to view all role permissions.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_all_role_permissions(request):
@@ -101,6 +104,7 @@ def view_all_role_permissions(request):
     return Response({"data": response_data}, status=status.HTTP_200_OK)
 
 
+@api_user_agent("Admin has requested to view available permissions.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_database_permissions(request):
@@ -114,6 +118,7 @@ def get_database_permissions(request):
     }}, status=status.HTTP_200_OK)
 
 
+@api_user_agent("Admin has requested to view permissions by role ID.")
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def view_permissions_by_role(request, role_id):
@@ -143,6 +148,7 @@ def view_permissions_by_role(request, role_id):
         )
 
 
+@api_user_agent("Admin has requested to update a permission.")
 @api_view(['PUT'])
 @permission_classes([AllowAny])
 def update_permission(request, permission_id):
@@ -188,6 +194,7 @@ def update_permission(request, permission_id):
     )
 
 
+@api_user_agent("Admin has requested to add a permission to a role.")
 @api_view(['PUT'])
 @permission_classes([AllowAny])
 def add_permission(request, role_id):
@@ -246,6 +253,7 @@ def add_permission(request, role_id):
     )
 
 
+@api_user_agent("Admin has requested to remove a permission from a role.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
 def remove_role_permission(request, role_id):
