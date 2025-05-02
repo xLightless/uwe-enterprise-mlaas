@@ -27,10 +27,9 @@ def get_activity_logs_next(request, start_index=None, end_index=None):
         }, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        logs = ActivityLog.objects.using('traffic_db').filter(
-            log_id__gte=start_index,
-            log_id__lt=end_index+1
-        ).order_by("-generated_at")
+        logs = ActivityLog.objects.using('traffic_db').order_by(
+            "-generated_at"
+        )[start_index:end_index+1]
 
         serializer = ActivityLogSerializer(logs, many=True)
         return Response({

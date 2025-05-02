@@ -39,14 +39,15 @@ const NetworkActivity: React.FC = () => {
         // Replace with actual fetch request
         // return response;
 
-        console.log("Fetching network activity data...", startIndex, endIndex);
         const fetchedInitialActivityLog = await getActivityLogsNext(previousPage, nextPage);
-        const fetchedActivityLog = fetchedInitialActivityLog.data as Array<unknown>;
+        // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
+        const fetchedActivityLog = fetchedInitialActivityLog.data as Array<Object>;
 
         // Formats the key value pairs to fix the backend team issues.
         const transformedRows = [];
         for (let i = 0; i < fetchedActivityLog.length; i++) {
             const row = fetchedActivityLog[i];
+            console.log("Row data:", row);
             const transformedRow = {
                 log_id: row["log_id"],
                 user_id: row["user"],
@@ -62,9 +63,8 @@ const NetworkActivity: React.FC = () => {
 
         const initialActivityData = {
             thead: heads,
-            tbody: transformedRows
-        }
-
+            tbody: data ? [...data.tbody, ...transformedRows] : transformedRows
+        };
         setNetworkActivityData(initialActivityData);
     };
 
