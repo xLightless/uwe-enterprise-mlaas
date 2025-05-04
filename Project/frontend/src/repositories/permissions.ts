@@ -7,6 +7,18 @@ const permissions = axios.create({
     baseURL: "http://localhost:8000/api/permissions"
 });
 
+permissions.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
 
 const getRolePermissions = async (): Promise<JSONResponse<Role[]>> => {
     return permissions.get<JSONResponse<Role[]>>("/roles/",
@@ -88,9 +100,30 @@ const removePermission = async (roleId: number, permissionName: string): Promise
     });
 };
 
+/**
+ * Get an array of permissions for a role ID.
+ * @param roleId
+ * @returns
+ */
+const getPermissionsOfRoleId = async (roleId: number): Promise<JSONResponse<Permission[]>> => {
+    return permissions.get<JSONResponse<Permission[]>>(`/role/${roleId}/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then((response) => response.data)
+        .catch((error) => {
+            console.error("Error fetching permissions of role ID:", error);
+            throw error;
+        });
+}
+
 export {
     getRolePermissions,
     getPermissions,
     addPermission,
-    removePermission
+    removePermission,
+    getPermissionsOfRoleId
 }

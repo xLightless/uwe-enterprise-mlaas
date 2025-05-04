@@ -11,6 +11,30 @@ const authModels = axios.create({
     baseURL: 'http://localhost:8000/api/auth/models',
 });
 
+models.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
+authModels.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
 /**
  * Retrieves a list of models from the server.
  * @async

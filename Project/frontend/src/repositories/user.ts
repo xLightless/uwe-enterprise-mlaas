@@ -6,6 +6,18 @@ const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000/api/users',
 })
 
+axiosInstance.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
 const updateUserDetails = async (updateData: { [key: string]: string }) => {
     try {
         const token = sessionStorage.getItem('access_token');

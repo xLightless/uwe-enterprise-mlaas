@@ -6,6 +6,18 @@ const traffic = axios.create({
     baseURL: 'http://localhost:8000/api/logs'
 });
 
+traffic.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
 const getActivityLogsNext = async (startIndex: number, endIndex: number): Promise<JSONResponse> => {
     return traffic.get<JSONResponse>(`/activity/${startIndex}/${endIndex}/`,
         {

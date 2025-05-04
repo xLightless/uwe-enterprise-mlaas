@@ -7,7 +7,7 @@ import { useRoleContext } from "../../../../../common/contexts/role";
 import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
-import { addPermission, getPermissions, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
+import { addPermission, getPermissions, getPermissionsOfRoleId, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
 import { createRole, deleteRole, getRole, getRoles } from "../../../../../repositories/roles";
 import { adminUpdateUserDetails, getUsers } from "../../../../../repositories/user";
 
@@ -65,7 +65,7 @@ const PermissionsList: React.FC = () => {
             setAddPermissions(filteredDbPerms);
         };
         fetchDatabasePermissions();
-    }, [roleContext.permissions]); // Re-render when the role permissions change
+    }, [roleContext.permissions, roleContext.roleId, roleContext.roleName]); // Re-render when the role permissions change
 
     return (
         <div className="grid grid-cols-[0.5fr_auto_1fr] w-full h-full">
@@ -132,8 +132,22 @@ const Roles: React.FC<RolesProps> = ({ roles, onRemoveRole }) => {
     const roleContext = useRoleContext();
 
     // Set the clicked role as the active contextual role to manage.
-    const setClickedRole = (role: Role) => {
-        roleContext.setRole(role);
+    const setClickedRole = async (role: Role) => {
+        const fetchedPermissionsArray = await getPermissionsOfRoleId(role.roleId as number);
+
+        const permissionsMap = fetchedPermissionsArray.data.permissions.map(
+            (permission: Permission) => {
+                return {
+                    permissionName: permission.permission_name,
+                };
+            }
+        );
+        console.log("Fetched permissions: ", permissionsMap);
+        roleContext.setRole({
+            roleId: role.roleId,
+            roleName: role.roleName,
+            permissions: permissionsMap,
+        } as Role);
     };
 
     return (

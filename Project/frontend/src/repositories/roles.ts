@@ -10,6 +10,18 @@ const roles = axios.create({
     baseURL: "http://localhost:8000/api/roles"
 });
 
+roles.interceptors.request.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            alert('Session expired. Please log in again.');
+            window.location.href = '/';
+        }
+    }
+);
+
 /**
  * Creates a new role in the system.
  * @param role - The role to be created.
