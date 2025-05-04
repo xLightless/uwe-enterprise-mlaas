@@ -6,7 +6,7 @@ interface RoleContextProps {
     roleName: string | null;
     permissions: Permission[];
     setRole: (role: Role) => void;
-    removeRole: (role: Role) => void;
+    removeRole: () => void;
     addPermissions: (permissions: Permission[]) => void;
 };
 
@@ -45,7 +45,7 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
      * Removes the role from context, if applicable, and the database.
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const removeRole = (role: Role) => {
+    const removeRole = () => {
         // TODO: Remove the role from the database
 
         // TODO: Remove the role from the context

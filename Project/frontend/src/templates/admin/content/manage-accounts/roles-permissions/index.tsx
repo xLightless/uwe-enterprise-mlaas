@@ -334,7 +334,6 @@ const RolePermissions: React.FC = () => {
      */
     const handleRemoveRole = async (role: Role) => {
         if (role.roleId) {
-            roleContext.removeRole(role);
             let isRoleDeleted = false;
             try {
                 console.log("Attempting to delete role id: ", role.roleId);
@@ -344,7 +343,10 @@ const RolePermissions: React.FC = () => {
             catch {
                 console.error("Error deleting role Id: ", role.roleId);
             }
-            if (isRoleDeleted) setRoles(roles.filter((r) => r.roleId !== role.roleId));
+            if (isRoleDeleted) {
+                setRoles(roles.filter((r) => r.roleId !== role.roleId)); // Remove the role from the UI
+                roleContext.removeRole(); // Removes related role permissions from context
+            }
         } else {
             console.error("Role ID is not defined.");
         }
