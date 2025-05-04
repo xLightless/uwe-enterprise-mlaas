@@ -69,7 +69,7 @@ def update_role(request, role_id):
 @api_user_agent("Deleting roles by ID.")
 @api_view(['DELETE'])
 @permission_classes([AllowAny])
-def delete_role(role_id):
+def delete_role(request, role_id):
     """
     Delete a role by its ID.
     This will also delete all associated permissions.
@@ -79,18 +79,24 @@ def delete_role(role_id):
     """
     role = get_object_or_404(Role, pk=role_id)
     role_permission = RolePermission.objects.filter(role=role.role_id)
-    if not role_permission.exists():
-        return Response({
-            "status": False,
-            "message": "Cannot delete this role. Role not found."
-        }, status=status.HTTP_400_BAD_REQUEST)
 
-    role_permission.delete()
+    has_role_permission = False
+    if role_permission.exists():
+        has_role_permission = True
+        role_permission.delete()
+
     role.delete()
+
+    message = ""
+    if has_role_permission:
+        message = "Role and associated permissions deleted successfully."
+    else:
+        message = "Role deleted successfully."
+
     return Response(
         {
             "status": True,
-            "message": "Role deleted successfully."
+            "message": message
         },
         status=status.HTTP_204_NO_CONTENT
     )

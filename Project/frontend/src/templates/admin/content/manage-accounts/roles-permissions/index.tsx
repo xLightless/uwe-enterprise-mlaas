@@ -133,21 +133,27 @@ const Roles: React.FC<RolesProps> = ({ roles, onRemoveRole }) => {
 
     // Set the clicked role as the active contextual role to manage.
     const setClickedRole = async (role: Role) => {
-        const fetchedPermissionsArray = await getPermissionsOfRoleId(role.roleId as number);
+        try {
+            const fetchedPermissionsArray = await getPermissionsOfRoleId(role.roleId as number);
 
-        const permissionsMap = fetchedPermissionsArray.data.permissions.map(
-            (permission: Permission) => {
-                return {
-                    permissionName: permission.permission_name,
-                };
-            }
-        );
-        console.log("Fetched permissions: ", permissionsMap);
-        roleContext.setRole({
-            roleId: role.roleId,
-            roleName: role.roleName,
-            permissions: permissionsMap,
-        } as Role);
+            const permissionsMap = fetchedPermissionsArray.data.permissions.map(
+                (permission: Permission) => {
+                    return {
+                        permissionName: permission.permission_name,
+                    };
+                }
+            );
+            console.log("Fetched permissions: ", permissionsMap);
+            roleContext.setRole({
+                roleId: role.roleId,
+                roleName: role.roleName,
+                permissions: permissionsMap,
+            } as Role);
+        }
+        catch {
+            console.log("Permissions not found for this role, using context instead.");
+            roleContext.setRole(role);
+        }
     };
 
     return (
@@ -314,6 +320,7 @@ const RolePermissions: React.FC = () => {
             setRoles([...roles, {...newRole, roleId: roles.length + 1}]);
             setNewRoleName("");
             setToggleNewRoleCreation(false);
+            fetchRolesData();
 
         } else {
             console.error("Role name cannot be empty");
@@ -325,12 +332,24 @@ const RolePermissions: React.FC = () => {
      * then proceeds to delete it from the database.
      * @param role
      */
-    const handleRemoveRole = (role: Role) => {
+    const handleRemoveRole = async (role: Role) => {
         if (role.roleId) {
             roleContext.removeRole(role);
-            setRoles(roles.filter((r) => r.roleId !== role.roleId));
+            let isDeletedRole = false;
+            try {
+                console.log("Attempting to delete role id: ", role.roleId);
+                const deletedRole = await deleteRole(role.roleId as number)
+                if (!deletedRole) return;
+                const isRoleDeleted = deletedRole.data?.status ?? false;
+                console.log("Deleted STATUS: ", isRoleDeleted);
+                isDeletedRole = isRoleDeleted;
+            }
+            catch {
+                isDeletedRole = false;
+            }
 
-            deleteRole(role.roleId as number)
+            console.log("Deleted role: ", isDeletedRole);
+            if (isDeletedRole) setRoles(roles.filter((r) => r.roleId !== role.roleId));
         } else {
             console.error("Role ID is not defined.");
         }

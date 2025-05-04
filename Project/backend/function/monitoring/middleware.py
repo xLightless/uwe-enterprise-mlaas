@@ -87,11 +87,12 @@ def api_user_agent(description=None):
                     status=401,
                 )
 
-            except Exception:
+            except Exception as exc:
                 return JsonResponse(
                     {
                         "status": False,
-                        "message": "An unexpected error occurred."
+                        "message": "An unexpected error occurred.",
+                        "data": str(exc),
                     },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
