@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
 import { Scrollbar } from "../../../../../components/scrollbar";
 import { useRoleContext } from "../../../../../common/contexts/role";
-import { JSONResponse, Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
+import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
 import { addPermission, getPermissions, getPermissionsOfRoleId, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
