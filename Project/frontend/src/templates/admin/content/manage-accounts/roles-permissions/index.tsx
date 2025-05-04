@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
 import { Scrollbar } from "../../../../../components/scrollbar";
 import { useRoleContext } from "../../../../../common/contexts/role";
-import { Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
+import { JSONResponse, Permission, Role, TableData, TableRow, UserProps } from "../../../../../common/interfaces";
 import Overlay from "../../../../../components/overlay";
 import { useUserContext } from "../../../../../common/contexts/user";
 import { addPermission, getPermissions, getPermissionsOfRoleId, getRolePermissions, removePermission } from "../../../../../repositories/permissions";
@@ -335,21 +335,16 @@ const RolePermissions: React.FC = () => {
     const handleRemoveRole = async (role: Role) => {
         if (role.roleId) {
             roleContext.removeRole(role);
-            let isDeletedRole = false;
+            let isRoleDeleted = false;
             try {
                 console.log("Attempting to delete role id: ", role.roleId);
-                const deletedRole = await deleteRole(role.roleId as number)
-                if (!deletedRole) return;
-                const isRoleDeleted = deletedRole.data?.status ?? false;
-                console.log("Deleted STATUS: ", isRoleDeleted);
-                isDeletedRole = isRoleDeleted;
+                await deleteRole(role.roleId as number)
+                isRoleDeleted = true;
             }
             catch {
-                isDeletedRole = false;
+                console.error("Error deleting role Id: ", role.roleId);
             }
-
-            console.log("Deleted role: ", isDeletedRole);
-            if (isDeletedRole) setRoles(roles.filter((r) => r.roleId !== role.roleId));
+            if (isRoleDeleted) setRoles(roles.filter((r) => r.roleId !== role.roleId));
         } else {
             console.error("Role ID is not defined.");
         }

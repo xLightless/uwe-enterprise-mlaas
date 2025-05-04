@@ -28,6 +28,7 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
     disableNextLastPage,
     disablePreviousFirstPage
 }) => {
+
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilteredBy, setSelectedFilteredBy] = useState<boolean>(false);
     const [selectedItems, setSelectedFilterItems] = useState<string[]>([]);
