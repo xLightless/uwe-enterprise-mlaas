@@ -35,7 +35,29 @@ const getActivityLogsNext = async (startIndex: number, endIndex: number): Promis
         });
 };
 
+/**
+ * Retrieves an aggregated count of the past 3 months of connections.
+ * @returns {Promise<JSONResponse>} - A promise that resolves to the past connections data.
+ */
+const getPastConnections = async (): Promise<JSONResponse> => {
+    return traffic.get<JSONResponse>(`/activity/chart/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            console.error("Error fetching past connections:", error);
+            throw error;
+        });
+};
+
 
 export {
-    getActivityLogsNext
+    getActivityLogsNext,
+    getPastConnections
 }

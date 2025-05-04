@@ -1,27 +1,38 @@
-import React, { useState } from "react";
-import { getModels } from "../../../../../repositories/models";
-import { JSONResponse } from "../../../../../common/interfaces";
+import React, { use, useEffect, useState } from "react";
+import { getModels, getModel } from "../../../../../repositories/models";
+import { ModelProps, ModelStatistics } from "../../../../../common/interfaces";
 
 const MLAASTraffic: React.FC = () => {
-    const [data, setData] = useState<JSONResponse | null>(null);
+
+    // Collection of multiple ML Models
+    const [mlModels, setMLModels] = useState<ModelProps[]>([]);
+
+    // Single ML Model Properties and Statistics
+    const [modelProperties, setModelProperties] = useState<ModelProps | null>(null);
+    const [modelStats, setModelStats] = useState<ModelStatistics | null>(null);
 
     async function fetchModels() {
         const models = await getModels();
-        console.log(models);
-        setData(models);
+        setMLModels(models.data as ModelProps[]);
     }
+
+    // async function fetchModelProperties() {
+    //     const fetchedModelProperties = await getModels();
+    // };
+
+    useEffect(() => {
+        fetchModels();
+    }, []);
 
     return (
         <>
-        <div className="w-full h-52">
-            <button
-                className="p-4 h-fit w-fit btn bg-blue-500 text-white rounded-md hover:bg-blue-400 cursor-pointer"
-                onClick={fetchModels}
-            >
-                Swap Models
-            </button>
-            <p className="text-lg text-blue-500">{JSON.stringify(data)}</p>
-        </div>
+            <div>
+                <ul>
+                    {mlModels.map((model, index) => (
+                        <li key={index}>{JSON.stringify(model)}</li>
+                    ))}
+                </ul>
+            </div>
         </>
     )
 };

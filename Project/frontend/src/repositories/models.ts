@@ -42,8 +42,8 @@ authModels.interceptors.request.use(
  * @throws Will throw an error if the request fails.
  * @returns {Promise<JSONResponse>} - A promise that resolves to the list of models.
  */
-const getModels = async (): Promise<JSONResponse> => {
-    return models.get<JSONResponse>('/view/',
+const getModels = async (): Promise<JSONResponse<ModelProps[]>> => {
+    return models.get<JSONResponse<ModelProps[]>>('/view/',
         {
             headers: {
                 Authorization: getTokenAccess(true),
@@ -53,6 +53,26 @@ const getModels = async (): Promise<JSONResponse> => {
         .then(response => response.data)
         .catch(error => {
             console.error('Error fetching models:', error);
+            throw error;
+        });
+};
+
+/**
+ * Retrieves a models information via ID.
+ * @param modelId - The ID of the model to be retrieved.
+ * @returns
+ */
+const getModel = async (modelId: number): Promise<JSONResponse<ModelProps>> => {
+    return models.get<JSONResponse<ModelProps>>(`/${modelId}/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error fetching model:', error);
             throw error;
         });
 };
@@ -168,6 +188,7 @@ const getModelFeedback = async (modelId: number): Promise<JSONResponse> => {
 
 export {
     getModels,
+    getModel,
     createModel,
     deleteModel,
     setActiveModel,

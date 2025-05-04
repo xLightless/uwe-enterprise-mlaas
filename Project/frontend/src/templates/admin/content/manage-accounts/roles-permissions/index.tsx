@@ -565,65 +565,65 @@ const RolePermissions: React.FC = () => {
                         </div>
                     </div>
 
-                {filteredTableData &&
-                    <PaginatedTable
-                        thead={filteredTableHeads}
-                        tbody={filteredTableData?.tbody as TableRow[]}
-                        placeHolder="Search for a user..."
-                        maxRowsPerPage={4}
+                    {filteredTableData &&
+                        <PaginatedTable
+                            thead={filteredTableHeads}
+                            tbody={filteredTableData?.tbody as TableRow[]}
+                            placeHolder="Search for a user..."
+                            maxRowsPerPage={4}
 
-                        onCloseValue={isUpdateRoleOpen}
-                        onClose={() => setUpdateRoleOpen(false)}
+                            onCloseValue={isUpdateRoleOpen}
+                            onClose={() => setUpdateRoleOpen(false)}
 
-                        onNextPageEvent={() => {}}
-                        onPreviousPageEvent={() => {}}
-                        disableNextLastPage={true}
-                        disablePreviousFirstPage={true}
-                    >
-                        {isUpdateRoleOpen &&
-                            <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
-                                <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                                    <h1 className="font-bold">Updating the role of {`${getUser()?.email}`}</h1>
+                            onNextPageEvent={() => {}}
+                            onPreviousPageEvent={() => {}}
+                            disableNextLastPage={true}
+                            disablePreviousFirstPage={true}
+                        >
+                            {isUpdateRoleOpen &&
+                                <div className="w-full h-52 bg-white rounded grid grid-rows-[auto_1fr_auto]">
+                                    <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                                        <h1 className="font-bold">Updating the role of {`${getUser()?.email}`}</h1>
+                                    </div>
+
+                                    <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Role</th>
+                                                    <td>
+                                                        <select
+                                                            className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                            value={getUser()?.roleId}
+                                                            onChange={(e) => setUser({ ...getUser(), roleId: parseInt(e.target.value) })}
+                                                        >
+                                                            {roles.map((role, index) => (
+                                                                <option key={index} value={role.roleId}>{role.roleName}</option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <button
+                                            type="submit"
+                                            className="cursor-pointer"
+                                            onClick={(e) => updateCurrentUserRole(e)}
+                                        >
+                                            <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
+                                        </button>
+                                    </form>
                                 </div>
+                            }
+                        </PaginatedTable>
+                    }
 
-                                <form className="w-full h-full flex flex-col justify-center space-y-4 px-4">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <th>Role</th>
-                                                <td>
-                                                    <select
-                                                        className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                                        value={getUser()?.roleId}
-                                                        onChange={(e) => setUser({ ...getUser(), roleId: parseInt(e.target.value) })}
-                                                    >
-                                                        {roles.map((role, index) => (
-                                                            <option key={index} value={role.roleId}>{role.roleName}</option>
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                    <button
-                                        type="submit"
-                                        className="cursor-pointer"
-                                        onClick={(e) => updateCurrentUserRole(e)}
-                                    >
-                                        <p className="text-center text-white bg-blue-500 hover:bg-blue-400 p-2 rounded-md">Assign Role</p>
-                                    </button>
-                                </form>
-                            </div>
-                        }
-                    </PaginatedTable>
-                }
-
-                {!filteredTableData &&
-                    <div className="w-full h-full flex justify-center items-center">
-                        <p className="font-bold">No data to display.</p>
-                    </div>
-                }
+                    {!filteredTableData &&
+                        <div className="w-full h-full flex justify-center items-center">
+                            <p className="font-bold">No data to display.</p>
+                        </div>
+                    }
                 </div>
             </div>
         </>

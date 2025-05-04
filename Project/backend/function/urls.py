@@ -29,7 +29,10 @@ from function.users.login.views import login_user, get_user_profile, \
 from function.users.manage.views import get_user_details, \
     update_user_profile, list_all_users, get_user_by_id, admin_update_user, \
     delete_user
-from function.monitoring.views import get_activity_logs_next
+from function.monitoring.views import (
+    get_activity_logs_next,
+    count_connections
+)
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from rest_framework import permissions
@@ -99,6 +102,7 @@ urlpatterns = [
     # Monitoring
     # path('logs/activity/', recent_activity_logs, name='recent-activity-logs'),
     path('logs/activity/<int:start_index>/<int:end_index>/', get_activity_logs_next, name='get_activity_logs_next'),
+    path('logs/activity/chart/', count_connections, name='count_connections'),
 
     # Swagger Docs
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0),

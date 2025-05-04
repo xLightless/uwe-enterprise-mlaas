@@ -104,13 +104,18 @@ export interface JSONResponse<T = unknown> {
  * @model_file - The file path of the model.
  */
 export interface ModelProps {
-    model_name: string
-    model_description: string
-    model_version: string
-    model_file: string
+    modelId?: number
+    totalClaims?: number
+    modelName: string
+    modelDescription: string
+    modelVersion: string
+    uploadedAt: string
+    isActive: boolean
+    modelFile: string
+    modelStatistics: ModelStatistics
 }
 
 export interface ModelStatistics {
-    num_accepted_claims: number
-    num_rejected_claims: number
+    numAcceptedClaims: number
+    numRejectedClaims: number
 }
