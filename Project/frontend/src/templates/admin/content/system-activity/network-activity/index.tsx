@@ -67,20 +67,6 @@ const NetworkActivity: React.FC = () => {
     };
 
     async function fetchNetworkUser(userId: number) {
-
-        // // Replace with actual fetch request
-        // const userProp: UserProps = {
-        //     fullName: "John Smith",
-        //     email: "john.smith@example.com",
-        //     phoneNumber: "123-456-7890",
-        //     roleId: 1,
-        //     userId: userId,
-        //     createdAt: String(new Date()),
-        //     lastLogin: String(new Date()),
-        //     isVerified: true,
-        //     isActive: true,
-        // }
-
         const fetchedUser = await getUserDetails(userId);
         const userData = fetchedUser.data;
         setUser({

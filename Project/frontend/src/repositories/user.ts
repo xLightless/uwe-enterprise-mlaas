@@ -49,22 +49,26 @@ const updateUserDetails = async (updateData: { [key: string]: string }) => {
  * @param user {UserProps} - The user object containing the details to update.
  */
 const adminUpdateUserDetails = async (userId: number, user: UserProps) => {
+    const editUserData = {
+        email: user.email,
+        full_name: user.fullName,
+        role_id: user.roleId,
+        phone_number: user.phoneNumber,
+        is_verified: user.isVerified,
+        is_active: user.isActive,
+        password: user.password,
+    }
+
     const filteredData = Object.fromEntries(
-        Object.entries(user).filter(
+        Object.entries(editUserData).filter(
             ([, value]) => value !== undefined && value !== null
         )
     );
 
-    return axiosInstance.put<JSONResponse<UserProps>>(
-        `/${userId.toString()}/update/`,
+    return axiosInstance.put<JSONResponse>(
+        `/${userId}/update/`,
         {
-            email: filteredData.email,
-            full_name: filteredData.fullName,
-            role_id: filteredData.roleId,
-            phone_number: filteredData.phoneNumber,
-            is_verified: filteredData.isVerified,
-            is_active: filteredData.isActive,
-
+            ...filteredData,
         },
         {
             headers: {
@@ -114,9 +118,46 @@ const getUsers = async (): Promise<JSONResponse<APIUsersProps[]>> => {
         });
 };
 
+const deleteUserById = async (userId: number): Promise<JSONResponse> => {
+    return axiosInstance.delete<JSONResponse>(`/${userId}/delete/`,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error deleting user:', error);
+            throw error;
+        });
+};
+
+/**
+ * Admin create a new user in the system.
+ * @param user {UserProps} - The user object containing the details of the new user.
+ * @returns {Promise<JSONResponse>} - A promise that resolves to the created user's information.
+ */
+const createUser = async (user: UserProps): Promise<JSONResponse<UserProps>> => {
+    return axiosInstance.post<JSONResponse<UserProps>>('/recovery/create-user/', user,
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error creating user:', error);
+            throw error;
+        });
+};
+
 export {
     updateUserDetails,
     getUserDetails,
     getUsers,
-    adminUpdateUserDetails
+    adminUpdateUserDetails,
+    deleteUserById,
+    createUser
 }

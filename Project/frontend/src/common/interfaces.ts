@@ -68,10 +68,6 @@ export interface UserProps {
     isVerified?: boolean | string;
     isActive?: boolean | string;
 
-    // isAdmin?: boolean | string;
-    // isStaff?: boolean | string;
-    // isSuperuser?: boolean | string;
-
     actions?: JSX.Element;
 }
 

@@ -58,6 +58,6 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
         model = Users
         fields = [
             'user_id', 'email', 'full_name', 'role_id', 'phone_number',
-            'is_verified', 'is_active',
+            'is_verified', 'is_active', 'password'
         ]
         read_only_fields = ['user_id']

@@ -128,7 +128,7 @@ const PaginatedTable: React.FC<TableData & ReactChildProp & SearchBarProps & Fil
             applyFilter(selectedItems, searchQuery);
         } else {
             setFilteredData(tbody);
-            console.log(`An update occured on a table with heads ${thead}. `, tbody);
+            // console.log(`An update occured on a table with heads ${thead}. `, tbody);
         }
     }, [tbody]);
 

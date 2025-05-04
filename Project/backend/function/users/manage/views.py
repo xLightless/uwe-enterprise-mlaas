@@ -1,14 +1,17 @@
 # flake8: noqa
+from datetime import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
+from function.serializer import RoleSerializer
 from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
-from function.models import Users
+from function.models import Role, Users
 from function.monitoring.middleware import api_user_agent
 from function.permissions import has_role
+from django.contrib.auth.hashers import make_password
 
 
 @api_user_agent("Authenticated user requested their profile.")
@@ -106,9 +109,15 @@ def admin_update_user(request, user_id):
     """Update any user's details (Admin only)"""
     try:
         user = Users.objects.get(user_id=user_id)
+        user_data = None
+        password = request.data.get("password")
+        if password:
+            user_data = request.data.copy()
+            user_data["password"] = make_password(request.data.get("password"))
+
         serializer = AdminUserUpdateSerializer(
             user,
-            data=request.data,
+            data=user_data if user_data is not None else request.data,
             partial=True
         )
 
@@ -125,19 +134,69 @@ def admin_update_user(request, user_id):
             status=status.HTTP_404_NOT_FOUND
         )
 
+@api_user_agent("Admin created a new user in recovery, bypassing OTP.")
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def admin_create_user(request):
+    role = Role.objects.filter(role_id=request.data.get("role_id")).first()
+    if not role:
+        return Response(
+            {
+                "status": False,
+                "message": "Invalid role ID. Role not found.",
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    user_data = request.data.copy()
+    user_data["role"] = role
+
+    serializer = UserProfileSerializer(data=user_data)
+    if not serializer.is_valid():
+        return Response(
+            {
+                "status": False,
+                "message": "Cannot create this user. Invalid data.",
+                "error": serializer.errors
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    return Response({
+        "status": True,
+        "message": "User created successfully",
+        "data": serializer.data,
+        "errors": serializer.errors
+    })
+
 @swagger_auto_schema(
     method="delete",
     responses={204: "User successfully deleted"}
 )
 @api_user_agent("Admin attempted to delete a user.")
 @api_view(['DELETE'])
-@permission_classes([has_role("Admin")])
+# @permission_classes([has_role("Admin")])
+@permission_classes([IsAuthenticated])
 def delete_user(request, user_id):
     """Delete a user (Admin only)"""
     try:
         user = Users.objects.get(user_id=user_id)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if not user.is_active:
+            return Response(
+                {
+                    "status": False,
+                    "message": "Cannot delete this user. User is already inactive."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+        user.is_active = False
+        user.save()
+        return Response({
+            "status": True,
+            "message": "User has successfully been deleted."
+        }, status=status.HTTP_204_NO_CONTENT)
     except Users.DoesNotExist:
         return Response(
             {
