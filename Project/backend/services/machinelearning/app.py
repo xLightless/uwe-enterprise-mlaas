@@ -44,7 +44,7 @@ print("Training data loaded successfully.")
 
 
 def preprocess_value(feature, value):
-    
+
     if feature in ["Accident Date", "Claim Date"]:
         try:
             dt = datetime.datetime.strptime(value, "%d/%m/%Y %H:%M:%S")
@@ -152,7 +152,7 @@ def predict():
     except (ValueError, KeyError, TypeError) as e:
         return jsonify({"error": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": "An unexpected error occurred: " + str(e)}), 500
+        return jsonify({"error": "An error occurred: " + str(e)}), 500
 
 
 @app.route('/health', methods=['GET'])
@@ -163,3 +163,4 @@ def health_check():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
+    

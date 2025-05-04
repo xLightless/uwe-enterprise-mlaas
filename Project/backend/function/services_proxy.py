@@ -14,12 +14,13 @@ def call_ml_service(endpoint, data):
     Send a request to the ML service and return the response.
     """
     # Get the ML service URL from settings or environment variable
-    ml_service_url = getattr(settings, 'ML_SERVICE_URL', 
-                           os.environ.get('ML_SERVICE_URL', 'http://ml-service:5000'))
-    
+    ml_service_url = getattr(settings, 'ML_SERVICE_URL',
+                           os.environ.get('ML_SERVICE_URL',
+                                            'http://ml-service:5000'))
+
     # Construct the full URL
     url = f"{ml_service_url}/{endpoint.lstrip('/')}"
-    
+
     try:
         # Send the request to the ML service
         response = requests.post(url, json=data, timeout=30)

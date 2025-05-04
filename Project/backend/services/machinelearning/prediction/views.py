@@ -41,7 +41,7 @@ training_data = joblib.load(TRAINING_DATA_PATH)  # Load actual training data
 
 
 def preprocess_value(feature, value):
-    
+
     if feature in ["Accident Date", "Claim Date"]:
         try:
             dt = datetime.datetime.strptime(value, "%d/%m/%Y %H:%M:%S")
