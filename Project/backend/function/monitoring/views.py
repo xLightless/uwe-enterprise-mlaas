@@ -2,7 +2,6 @@
 Monitoring views for the function app.
 """
 
-from datetime import timezone
 from function.models import ActivityLog
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
