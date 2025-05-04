@@ -30,12 +30,6 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
      * roleId, roleName, and permissions in the context.
      */
     const setRole = (role: Role) => {
-
-        // TODO: Get the role from the database
-
-        // TODO: If the role is not found, attempt to create it.
-
-        // TODO: Set the role in the context
         setRoleId(role.roleId);
         setRoleName(role.roleName);
         setPermissions(role.permissions);
@@ -44,11 +38,7 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     /**
      * Removes the role from context, if applicable, and the database.
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const removeRole = () => {
-        // TODO: Remove the role from the database
-
-        // TODO: Remove the role from the context
         setRoleId(null);
         setRoleName(null);
         setPermissions([]);
@@ -56,9 +46,6 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
     const addPermissions = (permissions: Permission[]) => {
         setPermissions(permissions);
-
-        // TODO: Add the new permission to the permissions table, if not already there.
-
     };
 
     return (

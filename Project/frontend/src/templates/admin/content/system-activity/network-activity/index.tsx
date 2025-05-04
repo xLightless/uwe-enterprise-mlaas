@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PaginatedTable from "./components/paginated-table";
 import { TableData, UserProps } from "../../../../../common/interfaces";
-import { response } from "../../../../../common/data";
 import UserSettingsDropdown from "../../../../../components/user-settings";
 import NetworkConnectionsChart from "./components/charts/connections";
 import { getActivityLogsNext, getPastConnections } from "../../../../../repositories/traffic";

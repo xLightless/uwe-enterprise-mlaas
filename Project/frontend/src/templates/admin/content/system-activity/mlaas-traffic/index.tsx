@@ -1,6 +1,6 @@
-import React, { use, useEffect, useState } from "react";
-import { getModels, getModel } from "../../../../../repositories/models";
-import { ModelProps, ModelStatistics } from "../../../../../common/interfaces";
+import React, { useEffect, useState } from "react";
+import { getModels } from "../../../../../repositories/models";
+import { ModelProps } from "../../../../../common/interfaces";
 
 const MLAASTraffic: React.FC = () => {
 
@@ -8,8 +8,8 @@ const MLAASTraffic: React.FC = () => {
     const [mlModels, setMLModels] = useState<ModelProps[]>([]);
 
     // Single ML Model Properties and Statistics
-    const [modelProperties, setModelProperties] = useState<ModelProps | null>(null);
-    const [modelStats, setModelStats] = useState<ModelStatistics | null>(null);
+    // const [modelProperties, setModelProperties] = useState<ModelProps | null>(null);
+    // const [modelStats, setModelStats] = useState<ModelStatistics | null>(null);
 
     async function fetchModels() {
         const models = await getModels();
