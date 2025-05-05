@@ -205,9 +205,9 @@ const SubmitClaim: React.FC = () => {
                                         <option value="accident4">Other side pulled out of side road</option>
                                         <option value="accident5">Other side pulled on to roundabout</option>
                                         <option value="accident6">Other side drove on wrong side of the road</option>
-                                        <option value="accident7">Other side reversed into Clt's vehicle</option>
-                                        <option value="accident8">Other side changed lanes and collided with clt's vehicle</option>
-                                        <option value="accident9">Other side changed lanes on a roundabout colliding with clt's vehicle</option>
+                                        <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
+                                        <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
+                                        <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
                                     </select>
                                 </div>
 
@@ -832,9 +832,9 @@ const SubmitClaim: React.FC = () => {
                                                                             <option value="accident4">Other side pulled out of side road</option>
                                                                             <option value="accident5">Other side pulled on to roundabout</option>
                                                                             <option value="accident6">Other side drove on wrong side of the road</option>
-                                                                            <option value="accident7">Other side reversed into Clt's vehicle</option>
-                                                                            <option value="accident8">Other side changed lanes and collided with clt's vehicle</option>
-                                                                            <option value="accident9">Other side changed lanes on a roundabout colliding with clt's vehicle</option>
+                                                                            <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
+                                                                            <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
+                                                                            <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
                                                                         </>
                                                                     )}
 
