@@ -13,7 +13,7 @@ from function.Model_management.views import (
 
 from function.users.role_management.views import (view_roles, view_role_detail,
                                             add_role, update_role, delete_role)
-from function.prediction.views import predict
+from services.views import predict
 from function.users.perm_management.views import (
     create_permission,
     delete_permission,
@@ -23,6 +23,7 @@ from function.users.perm_management.views import (
     view_permissions_by_role,
     get_database_permissions
 )
+from function.claims.user_views import create_claim, list_user_claims, get_claim_details, update_claim_status
 
 from function.users.login.views import login_user, get_user_profile, \
     logout_user
@@ -80,6 +81,13 @@ urlpatterns = [
     path('models/<int:pk>/', model_detail, name='model_detail'),
     path('models/<int:model_id>/statistics/', view_model_statistics, name='view_model_statistics'),
     path('models/<int:model_id>/feedback/', view_model_feedback, name='view_model_feedback'),
+    
+        # claim system endpoints
+    path('claims/create/', create_claim, name='create_claim'),
+    path('claims/', list_user_claims, name='list_user_claims'),
+    path('claims/<int:claim_id>/', get_claim_details, name='get_claim_details'),
+    path('claims/<int:claim_id>/update-status/', update_claim_status, name='update_claim_status'),
+
 
     #role management code
     path('roles/', view_roles, name='view_roles'),
@@ -88,7 +96,7 @@ urlpatterns = [
     path('roles/update/<int:role_id>/', update_role, name='update_role'),
     path('roles/delete/<int:role_id>/', delete_role, name='delete_role'),
 
-    #prediction endpoint
+
     path('predict/', predict, name='predict'),
 
     # role management endpoints

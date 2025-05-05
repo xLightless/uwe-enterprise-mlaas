@@ -176,6 +176,7 @@ CREATE TABLE public."UserClaims" (
     user_accident_id integer NOT NULL,
     claim_id integer NOT NULL,
     predicted_settlement_value numeric NOT NULL,
+    pending_claim TEXT NOT NULL,
     user_id integer NOT NULL
 );
 

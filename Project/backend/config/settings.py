@@ -59,6 +59,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
 ]
 
+# Machine Learning Service settings
+# In config/settings.py
+ML_SERVICE_URL = os.environ.get('ML_SERVICE_URL', 'http://ml-service:5000')
+
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_FROM_EMAIL = os.getenv('TWILIO_FROM_EMAIL')
