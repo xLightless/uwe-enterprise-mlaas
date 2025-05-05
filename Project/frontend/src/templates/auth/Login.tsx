@@ -35,7 +35,7 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
                 
                 <div className="w-full relative">
                     <img src={mail_icon} width="17px" height="17px" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
-                    <input type="email" placeholder="john.doe@example.co.uk" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border-2 border-slate-200"/>
+                    <input type="email" placeholder="john.doe@example.co.uk" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border border-slate-200"/>
                 </div>
                 
             </div>
@@ -48,7 +48,7 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
 
                 <div className="w-full relative">
                     <img src={pwd_icon} width="17px" height="17px" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
-                    <input type="password" placeholder="••••••••••" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border-2 border-slate-200"/>
+                    <input type="password" placeholder="••••••••••" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border border-slate-200"/>
                 </div>
             </div>
 
