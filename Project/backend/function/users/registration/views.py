@@ -45,7 +45,13 @@ def register_user(request):
             "message": "User data cached successfully. Please check your phone for verification."
         }, status=status.HTTP_201_CREATED)
 
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    errors = []
+    for k, v in serializer.errors.items():
+        errors.append(f"{k}: {v[0]}")
+    return Response({
+            'status': False,
+            'message': errors,
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 @swagger_auto_schema(
     method="post",
@@ -56,6 +62,7 @@ def register_user(request):
 @permission_classes([AllowAny])
 def verify_otp(request):
     phone_number = request.data.get('phone_number')
+    email = request.data.get('email')
     otp = request.data.get('otp')
 
     # Validate input
@@ -79,12 +86,25 @@ def verify_otp(request):
             cache_key = f"user_data_{phone_number}"
             user_data = cache.get(cache_key)
 
+            print("Verify OTP: ", user_data)
+
             if user_data:
+                existing_user = Users.objects.filter(email=email).first()
+                print("Existing user: ", existing_user)
+                if existing_user:
+                    return Response({
+                        "status": False,
+                        "message": "User already exists."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST)
+
                 serializer = UserCreateSerializer(data=user_data)
                 if serializer.is_valid():
                     user = serializer.save()
                     user.is_verified = True
                     user.save()
+
+                    print("Serialised is valid: ", user)
 
                     refresh = RefreshToken.for_user(user)
 

@@ -1,0 +1,1000 @@
+{
+    "Claims": [
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T22:24:30"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T07:01:06"
+        },
+        {
+            "injury_prognosis": "7 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T19:47:48"
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T12:32:06"
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Concussion and bruised ribs.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T13:07:06"
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T18:12:30"
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": false,
+            "witness_present": false,
+            "claim_date": "2025-04-22T00:57:54"
+        },
+        {
+            "injury_prognosis": "8 months",
+            "injury_description": "Concussion and bruised ribs.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-22T00:13:42"
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T07:57:30"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T13:18:12"
+        },
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T22:24:30"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T07:01:06"
+        },
+        {
+            "injury_prognosis": "7 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T19:47:48"
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T12:32:06"
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Fractured wrist from a fall.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-22T10:15:00"
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Sprained ankle during a workplace accident.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T11:30:00"
+        },
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Back strain from lifting heavy equipment.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T12:45:00"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor laceration from sharp object.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-22T13:00:00"
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Concussion from a fall.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T14:15:00"
+        },
+        {
+            "injury_prognosis": "1 month",
+            "injury_description": "Burns from chemical exposure.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T15:30:00"
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Knee injury from sports activity.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-22T16:00:00"
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Shoulder dislocation during a fall.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T17:15:00"
+        },
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Fractured ankle from a slip.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T18:30:00"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor burn from hot surface.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-22T19:45:00"
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Herniated disc from lifting.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T20:00:00"
+        },
+        {
+            "injury_prognosis": "1 month",
+            "injury_description": "Cut from broken glass.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T21:15:00"
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Torn ligament in the knee.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T22:30:00"
+        },
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash from rear-end collision.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-22T23:45:00"
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Fractured collarbone from a fall.",
+            "police_report_filed": false,
+            "witness_present": false,
+            "claim_date": "2025-04-23T00:15:00"
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor concussion from sports.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-23T01:00:00"
+        }
+    ],
+
+    "Accidents": [
+        {
+            "accident_type": "Rear end"
+        },
+        {
+            "accident_type": "Rear end - Clt pushed into next vehicle"
+        },
+        {
+            "accident_type": "Rear end - 3 car - Clt at front"
+        },
+        {
+            "accident_type": "Other side pulled out of side road"
+        },
+        {
+            "accident_type": "Other side pulled on to roundabout"
+        },
+        {
+            "accident_type": "Other side drove on wrong side of the road"
+        },
+        {
+            "accident_type": "Other side reversed into Clt's vehicle"
+        },
+        {
+            "accident_type": "Other side changed lanes and collided with clt's vehicle"
+        },
+        {
+            "accident_type": "Other side changed lanes on a roundabout colliding with clt's vehicle"
+        }
+    ],
+
+    "Drivers": [
+        {
+            "driver_age": 35,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 28,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 16,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 30,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 50,
+            "gender": "Male",
+            "number_of_passengers": 4
+        },
+        {
+            "driver_age": 17,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 40,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 29,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 15,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 45,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 37,
+            "gender": "Male",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 26,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 48,
+            "gender": "Male",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 31,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 14,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 24,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 41,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 27,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 36,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 44,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 38,
+            "gender": "Male",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 25,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 47,
+            "gender": "Male",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 32,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 46,
+            "gender": "Male",
+            "number_of_passengers": 4
+        },
+        {
+            "driver_age": 13,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 43,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 29,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 34,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 49,
+            "gender": "Female",
+            "number_of_passengers": 2
+        }
+    ],
+
+    "Weather": [
+        {
+            "weather_conditions": "Sunny"
+        },
+        {
+            "weather_conditions": "Rainy"
+        },
+        {
+            "weather_conditions": "Snowy"
+        }
+    ],
+
+    "Vehicles": [
+        {
+            "vehicle_type": "Motorcycle"
+        },
+        {
+            "vehicle_type": "Truck"
+        },
+        {
+            "vehicle_type": "Car"
+        }
+    ],
+
+    "UserAccident": [
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-04-20T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-04-21T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-04-22T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-04-23T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-04-24T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-04-25T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-04-26T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-04-27T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-04-28T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-04-29T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-04-30T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-01T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-05-02T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-05-03T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-05-04T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-05-05T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-05-06T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-05-07T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-05-08T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-05-09T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-10T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-05-11T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-05-12T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-05-13T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-05-14T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-05-15T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-05-16T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-05-17T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-05-18T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-19T08:45:00"
+        }
+    ],
+
+    "UserClaims": [
+        {
+            "user_accident_id": 1,
+            "claim_id": 1,
+            "predicted_settlement_value": 5000.00,
+            "user_id": 1
+        },
+        {
+            "user_accident_id": 2,
+            "claim_id": 2,
+            "predicted_settlement_value": 3000.00,
+            "user_id": 2
+        },
+        {
+            "user_accident_id": 3,
+            "claim_id": 3,
+            "predicted_settlement_value": 7000.00,
+            "user_id": 3
+        },
+        {
+            "user_accident_id": 4,
+            "claim_id": 4,
+            "predicted_settlement_value": 4000.00,
+            "user_id": 4
+        },
+        {
+            "user_accident_id": 5,
+            "claim_id": 5,
+            "predicted_settlement_value": 3500.00,
+            "user_id": 5
+        },
+        {
+            "user_accident_id": 6,
+            "claim_id": 6,
+            "predicted_settlement_value": 6000.00,
+            "user_id": 6
+        },
+        {
+            "user_accident_id": 7,
+            "claim_id": 7,
+            "predicted_settlement_value": 4500.00,
+            "user_id": 7
+        },
+        {
+            "user_accident_id": 8,
+            "claim_id": 8,
+            "predicted_settlement_value": 5500.00,
+            "user_id": 8
+        },
+        {
+            "user_accident_id": 9,
+            "claim_id": 9,
+            "predicted_settlement_value": 6200.00,
+            "user_id": 9
+        },
+        {
+            "user_accident_id": 10,
+            "claim_id": 10,
+            "predicted_settlement_value": 2800.00,
+            "user_id": 10
+        },
+        {
+            "user_accident_id": 11,
+            "claim_id": 11,
+            "predicted_settlement_value": 5000.00,
+            "user_id": 11
+        },
+        {
+            "user_accident_id": 12,
+            "claim_id": 12,
+            "predicted_settlement_value": 3000.00,
+            "user_id": 12
+        },
+        {
+            "user_accident_id": 13,
+            "claim_id": 13,
+            "predicted_settlement_value": 7000.00,
+            "user_id": 13
+        },
+        {
+            "user_accident_id": 14,
+            "claim_id": 14,
+            "predicted_settlement_value": 4000.00,
+            "user_id": 14
+        },
+        {
+            "user_accident_id": 15,
+            "claim_id": 15,
+            "predicted_settlement_value": 3500.00,
+            "user_id": 15
+        },
+        {
+            "user_accident_id": 16,
+            "claim_id": 16,
+            "predicted_settlement_value": 6000.00,
+            "user_id": 16
+        },
+        {
+            "user_accident_id": 17,
+            "claim_id": 17,
+            "predicted_settlement_value": 4500.00,
+            "user_id": 17
+        },
+        {
+            "user_accident_id": 18,
+            "claim_id": 18,
+            "predicted_settlement_value": 5500.00,
+            "user_id": 18
+        },
+        {
+            "user_accident_id": 19,
+            "claim_id": 19,
+            "predicted_settlement_value": 6200.00,
+            "user_id": 19
+        },
+        {
+            "user_accident_id": 20,
+            "claim_id": 20,
+            "predicted_settlement_value": 2800.00,
+            "user_id": 20
+        },
+        {
+            "user_accident_id": 21,
+            "claim_id": 21,
+            "predicted_settlement_value": 5000.00,
+            "user_id": 21
+        },
+        {
+            "user_accident_id": 22,
+            "claim_id": 22,
+            "predicted_settlement_value": 3000.00,
+            "user_id": 22
+        },
+        {
+            "user_accident_id": 23,
+            "claim_id": 23,
+            "predicted_settlement_value": 7000.00,
+            "user_id": 23
+        },
+        {
+            "user_accident_id": 24,
+            "claim_id": 24,
+            "predicted_settlement_value": 4000.00,
+            "user_id": 24
+        },
+        {
+            "user_accident_id": 25,
+            "claim_id": 25,
+            "predicted_settlement_value": 3500.00,
+            "user_id": 25
+        },
+        {
+            "user_accident_id": 26,
+            "claim_id": 26,
+            "predicted_settlement_value": 6000.00,
+            "user_id": 26
+        },
+        {
+            "user_accident_id": 27,
+            "claim_id": 27,
+            "predicted_settlement_value": 4500.00,
+            "user_id": 27
+        },
+        {
+            "user_accident_id": 28,
+            "claim_id": 28,
+            "predicted_settlement_value": 5500.00,
+            "user_id": 28
+        },
+        {
+            "user_accident_id": 29,
+            "claim_id": 29,
+            "predicted_settlement_value": 6200.00,
+            "user_id": 29
+        },
+        {
+            "user_accident_id": 30,
+            "claim_id": 30,
+            "predicted_settlement_value": 2800.00,
+            "user_id": 30
+        }
+    ],
+
+    "UserVehicle": [
+        {
+            "user_id": 1,
+            "vehicle_id": 1,
+            "vehicle_age": 5,
+            "driver_id": 1
+        },
+        {
+            "user_id": 2,
+            "vehicle_id": 2,
+            "vehicle_age": 3,
+            "driver_id": 2
+        },
+        {
+            "user_id": 3,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 3
+        },
+        {
+            "user_id": 4,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 4
+        },
+        {
+            "user_id": 5,
+            "vehicle_id": 2,
+            "vehicle_age": 6,
+            "driver_id": 5
+        },
+        {
+            "user_id": 6,
+            "vehicle_id": 3,
+            "vehicle_age": 2,
+            "driver_id": 6
+        },
+        {
+            "user_id": 7,
+            "vehicle_id": 1,
+            "vehicle_age": 8,
+            "driver_id": 7
+        },
+        {
+            "user_id": 8,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 8
+        },
+        {
+            "user_id": 9,
+            "vehicle_id": 3,
+            "vehicle_age": 3,
+            "driver_id": 9
+        },
+        {
+            "user_id": 10,
+            "vehicle_id": 1,
+            "vehicle_age": 6,
+            "driver_id": 10
+        },
+        {
+            "user_id": 11,
+            "vehicle_id": 2,
+            "vehicle_age": 4,
+            "driver_id": 11
+        },
+        {
+            "user_id": 12,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 12
+        },
+        {
+            "user_id": 13,
+            "vehicle_id": 1,
+            "vehicle_age": 2,
+            "driver_id": 13
+        },
+        {
+            "user_id": 14,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 14
+        },
+        {
+            "user_id": 15,
+            "vehicle_id": 3,
+            "vehicle_age": 6,
+            "driver_id": 15
+        },
+        {
+            "user_id": 16,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 16
+        },
+        {
+            "user_id": 17,
+            "vehicle_id": 2,
+            "vehicle_age": 3,
+            "driver_id": 17
+        },
+        {
+            "user_id": 18,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 18
+        },
+        {
+            "user_id": 19,
+            "vehicle_id": 1,
+            "vehicle_age": 6,
+            "driver_id": 19
+        },
+        {
+            "user_id": 20,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 20
+        },
+        {
+            "user_id": 21,
+            "vehicle_id": 3,
+            "vehicle_age": 4,
+            "driver_id": 21
+        },
+        {
+            "user_id": 22,
+            "vehicle_id": 1,
+            "vehicle_age": 8,
+            "driver_id": 22
+        },
+        {
+            "user_id": 23,
+            "vehicle_id": 2,
+            "vehicle_age": 2,
+            "driver_id": 23
+        },
+        {
+            "user_id": 24,
+            "vehicle_id": 3,
+            "vehicle_age": 6,
+            "driver_id": 24
+        },
+        {
+            "user_id": 25,
+            "vehicle_id": 1,
+            "vehicle_age": 3,
+            "driver_id": 25
+        },
+        {
+            "user_id": 26,
+            "vehicle_id": 2,
+            "vehicle_age": 7,
+            "driver_id": 26
+        },
+        {
+            "user_id": 27,
+            "vehicle_id": 3,
+            "vehicle_age": 5,
+            "driver_id": 27
+        },
+        {
+            "user_id": 28,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 28
+        },
+        {
+            "user_id": 29,
+            "vehicle_id": 2,
+            "vehicle_age": 6,
+            "driver_id": 29
+        },
+        {
+            "user_id": 30,
+            "vehicle_id": 3,
+            "vehicle_age": 3,
+            "driver_id": 30
+        }
+    ]
+}

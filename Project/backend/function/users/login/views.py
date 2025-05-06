@@ -18,10 +18,16 @@ import function.util.swu as swu
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
+    """Logs in the user into their account and returns a JWT token."""
     serializer = UserLoginSerializer(
         data=request.data, context={'request': request})
-    if serializer.is_valid():
+
+    is_serializer_valid = serializer.is_valid()
+    print(is_serializer_valid)
+    if is_serializer_valid:
         user = serializer.validated_data['user']
+
+        print("Validated Data:", serializer.validated_data)
 
         user.last_login = timezone.now()
         user.save()
@@ -40,7 +46,12 @@ def login_user(request):
             'role_id': serializer.validated_data['role_id'],
             "permissions": user.get_permissions()
         })
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({
+        'status': False,
+        'message': 'Invalid credentials or user not found',
+        },
+        status=status.HTTP_400_BAD_REQUEST
+    )
 
 
 @swagger_auto_schema(
@@ -51,12 +62,13 @@ def login_user(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
+    """"Logs out the user by blacklisting the refresh token."""
     try:
         # Get the refresh token from the request data
         refresh_token = request.data.get("refresh")
         token = RefreshToken(refresh_token)
-        
-        # Blacklist the refresh token 
+
+        # Blacklist the refresh token
         token.blacklist()
 
         return Response(
@@ -73,6 +85,7 @@ def logout_user(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
+    """Returns the user profile information."""
     user = request.user
     serializer = UserDetailSerializer(user)
     response = serializer.data

@@ -2,6 +2,8 @@ import { faUser, faCog, faArrowRightFromBracket } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { UserProps } from "../../common/interfaces";
+import { useNavigate } from "react-router-dom";
+import { handleLogoutUser } from "../../repositories/auth";
 
 interface UserSettingsDropdownProps {
     user: UserProps;
@@ -10,10 +12,18 @@ interface UserSettingsDropdownProps {
 
 const UserSettingsDropdown: React.FC<UserSettingsDropdownProps> = ({ user }) => {
     const [isProfileClicked, setIsProfileClicked] = useState(false);
+    const navigate = useNavigate();
 
     async function logoutUser() {
-        // Replace with actual fetch request
-        return true;
+        try {
+            await handleLogoutUser();
+
+            console.log("Logged out successfully");
+            
+            navigate("/");
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
     }
 
     async function openUserSettings() {

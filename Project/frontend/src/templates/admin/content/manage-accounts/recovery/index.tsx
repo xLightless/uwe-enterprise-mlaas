@@ -1,27 +1,134 @@
 import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
-import { usersResponse } from "../../../../../common/data";
-import { TableData, UserProps } from "../../../../../common/interfaces";
+import { rolesResponse, usersResponse } from "../../../../../common/data";
+import { Role, TableData, UserProps } from "../../../../../common/interfaces";
 
 import { Chart as ChartJS, ChartData, ChartOptions } from "chart.js/auto";
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
 import { Chart } from "react-chartjs-2";
 import { useUserContext } from "../../../../../common/contexts/user";
 import Overlay from "../../../../../components/overlay";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 ChartJS.register(MatrixController, MatrixElement);
 
-
 const Recovery: React.FC = () => {
+    // Information related to user(s)
+    const userContext = useUserContext();
     const [data, setTableData] = useState<TableData | null>(null);
     const [heatmapData, setHeatmapData] = useState<ChartData<"matrix"> | null>(null);
 
+    // Analytics
     const [newWeekUsers, setNewWeekUsers] = useState<number>(0);
     const [newMonthUsers, setNewMonthUsers] = useState<number>(0);
     const [newTotalUsers, setNewTotalUsers] = useState<number>(0);
-
     const [toggleEditUser, setToggleEditUser] = useState<boolean>(false);
-    const userContext = useUserContext();
+    const [roles, setRoles] = useState<Role[]>([]);
+
+    // Form data for creating a new account
+    const [newAccount, setNewAccount] = useState<UserProps | null>(null);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+    const [checkConfirmPassword, setCheckConfirmPassword] = useState<string>("");
+    const [creationStatusMessage, setCreationStatusMessage] = useState<string>("");
+
+    const [checkAccountRole, setCheckAccountRole] = useState<string>("");
+
+    // Create a new user account in the database, on form submission.
+    function createNewUser(e: React.FormEvent, newAccount: UserProps | null) {
+        e.preventDefault();
+
+        alert(
+            `${newAccount?.email} | ${newAccount?.password} | ${newAccount?.roleId} | ${newAccount?.fullName} | ${newAccount?.phoneNumber}`
+        )
+
+        // Check for missing or invalid fields first
+        if (!newAccount) {
+            setCreationStatusMessage("Failed to create user account. Please fill in all fields.");
+            return;
+        }
+
+        if (!newAccount.email) {
+            setCreationStatusMessage("Please enter an email address.");
+            return;
+        }
+
+        if (!newAccount.password) {
+            setCreationStatusMessage("Please enter a password.");
+            return;
+        }
+
+        if (checkConfirmPassword !== newAccount.password) {
+            setCreationStatusMessage("Passwords do not match.");
+            return;
+        }
+
+        if (!newAccount.roleId || newAccount.roleId === -1) {
+            setCreationStatusMessage("Please select a role for the user.");
+            return;
+        }
+
+        if (!newAccount.fullName) {
+            setCreationStatusMessage("Please enter a full name.");
+            return;
+        }
+
+        if (!newAccount.phoneNumber) {
+            setCreationStatusMessage("Please enter a phone number.");
+            return;
+        }
+
+        // If all validations pass, proceed with account creation
+        switch (checkAccountRole) {
+            case "End User":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: false,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+
+            case "Administrator":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: true,
+                    isSuperuser: true,
+                })
+                break;
+
+            case "AI Engineer":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+
+            case "Finance Team Member":
+                setNewAccount({
+                    ...newAccount,
+                    isVerified: true,
+                    isActive: true,
+                    isStaff: true,
+                    isAdmin: false,
+                    isSuperuser: false,
+                })
+                break;
+        }
+
+        // setCreationStatusMessage("User account created successfully!");
+        // Create a request using the /repositories folder
+    }
 
     // Opens the user settings editor for the selected user.
     const editUser = (user: UserProps) => {
@@ -86,6 +193,18 @@ const Recovery: React.FC = () => {
         setHeatmapData(heatmap as ChartData<"matrix">);
     };
 
+    const fetchRoles = async () => {
+        // Replace with actual fetch request
+        setRoles(rolesResponse);
+    };
+
+    // Get the role ID from the role name
+    const getRoleIdFromName = (roleName: string) => {
+        const roleId = roles.find(role => role.roleName === roleName)?.roleId
+        // alert(`Role Name: ${roleName} | Role ID: ${roleId}`);
+        return roleId || -1;
+    };
+
     const fetchUserAnalytics = async (data: TableData) => {
             // New users this week
             const newUsersThisWeek = data.tbody.filter((user: UserProps) => {
@@ -112,6 +231,7 @@ const Recovery: React.FC = () => {
     // On mount, fetch the data, then fetch data analytics and render it.
     useEffect(() => {
         fetchData();
+        fetchRoles();
     }, []);
 
     useEffect(() => {
@@ -248,116 +368,116 @@ const Recovery: React.FC = () => {
         <>
             {toggleEditUser &&
                 <Overlay onClose={() => setToggleEditUser(false)}>
-    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
-        {/* Header */}
-        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-            <h1 className="font-bold">Edit User Information</h1>
-        </div>
+                    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
+                        {/* Header */}
+                        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                            <h1 className="font-bold">Edit User Information</h1>
+                        </div>
 
-        {/* User Information Table */}
-        <div className="grid grid-cols-1">
-            <table className="w-full text-left">
-                <tbody>
-                    {/* Full Name */}
-                    <tr className="">
-                        <th className="text-black pr-4">Full Name:</th>
-                        <td>
-                            <input
-                                type="text"
-                                className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                value={userContext.getUser()?.fullName || ""}
-                                onChange={(e) =>
-                                    userContext.setUser({
-                                        ...userContext.getUser(),
-                                        fullName: e.target.value,
-                                    })
-                                }
-                            />
-                        </td>
-                    </tr>
+                        {/* User Information Table */}
+                        <div className="grid grid-cols-1">
+                            <table className="w-full text-left">
+                                <tbody>
+                                    {/* Full Name */}
+                                    <tr className="">
+                                        <th className="text-black pr-4">Full Name:</th>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                value={userContext.getUser()?.fullName || ""}
+                                                onChange={(e) =>
+                                                    userContext.setUser({
+                                                        ...userContext.getUser(),
+                                                        fullName: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </td>
+                                    </tr>
 
-                    {/* Email */}
-                    <tr>
-                        <th className="text-black pr-4">Email:</th>
-                        <td>
-                            <input
-                                type="email"
-                                className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                value={userContext.getUser()?.email || ""}
-                                onChange={(e) =>
-                                    userContext.setUser({
-                                        ...userContext.getUser(),
-                                        email: e.target.value,
-                                    })
-                                }
-                            />
-                        </td>
-                    </tr>
+                                    {/* Email */}
+                                    <tr>
+                                        <th className="text-black pr-4">Email:</th>
+                                        <td>
+                                            <input
+                                                type="email"
+                                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                value={userContext.getUser()?.email || ""}
+                                                onChange={(e) =>
+                                                    userContext.setUser({
+                                                        ...userContext.getUser(),
+                                                        email: e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </td>
+                                    </tr>
 
-                    {/* Phone Number */}
-                    <tr>
-                        <th className="text-black pr-4">Phone Number:</th>
-                        <td>
-                            <input
-                                type="text"
-                                className="w-full h-10 border border-gray-300 rounded-md px-4"
-                                value={userContext.getUser()?.phoneNumber || ""}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    if (/^\d*$/.test(value)) {
-                                        userContext.setUser({
-                                            ...userContext.getUser(),
-                                            phoneNumber: value,
-                                        });
-                                    }
+                                    {/* Phone Number */}
+                                    <tr>
+                                        <th className="text-black pr-4">Phone Number:</th>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                className="w-full h-10 border border-gray-300 rounded-md px-4"
+                                                value={userContext.getUser()?.phoneNumber || ""}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    if (/^\d*$/.test(value)) {
+                                                        userContext.setUser({
+                                                            ...userContext.getUser(),
+                                                            phoneNumber: value,
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                        </td>
+                                    </tr>
+
+                                    {/* Boolean Fields */}
+                                    {[
+                                        { label: "Is Verified", key: "isVerified" },
+                                        { label: "Is Active", key: "isActive" },
+                                        { label: "Is Staff", key: "isStaff" },
+                                        { label: "Is Admin", key: "isAdmin" },
+                                        { label: "Is Superuser", key: "isSuperuser" },
+                                    ].map((field) => (
+                                        <tr key={field.key}>
+                                            <th className="text-black pr-4">{field.label}:</th>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={!!userContext.getUser()?.[field.key as keyof UserProps]}
+                                                    onChange={(e) =>
+                                                        userContext.setUser({
+                                                            ...userContext.getUser(),
+                                                            [field.key]: e.target.checked,
+                                                        })
+                                                    }
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Save Changes Button */}
+                        <div className="flex justify-end mt-4">
+                            <button
+                                type="button"
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                                onClick={() => {
+                                    // Save changes logic here
+                                    setToggleEditUser(false);
                                 }}
-                            />
-                        </td>
-                    </tr>
-
-                    {/* Boolean Fields */}
-                    {[
-                        { label: "Is Verified", key: "isVerified" },
-                        { label: "Is Active", key: "isActive" },
-                        { label: "Is Staff", key: "isStaff" },
-                        { label: "Is Admin", key: "isAdmin" },
-                        { label: "Is Superuser", key: "isSuperuser" },
-                    ].map((field) => (
-                        <tr key={field.key}>
-                            <th className="text-black pr-4">{field.label}:</th>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={!!userContext.getUser()?.[field.key as keyof UserProps]}
-                                    onChange={(e) =>
-                                        userContext.setUser({
-                                            ...userContext.getUser(),
-                                            [field.key]: e.target.checked,
-                                        })
-                                    }
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-
-        {/* Save Changes Button */}
-        <div className="flex justify-end mt-4">
-            <button
-                type="button"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-                onClick={() => {
-                    // Save changes logic here
-                    setToggleEditUser(false);
-                }}
-            >
-                Save Changes
-            </button>
-        </div>
-    </div>
-</Overlay>
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </Overlay>
             }
 
             <div className="w-full h-full grid grid-rows-[0.2fr_0.5fr_1fr] gap-4">
@@ -386,6 +506,176 @@ const Recovery: React.FC = () => {
                             className="max-w-full py-2"
                         />
                     )}
+                </div>
+
+                {/* CRUD Admin operations for non-existing users */}
+                <div className="w-full h-fit">
+                    <div className="p-2">
+                        <h1 className="text-left font-bold text-black">Create User Accounts</h1>
+                    </div>
+                    <div className="w-full h-fit bg-gray-200 rounded shadow-md p-4 grid grid-rows-[auto_1fr_auto grid-cols-1 gap-4">
+                        <form onSubmit={(e) => createNewUser(e, newAccount)}>
+                            {/* Full Name and Phone Number */}
+                            <div className="grid gap-6 mb-6 md:grid-cols-2">
+                                <div>
+                                    <label htmlFor="first_name" className="block mb-2 font-bold text-left">Full Name</label>
+                                    <input
+                                        type="text"
+                                        id="first_name"
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="John"
+                                        onChange={(e) => setNewAccount({
+                                            ...newAccount,
+                                            fullName: e.target.value,
+                                        })}
+                                        pattern="[A-Za-z ]{1,}"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="phone" className="block mb-2 font-bold text-left">Phone number</label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="123-45-678"
+                                        onChange={(e) => setNewAccount({
+                                            ...newAccount,
+                                            phoneNumber: e.target.value,
+                                        })}
+                                        pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-6 mb-6">
+                                {/* Email and Password */}
+                                <div className="w-full h-full">
+                                    <div className="mb-6">
+                                        <label htmlFor="email" className="block mb-2 font-bold text-left">Email address</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="john.doe@company.com"
+                                            onChange={(e) => setNewAccount({
+                                                ...newAccount,
+                                                email: e.target.value,
+                                            })}
+                                            required />
+                                    </div>
+                                    <div className="mb-6">
+                                        <label htmlFor="password" className="block mb-2 font-bold text-left">New password</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                id="password"
+                                                className={`${
+                                                    !checkConfirmPassword || !newAccount?.password
+                                                      ? "text-gray-800"
+                                                      : checkConfirmPassword !== newAccount?.password
+                                                      ? "text-red-500"
+                                                      : "text-green-500"
+                                                  } bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                                                placeholder={"•••••••••"}
+                                                min={8}
+                                                max={20}
+                                                onChange={(e) => setNewAccount({
+                                                    ...newAccount,
+                                                    password: e.target.value,
+                                                })}
+                                                required
+                                            />
+                                            <button type="button" className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400">
+                                                {showPassword ? (
+                                                    <FontAwesomeIcon icon={faEyeSlash} onClick={() => setShowPassword(!showPassword)} />
+                                                ) : (
+                                                    <FontAwesomeIcon icon={faEye} onClick={() => setShowPassword(!showPassword)} />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="mb-6">
+                                        <label htmlFor="confirm_password" className="block mb-2 font-bold text-left">Confirm password</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                id="confirm_password"
+                                                className={`${
+                                                    !checkConfirmPassword || !newAccount?.password
+                                                      ? "text-gray-800"
+                                                      : checkConfirmPassword !== newAccount?.password
+                                                      ? "text-red-500"
+                                                      : "text-green-500"
+                                                  } bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                                                placeholder={"•••••••••"}
+                                                min={8}
+                                                max={20}
+                                                onChange={(e) => {
+                                                    setCheckConfirmPassword(e.target.value);
+                                                }}
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400"
+                                            >
+                                                {showConfirmPassword ? (
+                                                    <FontAwesomeIcon icon={faEyeSlash} onClick={() => setShowConfirmPassword(!showConfirmPassword)} />
+                                                ) : (
+                                                    <FontAwesomeIcon icon={faEye} onClick={() => setShowConfirmPassword(!showConfirmPassword)} />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Roles and permissions */}
+                                <div className="w-full h-full">
+                                    <div className="mb-6">
+                                        <label htmlFor="roleName" className="block mb-2 font-bold text-left">Role Name</label>
+                                        <select
+                                            id="roleName"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            value={newAccount?.roleId || ""}
+                                            onChange={(e) => {
+                                                setNewAccount({
+                                                    ...newAccount,
+                                                    roleId: getRoleIdFromName(e.target.value) || -1,
+                                                });
+
+                                                setCheckAccountRole(e.target.value);
+                                            }}
+                                        >
+                                            <option value="" disabled>Select a role</option>
+                                            {roles.map((role, index) => (
+                                                <option key={index} value={role.roleName}>
+                                                    {role.roleName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <div className="mb-6">
+                                            <button
+                                                type="submit"
+                                                className="w-full py-1 bg-gray-700 rounded text-white w-24 h-fit cursor-pointer hover:bg-gray-800"
+                                            >
+                                                    <span className="text-xs sm:text-xs md:text-md">Submit</span>
+                                            </button>
+                                        </div>
+
+                                        <div className="h-full">
+                                            {creationStatusMessage &&
+                                                <h1 className="text-black font-bold">{creationStatusMessage}</h1>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 {/* Table of Accounts */}

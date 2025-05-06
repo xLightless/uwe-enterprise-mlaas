@@ -13,7 +13,6 @@ const NetworkActivity: React.FC = () => {
 
     const [overlay, setOverlay] = useState<boolean>(false);
 
-
     async function fetchNetworkActivity() {
 
         // Replace with actual fetch request

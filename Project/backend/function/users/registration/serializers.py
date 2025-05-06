@@ -13,10 +13,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['email', 'password', 'password2', 'full_name', 'phone_number']  
+        fields = ['email', 'password', 'password2', 'full_name', 'phone_number']
         extra_kwargs = {
             'full_name': {'required': True},
-            'phone_number': {'required': True}, 
+            'phone_number': {'required': True},
 
         }
 
@@ -37,7 +37,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             full_name=validated_data['full_name'],
             role=default_role,
 
-            phone_number=validated_data['phone_number'], 
+            phone_number=validated_data['phone_number'],
 
         )
         user.set_password(validated_data['password'])
@@ -48,7 +48,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         if not DEBUG.SKIP_TWILIO:
             client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
             client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
-                to="+44" + validated_data['phone_number'], 
+                to="+44" + validated_data['phone_number'],
                 channel='sms'
             )
 

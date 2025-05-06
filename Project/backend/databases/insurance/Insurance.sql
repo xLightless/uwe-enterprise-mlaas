@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.4
--- Dumped by pg_dump version 17.2
+-- Dumped from database version 17.4 (Debian 17.4-1.pgdg120+2)
+-- Dumped by pg_dump version 17.4 (Debian 17.4-1.pgdg120+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -64,8 +64,8 @@ CREATE TABLE public."Claims" (
     injury_prognosis character varying(255) NOT NULL,
     injury_description text NOT NULL,
     police_report_filed boolean DEFAULT false NOT NULL,
-    num_witnesses integer DEFAULT 0 NOT NULL,
-    claim_date timestamp without time zone NOT NULL
+    claim_date timestamp without time zone NOT NULL,
+    witness_present boolean DEFAULT false NOT NULL
 );
 
 
@@ -99,11 +99,9 @@ ALTER SEQUENCE public."Claims_claim_id_seq" OWNED BY public."Claims".claim_id;
 
 CREATE TABLE public."Drivers" (
     driver_id integer NOT NULL,
-    age integer NOT NULL,
+    driver_age integer NOT NULL,
     gender character varying(25) NOT NULL,
-    passengers integer DEFAULT 0 NOT NULL,
-    driver_first_name character varying(50),
-    driver_last_name character varying(50)
+    number_of_passengers integer DEFAULT 0 NOT NULL
 );
 
 
@@ -177,8 +175,7 @@ CREATE TABLE public."UserClaims" (
     user_claim_id integer NOT NULL,
     user_accident_id integer NOT NULL,
     claim_id integer NOT NULL,
-    expense_type character varying(75) NOT NULL,
-    amount numeric NOT NULL,
+    predicted_settlement_value numeric NOT NULL,
     user_id integer NOT NULL
 );
 
@@ -284,7 +281,7 @@ ALTER SEQUENCE public."Vehicles_vehicle_id_seq" OWNED BY public."Vehicles".vehic
 
 CREATE TABLE public."Weather" (
     weather_id integer NOT NULL,
-    weather_type character varying(50) NOT NULL
+    weather_conditions character varying(50) NOT NULL
 );
 
 
@@ -380,7 +377,7 @@ COPY public."Accidents" (accident_id, accident_type) FROM stdin;
 -- Data for Name: Claims; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Claims" (claim_id, injury_prognosis, injury_description, police_report_filed, num_witnesses, claim_date) FROM stdin;
+COPY public."Claims" (claim_id, injury_prognosis, injury_description, police_report_filed, claim_date, witness_present) FROM stdin;
 \.
 
 
@@ -388,7 +385,7 @@ COPY public."Claims" (claim_id, injury_prognosis, injury_description, police_rep
 -- Data for Name: Drivers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Drivers" (driver_id, age, gender, passengers, driver_first_name, driver_last_name) FROM stdin;
+COPY public."Drivers" (driver_id, driver_age, gender, number_of_passengers) FROM stdin;
 \.
 
 
@@ -404,7 +401,7 @@ COPY public."UserAccident" (user_accident_id, accident_id, weather_id, user_vehi
 -- Data for Name: UserClaims; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."UserClaims" (user_claim_id, user_accident_id, claim_id, expense_type, amount, user_id) FROM stdin;
+COPY public."UserClaims" (user_claim_id, user_accident_id, claim_id, predicted_settlement_value, user_id) FROM stdin;
 \.
 
 
@@ -428,7 +425,7 @@ COPY public."Vehicles" (vehicle_id, vehicle_type) FROM stdin;
 -- Data for Name: Weather; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Weather" (weather_id, weather_type) FROM stdin;
+COPY public."Weather" (weather_id, weather_conditions) FROM stdin;
 \.
 
 

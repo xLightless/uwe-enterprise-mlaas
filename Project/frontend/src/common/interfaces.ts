@@ -73,3 +73,29 @@ export interface UserProps {
 
     actions?: JSX.Element;
 }
+
+export interface JSONResponse<T = unknown> {
+    status: string
+    message: string
+    data?: T
+}
+
+/**
+ * Interface for mapping model properties to the frontend.
+ *
+ * @model_name - The name of the model.
+ * @model_description - The description of the model.
+ * @model_version - The version of the model.
+ * @model_file - The file path of the model.
+ */
+export interface ModelProps {
+    model_name: string
+    model_description: string
+    model_version: string
+    model_file: string
+}
+
+export interface ModelStatistics {
+    num_accepted_claims: number
+    num_rejected_claims: number
+}

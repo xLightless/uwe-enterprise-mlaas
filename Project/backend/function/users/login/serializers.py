@@ -10,10 +10,14 @@ class UserLoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
+        print("validating creds: ", email, password)
+
         if email and password:
             user = authenticate(
                 request=self.context.get(
                     'request'), email=email, password=password)
+
+            print("authenticated user: ", user)
             if not user:
                 raise serializers.ValidationError('Invalid credentials')
         else:
@@ -21,5 +25,5 @@ class UserLoginSerializer(serializers.Serializer):
                 'Must include "email" and "password"')
 
         attrs['user'] = user
-        attrs['role_id'] = user.role.role_id 
+        attrs['role_id'] = user.role.role_id
         return attrs

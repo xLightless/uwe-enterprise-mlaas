@@ -1,12 +1,12 @@
-import React from "react"
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import mail_icon from '../../assets/mail_icon.svg'
 import pwd_icon from '../../assets/pwd_icon.svg'
 import pers_icon from '../../assets/pers_icon.svg'
 import phone_icon from '../../assets/phone_icon.svg'
 import { registerUser, verifyOtp } from '../../repositories/auth'
 
-function Register() {
+function Register({ toggleAuthForms }: { toggleAuthForms: () => void }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [password2, setPassword2] = useState('')
@@ -16,6 +16,8 @@ function Register() {
     const [otp, setOtp] = useState('')
     const [error, setError] = useState('')
     const [isOtpSent, setIsOtpSent] = useState(false)
+
+    const navigate = useNavigate()
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -31,7 +33,7 @@ function Register() {
         } catch (err) {
             console.error('Error registering:', err)
 
-            setError(err.detail || 'Registration failed')
+            setError((err as { detail?: string }).detail || 'Registration failed')
         }
     }
 
@@ -42,10 +44,13 @@ function Register() {
             const data = await verifyOtp({ phone_number: phoneNumber, otp })
 
             console.log('OTP verified:', data)
+
+            toggleAuthForms()
+            navigate("/user-dashboard")
         } catch (err) {
             console.error('OTP error:', err)
 
-            setError(err.detail || 'OTP failed')
+            setError((err as { detail?: string }).detail || 'OTP failed')
         }
     }
 
