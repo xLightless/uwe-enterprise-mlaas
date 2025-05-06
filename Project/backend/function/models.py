@@ -363,3 +363,17 @@ class ModelUsageLog(models.Model):
 
     def __str__(self):
         return f"Model Usage {self.usage_id} - Model: {self.model.model_name}, Predictions: {self.num_predictions}"
+
+class UserModelFeedback(models.Model):
+    feedback_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
+    settlement_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    expected_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
+    feedback_rating = models.SmallIntegerField(default=0)
+    comments = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = '"UserModelFeedback"'
+
+    def __str__(self):
+        return f"Feedback {self.feedback_id} - User: {self.user.email}, Rating: {self.feedback_rating}"

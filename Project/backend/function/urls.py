@@ -2,8 +2,8 @@ from django.urls import path, include
 from function.users.registration.views import register_user, verify_otp
 from function.users.login.views import login_user
 from function.Model_management.views import (
-    add_model, delete_model, view_models, set_active_model, model_detail,
-    view_model_statistics, view_model_feedback
+   add_model, delete_model, view_models, set_active_model, model_detail,
+   view_model_statistics, view_model_feedback
 )
 from .forward import predict
 from function.users.role_management.views import (view_roles, view_role_detail,
@@ -80,7 +80,7 @@ urlpatterns = [
     # Admin - recovery and create accounts
     path('users/recovery/create-user/', admin_create_user, name='admin_create_user'),
 
-    # Model management endpoints
+    #Model management endpoints
     path('auth/add_models/', add_model, name='add_model'),
     path('models/<int:model_id>/delete/', delete_model, name='delete_model'),
     path('models/view/', view_models, name='view_models'),

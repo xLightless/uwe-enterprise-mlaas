@@ -35,6 +35,15 @@ CREATE TABLE public."Users" (
     stripe_account_id character varying(255) NULL
 );
 
+CREATE TABLE public."UserModelFeedback" (
+    feedback_id serial PRIMARY KEY,
+    user_id integer NOT NULL REFERENCES public."Users"(user_id),
+    settlement_amount numeric DEFAULT 0 NOT NULL,
+    expected_amount numeric DEFAULT 0 NOT NULL,
+    feedback_rating smallint DEFAULT 0 NOT NULL,
+    comments text
+);
+
 CREATE TABLE public."Accidents" (
     accident_id serial PRIMARY KEY,
     accident_type character varying(75) NOT NULL
