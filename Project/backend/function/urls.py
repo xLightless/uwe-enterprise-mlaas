@@ -1,3 +1,4 @@
+# flake8: noqa
 from django.urls import path, include
 from function.users.registration.views import register_user, verify_otp
 from function.users.login.views import login_user

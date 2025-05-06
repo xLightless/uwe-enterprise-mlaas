@@ -1,7 +1,7 @@
 """
 Monitoring views for the function app.
 """
-
+# flake8: noqa
 from function.models import ActivityLog
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response

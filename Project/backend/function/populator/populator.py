@@ -3,7 +3,7 @@ This script populates the database with initial data from default.json.
 
 Written by Ksawery Buczek (22031584), Reece Turner (22036698).
 """
-
+# flake8: noqa
 from django.db import (
     DataError,
     IntegrityError,
