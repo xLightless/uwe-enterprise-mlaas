@@ -2,6 +2,8 @@
 ## Backend
 ### Download the project
 1. Git clone https://github.com/xLightless/uwe-enterprise-mlaas.git
+### Download the Machine Learning Models for the Service
+1. Git clone https://github.com/xLightless/uwe-enterprise-mlaas-models.git
 
 ### Creating Virtual Environments
 (x3) For each docker container (except the database) follow below:
