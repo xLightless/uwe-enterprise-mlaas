@@ -12,7 +12,9 @@ const CreateManualInvoices: React.FC = () => {
 
 const Invoices: React.FC = () => {
     return (
-        <>Invoices</>
+        <div className="container-primary max-w-[1280px]">
+            <h1>Invoices and payments</h1>
+        </div>
     )
 };
 
