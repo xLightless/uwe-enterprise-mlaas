@@ -637,180 +637,210 @@
             "user_accident_id": 1,
             "claim_id": 1,
             "predicted_settlement_value": 5000.00,
+            "pending_claim": "pending",
             "user_id": 1
         },
         {
             "user_accident_id": 2,
             "claim_id": 2,
             "predicted_settlement_value": 3000.00,
+            "pending_claim": "pending",
             "user_id": 2
         },
         {
             "user_accident_id": 3,
             "claim_id": 3,
             "predicted_settlement_value": 7000.00,
+            "pending_claim": "approved",
             "user_id": 3
         },
         {
             "user_accident_id": 4,
             "claim_id": 4,
             "predicted_settlement_value": 4000.00,
+            "pending_claim": "approved",
             "user_id": 4
         },
         {
             "user_accident_id": 5,
             "claim_id": 5,
             "predicted_settlement_value": 3500.00,
+            "pending_claim": "approved",
             "user_id": 5
         },
         {
             "user_accident_id": 6,
             "claim_id": 6,
             "predicted_settlement_value": 6000.00,
+            "pending_claim": "pending",
             "user_id": 6
         },
         {
             "user_accident_id": 7,
             "claim_id": 7,
             "predicted_settlement_value": 4500.00,
+            "pending_claim": "rejected",
             "user_id": 7
         },
         {
             "user_accident_id": 8,
             "claim_id": 8,
             "predicted_settlement_value": 5500.00,
+            "pending_claim": "rejected",
             "user_id": 8
         },
         {
             "user_accident_id": 9,
             "claim_id": 9,
             "predicted_settlement_value": 6200.00,
+            "pending_claim": "rejected",
             "user_id": 9
         },
         {
             "user_accident_id": 10,
             "claim_id": 10,
             "predicted_settlement_value": 2800.00,
+            "pending_claim": "rejected",
             "user_id": 10
         },
         {
             "user_accident_id": 11,
             "claim_id": 11,
             "predicted_settlement_value": 5000.00,
+            "pending_claim": "rejected",
             "user_id": 11
         },
         {
             "user_accident_id": 12,
             "claim_id": 12,
             "predicted_settlement_value": 3000.00,
+            "pending_claim": "rejected",
             "user_id": 12
         },
         {
             "user_accident_id": 13,
             "claim_id": 13,
             "predicted_settlement_value": 7000.00,
+            "pending_claim": "settled",
             "user_id": 13
         },
         {
             "user_accident_id": 14,
             "claim_id": 14,
             "predicted_settlement_value": 4000.00,
+            "pending_claim": "settled",
             "user_id": 14
         },
         {
             "user_accident_id": 15,
             "claim_id": 15,
             "predicted_settlement_value": 3500.00,
+            "pending_claim": "settled",
             "user_id": 15
         },
         {
             "user_accident_id": 16,
             "claim_id": 16,
             "predicted_settlement_value": 6000.00,
+            "pending_claim": "settled",
             "user_id": 16
         },
         {
             "user_accident_id": 17,
             "claim_id": 17,
             "predicted_settlement_value": 4500.00,
+            "pending_claim": "settled",
             "user_id": 17
         },
         {
             "user_accident_id": 18,
             "claim_id": 18,
             "predicted_settlement_value": 5500.00,
+            "pending_claim": "settled",
             "user_id": 18
         },
         {
             "user_accident_id": 19,
             "claim_id": 19,
             "predicted_settlement_value": 6200.00,
+            "pending_claim": "settled",
             "user_id": 19
         },
         {
             "user_accident_id": 20,
             "claim_id": 20,
             "predicted_settlement_value": 2800.00,
+            "pending_claim": "settled",
             "user_id": 20
         },
         {
             "user_accident_id": 21,
             "claim_id": 21,
             "predicted_settlement_value": 5000.00,
+            "pending_claim": "settled",
             "user_id": 21
         },
         {
             "user_accident_id": 22,
             "claim_id": 22,
             "predicted_settlement_value": 3000.00,
+            "pending_claim": "settled",
             "user_id": 22
         },
         {
             "user_accident_id": 23,
             "claim_id": 23,
             "predicted_settlement_value": 7000.00,
+            "pending_claim": "settled",
             "user_id": 23
         },
         {
             "user_accident_id": 24,
             "claim_id": 24,
             "predicted_settlement_value": 4000.00,
+            "pending_claim": "settled",
             "user_id": 24
         },
         {
             "user_accident_id": 25,
             "claim_id": 25,
             "predicted_settlement_value": 3500.00,
+            "pending_claim": "settled",
             "user_id": 25
         },
         {
             "user_accident_id": 26,
             "claim_id": 26,
             "predicted_settlement_value": 6000.00,
+            "pending_claim": "settled",
             "user_id": 26
         },
         {
             "user_accident_id": 27,
             "claim_id": 27,
             "predicted_settlement_value": 4500.00,
+            "pending_claim": "settled",
             "user_id": 27
         },
         {
             "user_accident_id": 28,
             "claim_id": 28,
             "predicted_settlement_value": 5500.00,
+            "pending_claim": "settled",
             "user_id": 28
         },
         {
             "user_accident_id": 29,
             "claim_id": 29,
             "predicted_settlement_value": 6200.00,
+            "pending_claim": "settled",
             "user_id": 29
         },
         {
             "user_accident_id": 30,
             "claim_id": 30,
             "predicted_settlement_value": 2800.00,
+            "pending_claim": "settled",
             "user_id": 30
         }
     ],

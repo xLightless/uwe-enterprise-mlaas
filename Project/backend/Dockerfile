@@ -19,18 +19,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./function/prediction/label_encoders.pkl ./function/prediction/label_encoders.pkl
 COPY ./function/prediction/random_forest_model.pkl ./function/prediction/random_forest_model.pkl
 COPY ./function/prediction/training_data.pkl ./function/prediction/training_data.pkl
-RUN pip install lime
-RUN pip install scikit-learn
-RUN pip install google-genai
-# Install PyTorch (CPU version)
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 # Make scripts executable
 RUN chmod +x ./entrypoint.sh
 RUN chmod +x ./wait-for
 
 # Set the port
-EXPOSE 8000
+EXPOSE 5000
 
 # Run entrypoint script
 ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
