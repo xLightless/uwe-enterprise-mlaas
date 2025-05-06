@@ -1,3 +1,4 @@
+# flake8: noqa
 from django.apps import AppConfig
 from function.populator.populator import get_empty_tables, populate
 

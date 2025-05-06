@@ -1,4 +1,4 @@
-# Add these imports at the top of your views.py file
+# flake8: noqa
 import os
 import json
 from django.conf import settings

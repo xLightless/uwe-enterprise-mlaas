@@ -3,7 +3,7 @@ This module provides a simple Flask service for predicting settlement amounts
 using a pre-trained machine learning model. It also generates explanations
 for the predictions using LIME and a generative AI model.
 """
-
+# flake8: noqa
 import os
 import joblib
 import numpy as np

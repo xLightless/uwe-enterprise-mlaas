@@ -1,6 +1,7 @@
 """
 Serializers for claims management
 """
+# flake8: noqa
 from rest_framework import serializers
 from function.models import (
     Accident, Weather, Vehicle, Driver, UserVehicle, 

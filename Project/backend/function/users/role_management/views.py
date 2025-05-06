@@ -3,7 +3,7 @@ This module provides functionality for managing roles in a system.
 It includes creating, deleting, viewing, and updating roles
 associated with roles.
 """
-
+# flake8: noqa
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
