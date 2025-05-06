@@ -16,7 +16,6 @@ import AuditLogs from './content/system-activity/audit-logs';
 import MLAAS_Traffic from './content/system-activity/mlaas-traffic';
 import RolesPermissions from './content/manage-accounts/roles-permissions';
 import Recovery from './content/manage-accounts/recovery';
-import DataRegulation from './content/manage-accounts/data-regulation';
 import { Invoices } from './content/finances';
 import { RoleProvider } from '../../common/contexts/role';
 import { UserProvider } from '../../common/contexts/user';
@@ -47,7 +46,7 @@ const AdminDashboard: React.FC = () => {
         // Manage Accounts
         "Roles & Permissions": RolesPermissions,
         "Recovery": Recovery,
-        "Data & Regulation": DataRegulation,
+        // "Data & Regulation": DataRegulation,
 
         // Finances
         "Invoices & Payments": Invoices,
@@ -72,14 +71,14 @@ const AdminDashboard: React.FC = () => {
             items: [
                 ["Roles & Permissions", () => onSidebarUpdate("Roles & Permissions"), <FontAwesomeIcon key={4} icon={faNetworkWired} />],
                 ["Recovery", () => onSidebarUpdate("Recovery"), <FontAwesomeIcon key={5} icon={faCommentNodes} />],
-                ["Data & Regulation", () => onSidebarUpdate("Data & Regulation"), <FontAwesomeIcon key={6} icon={faMicrochip} />],
+                // ["Data & Regulation", () => onSidebarUpdate("Data & Regulation"), <FontAwesomeIcon key={6} icon={faMicrochip} />],
             ] as [string, () => void | null, JSX.Element | null][],
         },
         {
             name: "Review Finances",
             sideBarIcon: <FontAwesomeIcon icon={faCreditCard} />,
             items: [
-                ["Invoices & Payments", () => onSidebarUpdate("Invoices"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
+                ["Invoices & Payments", () => onSidebarUpdate("Invoices & Payments"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
             ] as [string, () => void | null, JSX.Element | null][],
         },
         {

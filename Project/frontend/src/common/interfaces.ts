@@ -115,3 +115,77 @@ export interface ModelStatistics {
     numAcceptedClaims: number
     numRejectedClaims: number
 }
+
+export interface ModelFeatures {
+    gender: string;
+    driverAge: string;
+    vehicleType: string;
+    vehicleAge: string;
+    passengers: string;
+    exceptional: string;
+    accidentType: string;
+    accidentDate: string;
+    weatherConditions: string;
+    policeReport: string;
+    witness: string;
+    accidentDescription: string;
+    dominantInjury: string;
+    prognosis: string;
+    whiplash: string;
+    psychological: string;
+    injuryDescription: string;
+    assetDamage: string;
+    earningsLoss: string;
+    usageLoss: string;
+    generalFixes: string;
+    specialFixes: string;
+    tripCosts: string;
+    journeyExpenses: string;
+    medications: string;
+    rehabilitation: string;
+    therapy: string;
+    healthExpenses: string;
+    specialReduction: string;
+    specialOverage: string;
+    generalRest: string;
+    additionalInjury: string;
+    generalUplift: string;
+    loanerVehicle: string;
+}
+
+export interface ModelFeaturesPredicted {
+    gender: number;
+    driverAge: number;
+    vehicleType: number;
+    vehicleAge: number;
+    passengers: number;
+    exceptional: number;
+    accidentType: number;
+    accidentDate: number;
+    weatherConditions: number;
+    policeReport: number;
+    witness: number;
+    accidentDescription: number;
+    dominantInjury: number;
+    prognosis: number;
+    whiplash: number;
+    psychological: number;
+    injuryDescription: number;
+    assetDamage: number;
+    earningsLoss: number;
+    usageLoss: number;
+    generalFixes: number;
+    specialFixes: number;
+    tripCosts: number;
+    journeyExpenses: number;
+    medications: number;
+    rehabilitation: number;
+    therapy: number;
+    healthExpenses: number;
+    specialReduction: number;
+    specialOverage: number;
+    generalRest: number;
+    additionalInjury: number;
+    generalUplift: number;
+    loanerVehicle: number;
+}
