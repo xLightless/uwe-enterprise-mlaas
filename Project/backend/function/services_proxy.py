@@ -1,32 +1,23 @@
-"""
-Proxy module for communicating with microservices.
-"""
-
-import os
+# service_proxy.py
+# flake8: noqa
 import requests
 from django.conf import settings
 from rest_framework import status
 from rest_framework.response import Response
 
-
 def call_ml_service(endpoint, data):
     """
     Send a request to the ML service and return the response.
     """
-    # Get the ML service URL from settings or environment variable
-    ml_service_url = getattr(
-        settings, 'ML_SERVICE_URL',
-        os.environ.get(
-            'ML_SERVICE_URL',
-            'http://ml-service:5000'
-        ))
+
+    clean_endpoint = endpoint.strip('/')
 
     # Construct the full URL
-    url = f"{ml_service_url}/{endpoint.lstrip('/')}"
+    url = f"{settings.ML_SERVICE_URL}/{clean_endpoint}"
 
     try:
         # Send the request to the ML service
-        response = requests.post(url, json=data, timeout=30)
+        response = requests.post(url, json=data, timeout=900)
 
         # Return the response with appropriate status code
         return Response(

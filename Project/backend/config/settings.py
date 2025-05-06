@@ -1,3 +1,4 @@
+# Modified settings.py for schema-based approach
 # flake8: noqa
 """
 Django settings for example project.
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "function",
-    "function.users",
+
     "rest_framework",
     'rest_framework.authtoken',
     "djoser",
@@ -56,12 +57,17 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://localhost:5174",
+
 ]
 
-# Machine Learning Service settings
-# In config/settings.py
+
 ML_SERVICE_URL = os.environ.get('ML_SERVICE_URL', 'http://ml-service:5000')
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+# Add this line near the other URL configurations
+
+# Frontend URL for redirects
+FRONTEND_URL = 'Localhost:8000'
+
 
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
@@ -170,59 +176,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database
+# Database - UPDATED for schema-based approach
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "users_db",
+        "NAME": "desd",  # Updated database name
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
-    },
-    "users_db": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'users_db',
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    },
-    "insurance_db": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'insurance_db',
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    },
-    "ml_db": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ml_db",
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    },
-    "payments_db": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "payments_db",
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    },
-    "traffic_db": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "traffic_db",
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    },
+    }
 }
 
-DATABASE_ROUTERS = ["config.database_router.MultiDatabaseRouter"]
 
 # Password validation
 UserAttributeSimilarityValidator = (

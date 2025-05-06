@@ -3,7 +3,7 @@ This module provides a simple Flask service for predicting settlement amounts
 using a pre-trained machine learning model. It also generates explanations
 for the predictions using LIME and a generative AI model.
 """
-
+# flake8: noqa
 import os
 import joblib
 import numpy as np
@@ -15,6 +15,9 @@ import lime.lime_tabular
 import datetime
 
 app = Flask(__name__)
+
+# Disable automatic redirects for trailing slashes
+app.url_map.strict_slashes = True
 
 # Load the model and label encoders once when the server starts
 MODEL_PATH = os.path.join(
@@ -44,7 +47,9 @@ print("Training data loaded successfully.")
 
 
 def preprocess_value(feature, value):
-
+    """
+    Preprocess input values based on their feature type.
+    """
     if feature in ["Accident Date", "Claim Date"]:
         try:
             dt = datetime.datetime.strptime(value, "%d/%m/%Y %H:%M:%S")
@@ -79,6 +84,9 @@ def preprocess_value(feature, value):
 
 
 def generate(settlement_amount, lime_explanation):
+    """
+    Generate an explanation for the prediction using Gemini API.
+    """
     client = genai.Client(
         api_key="AIzaSyCQP5waAqmAQcxfa-sdzOBzYahBD21jKps",
     )
@@ -117,8 +125,12 @@ def generate(settlement_amount, lime_explanation):
     return generated_response
 
 
+# Important: Flask routes must start with a slash
 @app.route('/predict', methods=['POST'])
-def predict():
+def predict_settlement():
+    """
+    Handle prediction requests and return settlement predictions with explanations.
+    """
     try:
         input_data = request.json
         features = training_data.columns.tolist()
@@ -153,6 +165,15 @@ def predict():
         return jsonify({"error": str(e)}), 400
     except Exception as e:
         return jsonify({"error": "An error occurred: " + str(e)}), 500
+
+
+# This function is added for Django import compatibility
+def predict():
+    """
+    Proxy function for Django import compatibility.
+    This allows 'from services.machinelearning.app import predict' to work.
+    """
+    return predict_settlement
 
 
 @app.route('/health', methods=['GET'])

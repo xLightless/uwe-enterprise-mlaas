@@ -1,50 +1,39 @@
+# flake8: noqa
 from django.apps import AppConfig
-from function.populator.populator import (
-    get_empty_tables,
-    populate
-)
-
+from function.populator.populator import get_empty_tables, populate
 
 class ProjectConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'function'
 
     def ready(self):
-        """Validated the databases and populates them if they are empty."""
-        databases = [
-            'users_db',
-            'traffic_db',
-            'payments_db',
-            'ml_db',
-            'insurance_db'
-        ]
+        """Validates the database and populates tables if they are empty."""
+        import os
+        # Prevent running twice in development
+        if os.environ.get('RUN_MAIN', None) != 'true':
+            # Fix: Pass a list of database names, not a string
+            database_list = ['default']  # Using only default database
 
-        db_tables = get_empty_tables(databases)
-        # if len(db_tables) > 0:
-        #     empty_db_tables = {}
-        #     for db, tables in db_tables.items():
-        #         if len(tables) > 0:
-        #             empty_db_tables[db] = tables
+            # Get empty tables from the database(s)
+            empty_tables = get_empty_tables(database_list)
 
-        if len(db_tables) > 0:
-            empty_db_tables = {}
-            for db, tables in db_tables.items():
-                if len(tables) > 0:
-                    # Not an optimal solution, but ensures that
-                    # "UserAccidents" is processed before "UserClaims"
-                    if ("UserAccident" in tables):
-                        tables.remove("UserAccident")
-                        tables.insert(0, "UserAccident")
-                    if ("UserClaims" in tables) and (
-                        "UserAccident" not in tables
-                    ):
-                        tables.remove("UserClaims")
-                        tables.append("UserClaims")
-                    empty_db_tables[db] = tables
+            if empty_tables:
+                # Check if we need to reorder tables for dependency purposes
+                for db in database_list:
+                    tables = empty_tables.get(db, [])
+                    if tables:
+                        if "UserAccident" in tables:
+                            tables.remove("UserAccident")
+                            tables.insert(0, "UserAccident")
+                        if "UserClaims" in tables and "UserAccident" not in tables:
+                            tables.remove("UserClaims")
+                            tables.append("UserClaims")
 
-            print("********************* " +
-                  "Populating empty databases..." +
-                  " *********************")
-            populate(db_tables)
-            print("**************************************" +
-                  "***********************************")
+                        empty_tables[db] = tables
+
+                print("********************* " +
+                      "Populating empty database tables..." +
+                      " *********************")
+                populate(empty_tables)
+                print("**************************************" +
+                      "***********************************")

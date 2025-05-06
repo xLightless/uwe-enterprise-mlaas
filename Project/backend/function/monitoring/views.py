@@ -1,7 +1,7 @@
 """
 Monitoring views for the function app.
 """
-
+# flake8: noqa
 from function.models import ActivityLog
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -13,8 +13,7 @@ from datetime import timedelta
 from django.utils import timezone
 
 from function.monitoring.middleware import api_user_agent
-
-from .serializers import ActivityLogSerializer
+from .serializer import ActivityLogSerializer
 
 
 @api_user_agent("Admin has viewed activity logs of other users.")

@@ -14,12 +14,16 @@ class UserLoginSerializer(serializers.Serializer):
 
         if email and password:
             user = authenticate(
-                request=self.context.get(
-                    'request'), email=email, password=password)
+                request=self.context.get('request'),
+                email=email,
+                password=password
+            )
 
-            print("authenticated user: ", user)
             if not user:
                 raise serializers.ValidationError('Invalid credentials')
+
+            if not user.is_active:
+                raise serializers.ValidationError('User account is disabled')
         else:
             raise serializers.ValidationError(
                 'Must include "email" and "password"')

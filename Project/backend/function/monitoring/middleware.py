@@ -66,7 +66,7 @@ def api_user_agent(description=None):
                 event_type = f"{request.method} {request.path}"
 
                 # Save the activity log
-                ActivityLog.objects.using('traffic_db').create(
+                ActivityLog.objects.create(
                     user=user,
                     ip_address=ip_address,
                     description=description or "No description provided",
