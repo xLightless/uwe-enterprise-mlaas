@@ -1,3 +1,5 @@
+# Modified settings.py for schema-based approach
+# flake8: noqa
 """
 Django settings for example project.
 
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "function",
-    "function.users",
+    
     "rest_framework",
     "djoser",
     "rest_framework_simplejwt",
@@ -53,8 +55,17 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://localhost:5174",
+    
 ]
+
+
+ML_SERVICE_URL = os.environ.get('ML_SERVICE_URL', 'http://ml-service:5000')
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+# Add this line near the other URL configurations
+
+# Frontend URL for redirects
+FRONTEND_URL = 'Localhost:8000'
+
 
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
@@ -126,17 +137,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database
+# Database - UPDATED for schema-based approach
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'users_db',
+        "NAME": "desd",  # Updated database name
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT", "5432"),
-    },
+    }
 }
+
 
 # Password validation
 UserAttributeSimilarityValidator = (

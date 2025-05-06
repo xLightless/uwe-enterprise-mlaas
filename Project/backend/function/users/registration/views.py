@@ -1,6 +1,7 @@
 # flake8: noqa
 from django.core.cache import cache
 from django.conf import settings
+from rest_framework.permissions import AllowAny
 from twilio.rest import Client
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -8,7 +9,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from .serializers import UserCreateSerializer
-from function.models import Users
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
@@ -21,7 +21,7 @@ import function.util.debug as DEBUG
     responses={201: openapi.Response("Created (Check phone for verification)")}
 )
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([AllowAny]) 
 def register_user(request):
 
     serializer = UserCreateSerializer(data=request.data)
@@ -53,7 +53,7 @@ def register_user(request):
     responses={201: swu.response("token:string","refresh:string","access:string","user:object")}
 )
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([AllowAny]) 
 def verify_otp(request):
     phone_number = request.data.get('phone_number')
     otp = request.data.get('otp')
