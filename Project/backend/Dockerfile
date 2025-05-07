@@ -16,9 +16,6 @@ RUN pip install --upgrade pip && \
 COPY . .
 RUN pip install joblib
 RUN pip install --no-cache-dir -r requirements.txt
-COPY ./function/prediction/label_encoders.pkl ./function/prediction/label_encoders.pkl
-COPY ./function/prediction/random_forest_model.pkl ./function/prediction/random_forest_model.pkl
-COPY ./function/prediction/training_data.pkl ./function/prediction/training_data.pkl
 
 # Make scripts executable
 RUN chmod +x ./entrypoint.sh

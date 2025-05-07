@@ -25,6 +25,8 @@ sqlparse==0.4.4
 typing_extensions==4.10.0
 urllib3==2.3.0
 twilio==7.2.0
+drf-yasg
+django-cors-headers
 scikit-learn
 pandas
 drf_yasg
@@ -36,3 +38,5 @@ scikit-learn
 lime
 google-generativeai==0.3.1
 flask
+timedelta
+stripe

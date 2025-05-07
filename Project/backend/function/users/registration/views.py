@@ -1,6 +1,7 @@
 # flake8: noqa
 from django.core.cache import cache
 from django.conf import settings
+from rest_framework.permissions import AllowAny
 from twilio.rest import Client
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -10,7 +11,6 @@ from rest_framework import status
 
 from function.monitoring.middleware import api_user_agent
 from .serializers import UserCreateSerializer
-from function.models import Users
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
@@ -30,7 +30,6 @@ import function.util.debug as DEBUG
 )
 
 
-@api_user_agent("Registering a new user.")
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -91,7 +90,7 @@ def register_user(request):
         "user:object"
     )}
 )
-@api_user_agent("Verifying OTP for user registration.")
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def verify_otp(request):

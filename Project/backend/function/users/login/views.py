@@ -27,24 +27,20 @@ def login_user(request):
     is_serializer_valid = serializer.is_valid()
     if is_serializer_valid:
         user = serializer.validated_data['user']
-
         user.last_login = timezone.now()
         user.save()
 
-        # Generate JWT token
         refresh = RefreshToken.for_user(user)
-
-        # Get user details
         user_serializer = UserDetailSerializer(user)
 
-        # Include role_id in the response
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': user_serializer.data,
-            'role_id': serializer.validated_data['role_id'],
-            "permissions": user.get_permissions()
+            'role_id': user.role.role_id,  # Get role_id directly from user
+            "permissions": user.get_permissions() if hasattr(user, 'get_permissions') else []
         })
+
     return Response({
         'status': False,
         'message': 'Invalid credentials or user not found',
@@ -62,14 +58,10 @@ def login_user(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
-
-    """"Logs out the user by blacklisting the refresh token."""
+    """Logs out the user by blacklisting the refresh token."""
     try:
-        # Get the refresh token from the request data
         refresh_token = request.data.get("refresh")
         token = RefreshToken(refresh_token)
-
-        # Blacklist the refresh token
         token.blacklist()
 
         return Response(
@@ -98,5 +90,5 @@ def get_user_profile(request):
     user = request.user
     serializer = UserDetailSerializer(user)
     response = serializer.data
-    response["permissions"] = user.get_permissions()
+    response["permissions"] = user.get_permissions() if hasattr(user, 'get_permissions') else []
     return Response(response)
