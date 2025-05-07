@@ -137,7 +137,7 @@ interface RawClaimData {
     predicted_settlement?: number | string;
     status?: string;
     accident_type?: string;
-    [key: string]: any;
+    [key: string]: string | number | boolean | null | undefined | Record<string, string | number | boolean | null | undefined>;
 }
 
 export const getUserClaims = async () => {
@@ -307,7 +307,7 @@ export const submitClaimFeedback = async (claimId: string, feedback: { rating: n
         if (axios.isAxiosError(error)) {
             throw error.response ? error.response.data : error;
         }
-        
+
         throw error;
     }
 };
