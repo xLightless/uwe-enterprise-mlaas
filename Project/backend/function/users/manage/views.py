@@ -5,10 +5,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
-from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
+from .serializers import UserProfileSerializer, AdminUserUpdateSerializer, UserCreateSerializer
 from function.models import Users
 from function.monitoring.middleware import api_user_agent
-from function.permissions import has_role
+from function.permissions import has_role, has_permission
 
 
 @api_user_agent("Authenticated user requested their profile.")
@@ -100,7 +100,7 @@ def get_user_by_id(request, user_id):
 )
 @api_user_agent("Admin attempted to update user details.")
 @api_view(['PUT'])
-# @permission_classes([has_role("Admin")])
+@permission_classes([has_permission("manage_user_accounts")])
 @permission_classes([AllowAny])
 def admin_update_user(request, user_id):
     """Update any user's details (Admin only)"""
@@ -146,3 +146,43 @@ def delete_user(request, user_id):
             },
             status=status.HTTP_404_NOT_FOUND
         )
+    
+@swagger_auto_schema(
+    method="post",
+    request_body=swu.request(
+        "password:string",
+        "password2:string",
+        "email:string",
+        "full_name:string",
+        "phone_number:string",
+        "role_id:integer"
+    ),
+    responses={201: swu.response(
+        "user:object"
+    )}
+)
+#@api_user_agent("Admin created to attempt user")
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def create_user(request):
+    """
+    Creates a user
+    """
+    serializer = UserCreateSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+
+        return Response({
+            "status": True,
+            "user": serializer.data,
+            "permissions": user.get_permissions(),
+            "message": "User created successfully"
+        }, status=status.HTTP_201_CREATED)
+
+    errors = []
+    for k, v in serializer.errors.items():
+        errors.append(f"{k}: {v[0]}")
+    return Response({
+            'status': False,
+            'message': errors,
+        }, status=status.HTTP_400_BAD_REQUEST)

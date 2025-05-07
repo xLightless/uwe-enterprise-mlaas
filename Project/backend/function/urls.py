@@ -28,7 +28,7 @@ from function.users.login.views import login_user, get_user_profile, \
     logout_user
 from function.users.manage.views import get_user_details, \
     update_user_profile, list_all_users, get_user_by_id, admin_update_user, \
-    delete_user
+    delete_user, create_user
 from function.monitoring.views import (
     get_activity_logs_next,
     count_connections
@@ -61,6 +61,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
 
     # USER MANAGEMENT
+    path('users/create/', create_user, name='create_user'),
     path('users/me/', get_user_details, name='get_user_details'),
     path('users/me/update/', update_user_profile, name='update_user_profile'),
     path('users/', list_all_users, name='list-users'),
