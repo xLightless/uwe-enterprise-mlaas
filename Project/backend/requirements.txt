@@ -25,13 +25,8 @@ sqlparse==0.4.4
 typing_extensions==4.10.0
 urllib3==2.3.0
 twilio==7.2.0
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
 drf-yasg
 django-cors-headers
-=======
->>>>>>> eb2943cc79a32d9d69047de3aee226c819292f94
 scikit-learn
 pandas
 drf_yasg
@@ -43,9 +38,5 @@ scikit-learn
 lime
 google-generativeai==0.3.1
 flask
-<<<<<<< HEAD
-=======
 timedelta
 stripe
->>>>>>> Stashed changes
->>>>>>> eb2943cc79a32d9d69047de3aee226c819292f94

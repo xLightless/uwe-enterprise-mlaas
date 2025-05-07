@@ -3,6 +3,7 @@ This script populates the database with initial data from default.json.
 
 Written by Ksawery Buczek (22031584), Reece Turner (22036698).
 """
+
 # flake8: noqa
 from django.db import (
     DataError,
@@ -10,6 +11,7 @@ from django.db import (
     ProgrammingError,
     connections
 )
+import psycopg2
 from psycopg2.errors import (
     ForeignKeyViolation,
     UniqueViolation
@@ -32,13 +34,17 @@ def insert_data(db, t, data, mapping={}, override={}) -> None:
             print(item)
             keys = [mapping.get(s, s) for s in item.keys()]
 
-            spam = ("%s, " * len(keys))[:-2]
-            values = ", ".join(keys)
+            # Ensure keys are quoted to preserve case-sensitivity
+            quoted_keys = [f'"{k}"' for k in keys]
+            values = ", ".join(quoted_keys)
+            placeholders = ("%s, " * len(keys))[:-2]
 
-            print(f"""INSERT INTO "{t}" ({values}) VALUES ({spam})""")
+            print(f"""INSERT INTO "{t}" ({values}) VALUES ({placeholders})""")
 
-            cursor.execute(f"""INSERT INTO "{t}" ({values}) VALUES ({spam})""",
-                           [item[s] for s in item.keys()])
+            cursor.execute(
+                f"""INSERT INTO "{t}" ({values}) VALUES ({placeholders})""",
+                [item[s] for s in item.keys()]
+            )
 
 
 def drop_django_tables(databases: list[str], excluded_prefixes: tuple[str]) -> None:
@@ -136,9 +142,39 @@ def get_column_definitions(columns, data, table) -> list[str]:
         column_definitions.append(f'"{col}" {column_type}')
     return column_definitions
 
+def topological_sort(tables: list[str], data: dict[str, list[dict]]) -> list[str]:
+    """
+    Return a list of tables sorted so that any table's dependencies
+    (detected via {other_table}_id columns) come before it.
+    If a cycle is detected, returns the original list.
+    """
+    deps: dict[str, set[str]] = {t: set() for t in tables}
+    for t in tables:
+        for col in data[t][0].keys():
+            if not col.endswith('_id'):
+                continue
+            for u in tables:
+                if f"{normalize_primary_key(u)}" == col:
+                    deps[t].add(u)
+
+    sorted_list: list[str] = []
+    no_deps = [t for t, d in deps.items() if not d]
+
+    while no_deps:
+        n = no_deps.pop()
+        sorted_list.append(n)
+        for m in deps:
+            if n in deps[m]:
+                deps[m].remove(n)
+                if not deps[m]:
+                    no_deps.append(m)
+
+    if len(sorted_list) != len(tables):
+        return tables[:]
+    return sorted_list
 
 def populate(db_map: dict[str, list[str]]) -> None:
-    """Populate the database with initial data from default.json, retrying if FK constraints fail."""
+    """Populate the database with initial data from default.json, retrying if FK constraints fail or row count mismatch occurs."""
 
     # Load default.json once
     with open(parent + "default.json", encoding="utf-8") as f:
@@ -156,54 +192,146 @@ def populate(db_map: dict[str, list[str]]) -> None:
         print(f"Control table {control_name} already exists.")
 
     for db, original_tables in db_map.items():
-        tables = original_tables[:]
-        attempted_once = set()
+        tables = topological_sort(original_tables[:], data)
+        failed_tables = set()
+        max_retries = 5
 
-        while tables:
-            table = tables.pop(0)
+        for attempt in range(max_retries):
+            print(f"--- Attempt {attempt + 1} to populate tables ---")
+            remaining_tables = []
 
-            try:
-                with connections[db].cursor() as cursor:
-                    normalized_primary_key = normalize_primary_key(table)
+            for table in tables:
+                try:
+                    with connections[db].cursor() as cursor:
+                        normalized_primary_key = normalize_primary_key(table)
 
-                    # Create the table if it doesn't exist
-                    if table in data:
-                        columns = data[table][0].keys()
-                        column_definitions = get_column_definitions(columns, data, table)
+                        # Create the table if it doesn't exist
+                        if table in data:
+                            columns = data[table][0].keys()
+                            column_definitions = get_column_definitions(columns, data, table)
 
-                        primary_key = f'"{normalized_primary_key}" SERIAL PRIMARY KEY'
-                        column_definitions.insert(0, primary_key)
+                            primary_key = f'"{normalized_primary_key}" SERIAL PRIMARY KEY'
+                            column_definitions.insert(0, primary_key)
 
-                        cursor.execute(f"""
-                            CREATE TABLE IF NOT EXISTS "{table}" (
-                                {', '.join(column_definitions)}
-                            );
-                        """)
+                            cursor.execute(f"""
+                                CREATE TABLE IF NOT EXISTS "{table}" (
+                                    {', '.join(column_definitions)}
+                                );
+                            """)
 
-                    # Check if the table is empty
-                    cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
-                    count = cursor.fetchone()[0]
+                        # Check if the table is empty
+                        cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
+                        count = cursor.fetchone()[0]
 
-                    if count == 0:
-                        print(f"Populating {db}.{table}...")
-                        insert_data(db, table, data[table])
+                        if count == 0:
+                            print(f"Populating {db}.{table}...")
+                            insert_data(db, table, data[table])
 
-            except ForeignKeyViolation:
-                pass
-            except ProgrammingError:
-                pass
-            except DataError:
-                print(f"Data error in {db}.{table}, skipping.")
-                continue
-            except IntegrityError as e:
-                if "violates foreign key constraint" in str(e):
-                    if table in attempted_once:
-                        print(f"Skipping {db}.{table} — cannot be inserted yet (FK dependency).", e)
+                            # Check if the number of rows matches the JSON data
+                            cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
+                            current_count = cursor.fetchone()[0]
+
+                            if current_count != len(data[table]):
+                                print(f"Row count mismatch in table {table}: Expected {len(data[table])}, got {current_count}.")
+                                print(f"Attempted rows: {data[table]}")  # Log attempted rows
+                                remaining_tables.append(table)  # Re-attempt this table
+                            else:
+                                print(f"Successfully populated {table} with {current_count} rows.")
+                        else:
+                            print(f"Table {table} already has {count} rows, skipping population.")
+
+                except (ForeignKeyViolation, IntegrityError) as e:
+                    if table not in failed_tables:
+                        print(f"Deferring {table} due to FK issue: {e}")
+                        remaining_tables.append(table)
+                        failed_tables.add(table)
                     else:
-                        print(f"FK violation in {db}.{table}, retrying later.")
-                        tables.append(table)
-                        attempted_once.add(table)
-                else:
-                    raise
-            except (json.JSONDecodeError, FileNotFoundError, KeyError) as e:
-                print(f"Unexpected error while populating {db}.{table}: {e}")
+                        print(f"Skipping permanently: {table} (repeated FK issue).")
+                except (ProgrammingError, DataError) as e:
+                    print(f"Skipping {table} due to data error: {e}")
+                except (json.JSONDecodeError, FileNotFoundError, KeyError) as e:
+                    print(f"Unexpected error while populating {db}.{table}: {e}")
+
+            if not remaining_tables:
+                print("All tables populated successfully.")
+                break
+
+            tables = remaining_tables
+        else:
+            print("Some tables could not be populated due to persistent FK issues or row count mismatch:")
+            print(failed_tables)
+
+# def populate(db_map: dict[str, list[str]]) -> None:
+#     """Populate the database with initial data from default.json, retrying if FK constraints fail."""
+
+#     # Load default.json once
+#     with open(parent + "default.json", encoding="utf-8") as f:
+#         data = json.load(f)
+
+#     # Ensure control table exists in the default DB
+#     try:
+#         with connections['default'].cursor() as cursor:
+#             cursor.execute(f"""
+#                 CREATE TABLE IF NOT EXISTS {control_name} (
+#                     id INT PRIMARY KEY
+#                 );
+#             """)
+#     except UniqueViolation:
+#         print(f"Control table {control_name} already exists.")
+
+#     for db, original_tables in db_map.items():
+#         tables = topological_sort(original_tables[:], data)
+#         failed_tables = set()
+#         max_retries = 5
+
+#         for attempt in range(max_retries):
+#             print(f"--- Attempt {attempt + 1} to populate tables ---")
+#             remaining_tables = []
+
+#             for table in tables:
+#                 try:
+#                     with connections[db].cursor() as cursor:
+#                         normalized_primary_key = normalize_primary_key(table)
+
+#                         # Create the table if it doesn't exist
+#                         if table in data:
+#                             columns = data[table][0].keys()
+#                             column_definitions = get_column_definitions(columns, data, table)
+
+#                             primary_key = f'"{normalized_primary_key}" SERIAL PRIMARY KEY'
+#                             column_definitions.insert(0, primary_key)
+
+#                             cursor.execute(f"""
+#                                 CREATE TABLE IF NOT EXISTS "{table}" (
+#                                     {', '.join(column_definitions)}
+#                                 );
+#                             """)
+
+#                         # Check if the table is empty
+#                         cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
+#                         count = cursor.fetchone()[0]
+
+#                         if count == 0:
+#                             print(f"Populating {db}.{table}...")
+#                             insert_data(db, table, data[table])
+
+#                 except (ForeignKeyViolation, IntegrityError) as e:
+#                     if table not in failed_tables:
+#                         print(f"Deferring {table} due to FK issue: {e}")
+#                         remaining_tables.append(table)
+#                         failed_tables.add(table)
+#                     else:
+#                         print(f"Skipping permanently: {table} (repeated FK issue).")
+#                 except (ProgrammingError, DataError) as e:
+#                     print(f"Skipping {table} due to data error: {e}")
+#                 except (json.JSONDecodeError, FileNotFoundError, KeyError) as e:
+#                     print(f"Unexpected error while populating {db}.{table}: {e}")
+
+#             if not remaining_tables:
+#                 print("All tables populated successfully.")
+#                 break
+
+#             tables = remaining_tables
+#         else:
+#             print("Some tables could not be populated due to persistent FK issues:")
+#             print(failed_tables)

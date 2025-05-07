@@ -30,9 +30,8 @@ import function.util.debug as DEBUG
 )
 
 
-@api_user_agent("Registering a new user.")
 @api_view(['POST'])
-@permission_classes([AllowAny]) 
+@permission_classes([AllowAny])
 def register_user(request):
     """
     Registers a new user and sends an OTP to the
@@ -91,9 +90,9 @@ def register_user(request):
         "user:object"
     )}
 )
-@api_user_agent("Verifying OTP for user registration.")
+
 @api_view(['POST'])
-@permission_classes([AllowAny]) 
+@permission_classes([AllowAny])
 def verify_otp(request):
     phone_number = request.data.get('phone_number')
     email = request.data.get('email')
