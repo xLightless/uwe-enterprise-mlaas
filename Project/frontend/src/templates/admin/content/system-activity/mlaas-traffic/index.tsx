@@ -198,6 +198,7 @@ const MLAASTraffic: React.FC = () => {
         model: ModelProps
     ): Promise<void> {
         if (!model || !model.modelId) return;
+        console.log("Creating prediction with features:", features);
         const prediction = await createdModelPrediction(model.modelId, features)
         setModelPrediction(prediction.data as ModelFeaturesPredicted);
     };

@@ -103,9 +103,13 @@ const adminGetClaimDetails = async (claimId: number): Promise<JSONResponse> => {
 }
 
 const adminBulkUpdateClaims = async (claimIds: number[], status: string): Promise<JSONResponse> => {
-    return adminClaims.post<JSONResponse>('/bulk-update/', {
-        "claim_ids": claimIds,
-        "status": status
+    const updates = claimIds.map(claimId => ({
+        claim_id: claimId,
+        status: status,
+    }));
+
+    return adminClaims.patch<JSONResponse>('/bulk-update', {
+        updates: updates,
     }, {
         headers: {
             Authorization: getTokenAccess(true),
@@ -116,7 +120,7 @@ const adminBulkUpdateClaims = async (claimIds: number[], status: string): Promis
             console.error('Error bulk updating claims:', error);
             throw error;
         });
-}
+};
 
 const adminSearchClaims = async (searchTerm: AdminSearchClaims): Promise<JSONResponse> => {
     return adminClaims.get<JSONResponse>('/search/', {

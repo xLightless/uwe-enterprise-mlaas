@@ -94,7 +94,7 @@ def admin_update_claim(request, claim_id):
     try:
         user_claim = get_object_or_404(UserClaim, user_claim_id=claim_id)
         previous_status = user_claim.pending_claim
-        
+
         # Check for status update
         new_status = request.data.get('status')
         if new_status:
@@ -104,7 +104,7 @@ def admin_update_claim(request, claim_id):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             user_claim.pending_claim = new_status
-            
+
             # Update model counts if status changed to approved or rejected
             # Only count the transition from pending to approved/rejected to avoid double-counting
             if previous_status == 'pending' and user_claim.model:
@@ -159,7 +159,7 @@ def admin_update_claim(request, claim_id):
             "status": user_claim.pending_claim,
             "settlement_amount": getattr(user_claim, 'settled_amount', user_claim.predicted_settlement_value)
         }
-        
+
         # Add model info if available
         if user_claim.model:
             response_data["model_info"] = {
@@ -309,42 +309,137 @@ def admin_get_claim_details(request, claim_id):
             "error": f"Failed to retrieve claim details: {str(e)}"
         }, status=status.HTTP_400_BAD_REQUEST)
 
-@api_user_agent("Admin performed bulk claim status update.")
-@api_view(['POST'])
+@api_user_agent("Admin updated multiple claim settlements and statuses.")
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def admin_bulk_update_claims(request):
     """
-    Update status for multiple claims at once.
+    Bulk update claim statuses and settlement amounts.
+    Also updates the models' acceptance/rejection counts when applicable.
     """
-
     try:
-        claim_ids = request.data.get('claim_ids', [])
-        new_status = request.data.get('status')
-
-        if not claim_ids:
+        updates = request.data.get('updates', [])
+        if not isinstance(updates, list) or len(updates) == 0:
             return Response({
-                "error": "No claim IDs provided"
+                "error": "Please provide a list of claim updates in the 'updates' field"
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if not new_status or new_status not in ['pending', 'approved', 'rejected', 'settled']:
-            return Response({
-                "error": "Invalid status provided"
-            }, status=status.HTTP_400_BAD_REQUEST)
+        response_data = []
+        # Get the claim IDs from the updates
+        claim_ids = [int(update.get('claim_id')) for update in updates if update.get('claim_id')]
 
-        # Update all specified claims
-        updated_count = UserClaim.objects.filter(user_claim_id__in=claim_ids).update(
-            pending_claim=new_status
-        )
+        # Query for claims - make sure we're using integers for comparison
+        claims = UserClaim.objects.filter(user_claim_id__in=claim_ids)
+
+        # Create a mapping of claim_id to claim for faster lookup
+        # Convert claim_id to integer for consistent comparison
+        claims_map = {int(claim.user_claim_id): claim for claim in claims}
+
+        for update in updates:
+            claim_id = update.get('claim_id')
+            if not claim_id:
+                continue  # Skip invalid entries
+
+            # Convert claim_id to integer for consistent comparison with the mapping
+            try:
+                claim_id_int = int(claim_id)
+                user_claim = claims_map.get(claim_id_int)
+            except (ValueError, TypeError):
+                response_data.append({
+                    "claim_id": claim_id,
+                    "error": "Invalid claim ID format",
+                    "success": False
+                })
+                continue
+
+            if not user_claim:
+                response_data.append({
+                    "claim_id": claim_id,
+                    "error": "Claim not found",
+                    "success": False
+                })
+                continue
+
+            try:
+                previous_status = user_claim.pending_claim
+                claim_response = {"claim_id": claim_id, "success": True}
+
+                # Check for status update
+                new_status = update.get('status')
+                if new_status:
+                    if new_status not in ['pending', 'approved', 'rejected', 'settled']:
+                        response_data.append({
+                            "claim_id": claim_id,
+                            "error": "Invalid status provided. Must be one of: pending, approved, rejected, settled",
+                            "success": False
+                        })
+                        continue
+
+                    user_claim.pending_claim = new_status
+
+                    # Update model counts if status changed to approved or rejected
+                    if previous_status == 'pending' and user_claim.model:
+                        if new_status == 'approved':
+                            user_claim.model.num_accepted_claims += 1
+                            user_claim.model.save()
+                        elif new_status == 'rejected':
+                            user_claim.model.num_rejected_claims += 1
+                            user_claim.model.save()
+
+                # Check for settlement amount override
+                new_settlement = update.get('settlement_amount')
+                if new_settlement is not None:
+                    try:
+                        settlement_amount = Decimal(str(new_settlement))
+                        user_claim.settled_amount = settlement_amount
+
+                        if new_status == 'settled':
+                            user_claim.predicted_settlement_value = settlement_amount
+                    except (ValueError, TypeError):
+                        response_data.append({
+                            "claim_id": claim_id,
+                            "error": "Invalid settlement amount provided",
+                            "success": False
+                        })
+                        continue
+
+                # Save changes
+                user_claim.save()
+
+                # Add to successful response
+                claim_response.update({
+                    "status": user_claim.pending_claim,
+                    "settlement_amount": user_claim.settled_amount if hasattr(user_claim, 'settled_amount')
+                                      else user_claim.predicted_settlement_value
+                })
+
+                if user_claim.model:
+                    claim_response["model_info"] = {
+                        "model_id": user_claim.model.model_id,
+                        "model_name": user_claim.model.model_name,
+                        "model_version": user_claim.model.model_version,
+                        "num_accepted_claims": user_claim.model.num_accepted_claims,
+                        "num_rejected_claims": user_claim.model.num_rejected_claims
+                    }
+
+                response_data.append(claim_response)
+
+            except Exception as e:
+                response_data.append({
+                    "claim_id": claim_id,
+                    "error": f"Failed to update claim: {str(e)}",
+                    "success": False
+                })
 
         return Response({
-            "message": f"Updated {updated_count} claims to status '{new_status}'",
-            "updated_count": updated_count,
-            "total_requested": len(claim_ids)
+            "results": response_data,
+            "total_updated": len([r for r in response_data if r.get('success')]),
+            "total_failed": len([r for r in response_data if not r.get('success')])
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
         return Response({
-            "error": f"Failed to update claims: {str(e)}"
+            "error": f"Failed to process bulk update: {str(e)}"
         }, status=status.HTTP_400_BAD_REQUEST)
 
 @api_user_agent("Admin searched for claims.")
