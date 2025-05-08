@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUserClaims, getClaimDetails, uploadClaimEvidence, acceptClaim, refuseClaim } from "../../../repositories/user-claims";
+import { getUserClaims, getClaimDetails } from "../../../repositories/user-claims";
 
 type ClaimDetails = {
     gender: string;
@@ -51,12 +51,6 @@ const OngoingClaims: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
-    const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
-    const [isRefusePopupOpen, setIsRefusePopupOpen] = useState(false);
-    const [isAcceptPopupOpen, setIsAcceptPopupOpen] = useState(false);
-    const [refuseComments, setRefuseComments] = useState("");
-    const [selectedClaimForAction, setSelectedClaimForAction] = useState<string | null>(null);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     useEffect(() => {
         const fetchClaims = async () => {
@@ -158,90 +152,6 @@ const OngoingClaims: React.FC = () => {
         setSelectedClaim(null);
     };
 
-    const handleOpenUploadPopup = (claimId: string) => {
-        setSelectedClaimForAction(claimId);
-        setIsUploadPopupOpen(true);
-    };
-
-    const handleCloseUploadPopup = () => {
-        setIsUploadPopupOpen(false);
-        setSelectedFile(null);
-    };
-
-    const handleOpenRefusePopup = (claimId: string) => {
-        setSelectedClaimForAction(claimId);
-        setIsRefusePopupOpen(true);
-    };
-
-    const handleCloseRefusePopup = () => {
-        setIsRefusePopupOpen(false);
-        setRefuseComments("");
-    };
-
-    const handleOpenAcceptPopup = (claimId: string) => {
-        setSelectedClaimForAction(claimId);
-        setIsAcceptPopupOpen(true);
-    };
-
-    const handleCloseAcceptPopup = () => {
-        setIsAcceptPopupOpen(false);
-    };
-
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setSelectedFile(e.target.files[0]);
-        }
-    };
-
-    const handleFileUpload = async () => {
-        if (!selectedFile || !selectedClaimForAction) return;
-        
-        try {
-            await uploadClaimEvidence(selectedClaimForAction, selectedFile);
-            alert(`File "${selectedFile.name}" uploaded successfully.`);
-            handleCloseUploadPopup();
-        } catch (err) {
-            console.error("Error uploading file:", err);
-            alert("Failed to upload file. Please try again.");
-        }
-    };
-
-    const handleRefuseClaim = async () => {
-        if (!selectedClaimForAction) return;
-        
-        try {
-            await refuseClaim(selectedClaimForAction, refuseComments);
-            
-            setClaims(prevClaims => 
-                prevClaims.filter(claim => claim.claimId !== selectedClaimForAction)
-            );
-            
-            alert("Claim refused successfully.");
-            handleCloseRefusePopup();
-        } catch (err) {
-            console.error("Error refusing claim:", err);
-            alert("Failed to refuse claim. Please try again.");
-        }
-    };
-
-    const handleAcceptClaim = async () => {
-        if (!selectedClaimForAction) return;
-        
-        try {
-            await acceptClaim(selectedClaimForAction);
-            
-            setClaims(prevClaims => 
-                prevClaims.filter(claim => claim.claimId !== selectedClaimForAction)
-            );
-            
-            alert("Claim accepted successfully.");
-            handleCloseAcceptPopup();
-        } catch (err) {
-            console.error("Error accepting claim:", err);
-            alert("Failed to accept claim. Please try again.");
-        }
-    };
-
     return (
         <div className="container-primary bg-gray-50 p-6">
             <div className="flex flex-col gap-5 mb-8 max-w-[800px] mx-auto">
@@ -298,29 +208,6 @@ const OngoingClaims: React.FC = () => {
                                             >
                                                 View Details
                                             </button>
-                                            <button 
-                                                onClick={() => handleOpenUploadPopup(claim.claimId)} 
-                                                className="cursor-pointer py-2 px-4 rounded-lg bg-teal-600 text-white font-medium hover:bg-teal-700 transition-colors"
-                                            >
-                                                Upload Evidence
-                                            </button>
-
-                                            {claim.status === 'approved' && (
-                                                <div className="flex flex-row gap-3">
-                                                    <button 
-                                                        onClick={() => handleOpenAcceptPopup(claim.claimId)} 
-                                                        className="cursor-pointer py-2 px-4 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
-                                                    >
-                                                        Accept
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => handleOpenRefusePopup(claim.claimId)} 
-                                                        className="cursor-pointer py-2 px-4 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
-                                                    >
-                                                        Refuse
-                                                    </button>
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -549,127 +436,6 @@ const OngoingClaims: React.FC = () => {
                         
                         <div className="px-6 py-4 bg-gray-50 border-t">
                             <button onClick={handleCloseDetails} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Close</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isUploadPopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
-                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-4">
-                            <p className="text-white font-bold text-xl">Upload Supporting Evidence</p>
-                            <p className="text-blue-100 text-sm">Provide additional documentation for your claim</p>
-                        </div>
-                        
-                        <div className="p-6 space-y-6">
-                            <div className="space-y-4">
-                                <label className="block text-sm font-medium text-gray-700" htmlFor="file">Select a file to upload</label>
-                                
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors">
-                                    <input id="file" type="file" onChange={handleFileSelect} className="hidden"/>
-                                    
-                                    <label htmlFor="file" className="cursor-pointer flex flex-col items-center justify-center">
-                                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 mb-3">
-                                            <div className="w-8 h-8 rounded-full bg-white"></div>
-                                        </div>
-                                        
-                                        <span className="text-blue-500 font-medium mb-1">Click to select a file</span>
-                                    </label>
-                                </div>
-                                
-                                {selectedFile && (
-                                    <p className="text-sm text-green-600">Selected: {selectedFile.name}</p>
-                                )}
-                            </div>
-                        </div>
-                        
-                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
-                            <button onClick={handleCloseUploadPopup} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
-                            <button 
-                                onClick={handleFileUpload} 
-                                disabled={!selectedFile}
-                                className={`py-2 px-6 rounded-lg font-medium ${selectedFile ? 'cursor-pointer bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                            >
-                                Upload
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isRefusePopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
-                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-red-400 to-red-600 p-4">
-                            <p className="text-white font-bold text-xl">Refuse Claim</p>
-                            <p className="text-red-100 text-sm">Are you sure you want to refuse this claim?</p>
-                        </div>
-                        
-                        <div className="p-6 space-y-6">
-                            <div className="mb-4">
-                                <p className="text-gray-700 mb-4">By refusing this claim, you disagree with the proposed settlement. Please explain your reasons and provide any supporting documentation.</p>
-                                
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
-                                    <input id="refuseFile" type="file" className="hidden" onChange={handleFileSelect}/>
-                                    
-                                    <label htmlFor="refuseFile" className="cursor-pointer flex items-center justify-center p-2 py-5 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">
-                                        <div className="h-2 w-2 bg-gray-600 rounded-full mr-2"></div>
-                                        <span className="text-gray-600 text-sm">Attach supporting documentation (optional)</span>
-                                    </label>
-                                </div>
-                                
-                                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="refuseReason">Reason for Refusal</label>
-                                <textarea 
-                                    id="refuseReason"
-                                    value={refuseComments} 
-                                    onChange={(e) => setRefuseComments(e.target.value)}
-                                    placeholder="Please explain why you are refusing this claim..."
-                                    rows={4}
-                                    className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg" 
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
-                            <button onClick={handleCloseRefusePopup} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
-                            <button onClick={handleRefuseClaim} className="cursor-pointer py-2 px-6 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">Confirm</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isAcceptPopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
-                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-green-400 to-green-600 p-4">
-                            <p className="text-white font-bold text-xl">Accept Claim</p>
-                            <p className="text-green-100 text-sm">Confirm your acceptance of this claim</p>
-                        </div>
-                        
-                        <div className="p-6">
-                            <div className="mb-4">
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                                    <div className="flex items-center">
-                                        <p className="text-green-700 font-medium">You are about to accept the proposed settlement for this claim</p>
-                                    </div>
-                                </div>
-                                
-                                <p className="text-gray-700 mb-4">By accepting this claim, you agree to the following terms:</p>
-                                
-                                <ul className="list-disc pl-5 text-sm text-gray-600 space-y-2 mb-4">
-                                    <li key="term-1">You agree to the proposed settlement amount</li>
-                                    <li key="term-2">You will not seek further compensation for this incident</li>
-                                    <li key="term-3">You acknowledge all information provided is accurate</li>
-                                </ul>
-                                
-                                <p className="text-gray-700">Are you sure you want to accept this claim?</p>
-                            </div>
-                        </div>
-                        
-                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
-                            <button onClick={handleCloseAcceptPopup} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
-                            <button onClick={handleAcceptClaim} className="cursor-pointer py-2 px-6 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors">Confirm</button>
                         </div>
                     </div>
                 </div>

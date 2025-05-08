@@ -130,17 +130,17 @@ const SubmitClaim: React.FC = () => {
         "Review & Submit"
     ];
 
-    const accidentTypeLabels: Record<string, string> = {
-        "accident1": "Rear end",
-        "accident2": "Rear end - Clt pushed into next vehicle",
-        "accident3": "Rear end - 3 car - Clt at front",
-        "accident4": "Other side pulled out of side road",
-        "accident5": "Other side pulled on to roundabout",
-        "accident6": "Other side drove on wrong side of the road",
-        "accident7": "Other side reversed into Clt's vehicle",
-        "accident8": "Other side changed lanes and collided with clt's vehicle",
-        "accident9": "Other side changed lanes on a roundabout colliding with clt's vehicle"
-    };
+    const accidentTypes = [
+        "Rear end",
+        "Rear end - Clt pushed into next vehicle",
+        "Rear end - 3 car - Clt at front",
+        "Other side pulled out of side road",
+        "Other side pulled on to roundabout",
+        "Other side drove on wrong side of the road",
+        "Other side reversed into Clt's vehicle",
+        "Other side changed lanes and collided with clt's vehicle",
+        "Other side changed lanes on a roundabout colliding with clt's vehicle"
+    ];
 
     const renderForm = () => {
         switch (currentForm) {
@@ -263,15 +263,9 @@ const SubmitClaim: React.FC = () => {
                                         className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg" 
                                     >
                                         <option value="" disabled hidden>Select...</option>
-                                        <option value="accident1">Rear end</option>
-                                        <option value="accident2">Rear end - Clt pushed into next vehicle</option>
-                                        <option value="accident3">Rear end - 3 car - Clt at front</option>
-                                        <option value="accident4">Other side pulled out of side road</option>
-                                        <option value="accident5">Other side pulled on to roundabout</option>
-                                        <option value="accident6">Other side drove on wrong side of the road</option>
-                                        <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
-                                        <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
-                                        <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
+                                        {accidentTypes.map((type, index) => (
+                                            <option key={index} value={type}>{type}</option>
+                                        ))}
                                     </select>
                                 </div>
 
@@ -851,7 +845,7 @@ const SubmitClaim: React.FC = () => {
                                                     <span className="text-sm font-medium text-gray-600">{formattedKey}</span>
                                                     
                                                     {!isEditing[key] ? (
-                                                        <span className="text-gray-800 font-medium">{key === "accidentType" && value ? accidentTypeLabels[value] : key === "accidentDate" && value ? value.replace("T", " ") : value || "—"}</span>
+                                                        <span className="text-gray-800 font-medium">{key === "accidentDate" && value ? value.replace("T", " ") : value || "—"}</span>
                                                     ) : (
                                                         <>
                                                             {key === "gender" || key === "vehicleType" || key === "exceptional" || key === "accidentType" || 
@@ -890,15 +884,9 @@ const SubmitClaim: React.FC = () => {
 
                                                                     {key === "accidentType" && (
                                                                         <>
-                                                                            <option value="accident1">Rear end</option>
-                                                                            <option value="accident2">Rear end - Clt pushed into next vehicle</option>
-                                                                            <option value="accident3">Rear end - 3 car - Clt at front</option>
-                                                                            <option value="accident4">Other side pulled out of side road</option>
-                                                                            <option value="accident5">Other side pulled on to roundabout</option>
-                                                                            <option value="accident6">Other side drove on wrong side of the road</option>
-                                                                            <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
-                                                                            <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
-                                                                            <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
+                                                                            {accidentTypes.map((type, index) => (
+                                                                                <option key={index} value={type}>{type}</option>
+                                                                            ))}
                                                                         </>
                                                                     )}
 

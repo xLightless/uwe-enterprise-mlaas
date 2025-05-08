@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUserClaims, getClaimDetails, submitClaimFeedback } from "../../../repositories/user-claims";
+import { getUserClaims, getClaimDetails } from "../../../repositories/user-claims";
 
 type ClaimDetails = {
     gender: string;
@@ -51,11 +51,6 @@ const PastClaims: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
-    const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
-    const [rating, setRating] = useState<number | null>(null);
-    const [comments, setComments] = useState("");
-    const [claimForRating, setClaimForRating] = useState<string | null>(null);
-    const [submittingFeedback, setSubmittingFeedback] = useState(false);
 
     useEffect(() => {
         const fetchClaims = async () => {
@@ -166,39 +161,6 @@ const PastClaims: React.FC = () => {
         setSelectedClaim(null);
     };
 
-    const handleOpenRatingPopup = (claimId: string) => {
-        setClaimForRating(claimId);
-        setIsRatingPopupOpen(true);
-    };
-
-    const handleCloseRatingPopup = () => {
-        setIsRatingPopupOpen(false);
-        setRating(null);
-        setComments("");
-        setClaimForRating(null);
-    };
-
-    const handleSubmitRating = async () => {
-        if (!claimForRating || !rating) return;
-        
-        try {
-            setSubmittingFeedback(true);
-            
-            await submitClaimFeedback(claimForRating, {
-                rating,
-                comments
-            });
-            
-            alert("Thank you for your feedback!");
-            handleCloseRatingPopup();
-        } catch (err) {
-            console.error("Error submitting feedback:", err);
-            alert("Failed to submit feedback. Please try again.");
-        } finally {
-            setSubmittingFeedback(false);
-        }
-    };
-
     return (
         <div className="container-primary bg-gray-50 p-6">
             <div className="flex flex-col gap-5 mb-8 max-w-[800px] mx-auto">
@@ -251,12 +213,6 @@ const PastClaims: React.FC = () => {
                                                 className="cursor-pointer py-2 px-4 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
                                             >
                                                 View Details
-                                            </button>
-                                            <button 
-                                                onClick={() => handleOpenRatingPopup(claim.claimId)} 
-                                                className="cursor-pointer py-2 px-4 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
-                                            >
-                                                Leave Feedback
                                             </button>
                                         </div>
                                     </div>
@@ -495,72 +451,6 @@ const PastClaims: React.FC = () => {
                         
                         <div className="px-6 py-4 bg-gray-50 border-t">
                             <button onClick={handleCloseDetails} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Close</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isRatingPopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
-                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-4">
-                            <p className="text-white font-bold text-xl">Provide Feedback</p>
-                            <p className="text-blue-100 text-sm">Help us improve our service</p>
-                        </div>
-                        
-                        <div className="p-6">
-                            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmitRating(); }}>
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700" htmlFor="rating">Your Rating</label>
-                                    <select 
-                                        id="rating"
-                                        value={rating || ""}
-                                        onChange={(e) => setRating(Number(e.target.value))}
-                                        className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                    >
-                                        <option value="" disabled hidden>Select a rating</option>
-                                        <option value="5">5 - Excellent</option>
-                                        <option value="4">4 - Very Good</option>
-                                        <option value="3">3 - Good</option>
-                                        <option value="2">2 - Fair</option>
-                                        <option value="1">1 - Poor</option>
-                                    </select>
-                                </div>
-                                
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700" htmlFor="comments">Your Comments</label>
-                                    <textarea 
-                                        id="comments"
-                                        value={comments}
-                                        onChange={(e) => setComments(e.target.value)}
-                                        placeholder="Please share your experience with the claim process..."
-                                        rows={5}
-                                        className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                    />
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-end gap-3">
-                            <button 
-                                onClick={handleCloseRatingPopup} 
-                                className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors"
-                                disabled={submittingFeedback}
-                            >
-                                Cancel
-                            </button>
-                            
-                            <button 
-                                onClick={handleSubmitRating}
-                                disabled={!rating || submittingFeedback}
-                                className={`py-2 px-6 rounded-lg font-medium transition-colors ${
-                                    rating && !submittingFeedback 
-                                        ? 'cursor-pointer bg-green-600 text-white hover:bg-green-700' 
-                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            >
-                                {submittingFeedback ? 'Submitting...' : 'Submit Feedback'}
-                            </button>
                         </div>
                     </div>
                 </div>

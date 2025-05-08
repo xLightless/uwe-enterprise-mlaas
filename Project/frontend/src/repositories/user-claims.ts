@@ -86,14 +86,14 @@ export const submitClaim = async (claimData: ClaimSubmission) => {
             'AccidentType': claimData.accidentType,
             'Accident Date': formatDate(claimData.accidentDate),
             'Weather Conditions': claimData.weatherConditions,
-            'Police Report Filed': claimData.policeReport === 'yes',
-            'Witness Present': claimData.witness === 'yes',
+            'Police_Report_Filed': claimData.policeReport === 'yes',
+            'Witness_Present': claimData.witness === 'yes',
             'Accident Description': claimData.accidentDescription,
-            'Dominant_injury': claimData.dominantInjury,
-            'Injury_Prognosis': claimData.prognosis || 0,
+            'Dominant injury': claimData.dominantInjury,
+            'Injury_Prognosis': Number(claimData.prognosis),
             'Whiplash': claimData.whiplash === 'yes',
             'Minor_Psychological_Injury': claimData.psychological === 'yes',
-            'Injury Description': claimData.injuryDescription,
+            'Injury Description': claimData.injuryDescription || "DEFAULT",
             'SpecialAssetDamage': claimData.assetDamage || 0,
             'SpecialEarningsLoss': claimData.earningsLoss || 0,
             'SpecialUsageLoss': claimData.usageLoss || 0,
@@ -101,7 +101,7 @@ export const submitClaim = async (claimData: ClaimSubmission) => {
             'SpecialFixes': claimData.specialFixes || 0,
             'SpecialTripCosts': claimData.tripCosts || 0,
             'SpecialJourneyExpenses': claimData.journeyExpenses || 0,
-            'SpecialMedication': claimData.medications || 0,
+            'SpecialMedications': claimData.medications || 0,
             'SpecialRehabilitation': claimData.rehabilitation || 0,
             'SpecialTherapy': claimData.therapy || 0,
             'SpecialHealthExpenses': claimData.healthExpenses || 0,
@@ -201,7 +201,7 @@ export const getClaimDetails = async (claimId: string) => {
             specialFixes: Number(data.special_damages?.fixes || data.SpecialFixes || 0),
             tripCosts: Number(data.special_damages?.trip_costs || data.SpecialTripCosts || 0),
             journeyExpenses: Number(data.special_damages?.journey_expenses || data.SpecialJourneyExpenses || 0),
-            medications: Number(data.special_damages?.medication || data.SpecialMedication || 0),
+            medications: Number(data.special_damages?.medication || data.SpecialMedications || data.SpecialMedication || 0),
             rehabilitation: Number(data.special_damages?.rehabilitation || data.SpecialRehabilitation || 0),
             therapy: Number(data.special_damages?.therapy || data.SpecialTherapy || 0),
             healthExpenses: Number(data.special_damages?.health_expenses || data.SpecialHealthExpenses || 0),
@@ -245,69 +245,4 @@ export const getPastClaims = async () => {
     return claimsArray.filter(claim => 
         claim.status === 'settled' || claim.status === 'rejected'
     );
-};
-
-export const uploadClaimEvidence = async (claimId: string, file: File) => {
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await axiosInstance.post(`/claims/${claimId}/evidence/`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw error.response ? error.response.data : error;
-        }
-
-        throw error;
-    }
-};
-
-export const acceptClaim = async (claimId: string) => {
-    try {
-        const response = await axiosInstance.post(`/claims/${claimId}/accept/`);
-
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw error.response ? error.response.data : error;
-        }
-
-        throw error;
-    }
-};
-
-export const refuseClaim = async (claimId: string, reason: string) => {
-    try {
-        const response = await axiosInstance.post(`/claims/${claimId}/refuse/`, { reason });
-
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw error.response ? error.response.data : error;
-        }
-
-        throw error;
-    }
-};
-
-export const submitClaimFeedback = async (claimId: string, feedback: { rating: number; comments: string }) => {
-    try {
-        const response = await axiosInstance.post(`/claims/${claimId}/feedback/`, feedback);
-
-        return response.data;
-    } catch (error) {
-        console.error("Error submitting claim feedback:", error);
-
-        if (axios.isAxiosError(error)) {
-            throw error.response ? error.response.data : error;
-        }
-
-        throw error;
-    }
 };
