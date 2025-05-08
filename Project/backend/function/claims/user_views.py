@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 import requests
 from function.models import (
     Users, Accident, Weather, Vehicle, Driver, UserVehicle,
-    UserAccident, Claim, UserClaim)
+    UserAccident, Claim, UserClaim, Model)
 from function.monitoring.middleware import api_user_agent
 
 @api_user_agent("User submitted a new claim.")
@@ -125,6 +125,15 @@ def submit_claim(request):
         predicted_value = 0
         prediction_explanation = {}
         prediction_reason = "Unable to generate prediction"
+        active_model = None
+
+        # Find the currently active model
+        try:
+            active_model = Model.objects.filter(is_active=True).first()
+            if not active_model:
+                print("No active model found. Using default values.")
+        except Exception as e:
+            print(f"Error retrieving active model: {str(e)}")
 
         # Connect directly to the ML service
         try:
@@ -160,13 +169,14 @@ def submit_claim(request):
             # Log prediction error but continue with default values
             print(f"ML service error: {str(e)}")
 
-        # Create user claim with ONLY the predicted value (no explanations)
+        # Create user claim with the predicted value and the active model ID
         user_claim = UserClaim.objects.create(
             user_accident=user_accident,
             claim=claim,
             predicted_settlement_value=predicted_value,
             pending_claim='pending',
-            user=request.user
+            user=request.user,
+            model=active_model  # Associate the active model with the claim
         )
 
         # Return the full prediction information in the response
@@ -176,7 +186,8 @@ def submit_claim(request):
             "claim_id": user_claim.user_claim_id,
             "predicted_settlement": f"£{predicted_value:.2f}",
             "prediction_explanation": prediction_explanation,
-            "prediction_reason": prediction_reason
+            "prediction_reason": prediction_reason,
+            "model_id": active_model.model_id if active_model else None  # Include model ID in response
         }, status=status.HTTP_201_CREATED)
 
     except Exception as e:

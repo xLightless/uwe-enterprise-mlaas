@@ -7,7 +7,7 @@ from django.db.models import Count, Sum, Q
 from django.utils import timezone
 from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
-from function.models import Users, UserClaim, Claim
+from function.models import Users, UserClaim, Claim, Model
 from function.monitoring.middleware import api_user_agent
 from decimal import Decimal
 
@@ -89,10 +89,12 @@ def admin_get_claims_by_status(request, status_filter):
 def admin_update_claim(request, claim_id):
     """
     Update claim status and settlement amount.
+    Also updates the model's acceptance/rejection counts when applicable.
     """
     try:
         user_claim = get_object_or_404(UserClaim, user_claim_id=claim_id)
-
+        previous_status = user_claim.pending_claim
+        
         # Check for status update
         new_status = request.data.get('status')
         if new_status:
@@ -102,6 +104,18 @@ def admin_update_claim(request, claim_id):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             user_claim.pending_claim = new_status
+            
+            # Update model counts if status changed to approved or rejected
+            # Only count the transition from pending to approved/rejected to avoid double-counting
+            if previous_status == 'pending' and user_claim.model:
+                if new_status == 'approved':
+                    # Increment the num_accepted_claims counter for this model
+                    user_claim.model.num_accepted_claims += 1
+                    user_claim.model.save()
+                elif new_status == 'rejected':
+                    # Increment the num_rejected_claims counter for this model
+                    user_claim.model.num_rejected_claims += 1
+                    user_claim.model.save()
 
         # Check for settlement amount override
         new_settlement = request.data.get('settlement_amount')
@@ -138,12 +152,25 @@ def admin_update_claim(request, claim_id):
         # Save changes
         user_claim.save()
 
-        return Response({
+        # Prepare response
+        response_data = {
             "message": "Claim updated successfully",
             "claim_id": user_claim.user_claim_id,
             "status": user_claim.pending_claim,
             "settlement_amount": getattr(user_claim, 'settled_amount', user_claim.predicted_settlement_value)
-        }, status=status.HTTP_200_OK)
+        }
+        
+        # Add model info if available
+        if user_claim.model:
+            response_data["model_info"] = {
+                "model_id": user_claim.model.model_id,
+                "model_name": user_claim.model.model_name,
+                "model_version": user_claim.model.model_version,
+                "num_accepted_claims": user_claim.model.num_accepted_claims,
+                "num_rejected_claims": user_claim.model.num_rejected_claims
+            }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
     except Exception as e:
         return Response({
