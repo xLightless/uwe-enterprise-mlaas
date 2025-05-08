@@ -121,8 +121,6 @@ class Users(AbstractBaseUser):
     def set_password(self, raw_password):
         """Override to set password_hash field instead of password"""
         super().set_password(raw_password)
-        self.password_hash = self.password
-        self.password = None
 
 ###########################################
 # Insurance Models
@@ -251,6 +249,7 @@ class UserClaim(models.Model):
     ]
     pending_claim = models.CharField(max_length=50, choices=PENDING_CHOICES, default='pending')
     user = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
+    model = models.ForeignKey('Model', on_delete=models.SET_NULL, db_column='model_id', null=True, blank=True)
 
     class Meta:
         db_table = '"UserClaims"'
