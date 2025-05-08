@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { submitClaim, ClaimSubmission } from "../../../repositories/user-claims";
 
 const SubmitClaim: React.FC = () => {
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submissionError, setSubmissionError] = useState<string | null>(null);
     const [currentForm, setcurrentForm] = useState(1);
     const [formData, setFormData] = useState({
         gender: "",
@@ -38,6 +43,65 @@ const SubmitClaim: React.FC = () => {
         generalUplift: "",
         loanerVehicle: ""
     });
+
+    const handleSubmitClaim = async () => {
+        try {
+            setIsSubmitting(true);
+            setSubmissionError(null);
+            
+            const claimData: ClaimSubmission = {
+                gender: formData.gender,
+                driverAge: Number(formData.driverAge),
+                vehicleType: formData.vehicleType, 
+                vehicleAge: Number(formData.vehicleAge),
+                passengers: Number(formData.passengers),
+                exceptional: formData.exceptional,
+                accidentType: formData.accidentType,
+                accidentDate: formData.accidentDate,
+                weatherConditions: formData.weatherConditions,
+                policeReport: formData.policeReport,
+                witness: formData.witness,
+                accidentDescription: formData.accidentDescription,
+                dominantInjury: formData.dominantInjury,
+                prognosis: Number(formData.prognosis),
+                whiplash: formData.whiplash,
+                psychological: formData.psychological,
+                injuryDescription: formData.injuryDescription,
+                assetDamage: Number(formData.assetDamage),
+                earningsLoss: Number(formData.earningsLoss),
+                usageLoss: Number(formData.usageLoss),
+                generalFixes: Number(formData.generalFixes),
+                specialFixes: Number(formData.specialFixes),
+                tripCosts: Number(formData.tripCosts),
+                journeyExpenses: Number(formData.journeyExpenses),
+                medications: Number(formData.medications),
+                rehabilitation: Number(formData.rehabilitation),
+                therapy: Number(formData.therapy),
+                healthExpenses: Number(formData.healthExpenses),
+                specialReduction: Number(formData.specialReduction),
+                specialOverage: Number(formData.specialOverage),
+                generalRest: Number(formData.generalRest),
+                additionalInjury: Number(formData.additionalInjury),
+                generalUplift: Number(formData.generalUplift),
+                loanerVehicle: Number(formData.loanerVehicle)
+            };
+            
+            const response = await submitClaim(claimData);
+            console.log("Claim submitted successfully:", response);
+            
+            alert("Claim submitted successfully!");
+            navigate("/user-dashboard/");
+        } catch (error) {
+            console.error("Error submitting claim:", error);
+            if (error instanceof Error) {
+                setSubmissionError(error.message || "An error occurred while submitting your claim.");
+            } else {
+                setSubmissionError("An error occurred while submitting your claim.");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     
     const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
 
@@ -66,17 +130,17 @@ const SubmitClaim: React.FC = () => {
         "Review & Submit"
     ];
 
-    const accidentTypeLabels: Record<string, string> = {
-        "accident1": "Rear end",
-        "accident2": "Rear end - Clt pushed into next vehicle",
-        "accident3": "Rear end - 3 car - Clt at front",
-        "accident4": "Other side pulled out of side road",
-        "accident5": "Other side pulled on to roundabout",
-        "accident6": "Other side drove on wrong side of the road",
-        "accident7": "Other side reversed into Clt's vehicle",
-        "accident8": "Other side changed lanes and collided with clt's vehicle",
-        "accident9": "Other side changed lanes on a roundabout colliding with clt's vehicle"
-    };
+    const accidentTypes = [
+        "Rear end",
+        "Rear end - Clt pushed into next vehicle",
+        "Rear end - 3 car - Clt at front",
+        "Other side pulled out of side road",
+        "Other side pulled on to roundabout",
+        "Other side drove on wrong side of the road",
+        "Other side reversed into Clt's vehicle",
+        "Other side changed lanes and collided with clt's vehicle",
+        "Other side changed lanes on a roundabout colliding with clt's vehicle"
+    ];
 
     const renderForm = () => {
         switch (currentForm) {
@@ -199,15 +263,9 @@ const SubmitClaim: React.FC = () => {
                                         className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg" 
                                     >
                                         <option value="" disabled hidden>Select...</option>
-                                        <option value="accident1">Rear end</option>
-                                        <option value="accident2">Rear end - Clt pushed into next vehicle</option>
-                                        <option value="accident3">Rear end - 3 car - Clt at front</option>
-                                        <option value="accident4">Other side pulled out of side road</option>
-                                        <option value="accident5">Other side pulled on to roundabout</option>
-                                        <option value="accident6">Other side drove on wrong side of the road</option>
-                                        <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
-                                        <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
-                                        <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
+                                        {accidentTypes.map((type, index) => (
+                                            <option key={index} value={type}>{type}</option>
+                                        ))}
                                     </select>
                                 </div>
 
@@ -787,7 +845,7 @@ const SubmitClaim: React.FC = () => {
                                                     <span className="text-sm font-medium text-gray-600">{formattedKey}</span>
                                                     
                                                     {!isEditing[key] ? (
-                                                        <span className="text-gray-800 font-medium">{key === "accidentType" && value ? accidentTypeLabels[value] : key === "accidentDate" && value ? value.replace("T", " ") : value || "—"}</span>
+                                                        <span className="text-gray-800 font-medium">{key === "accidentDate" && value ? value.replace("T", " ") : value || "—"}</span>
                                                     ) : (
                                                         <>
                                                             {key === "gender" || key === "vehicleType" || key === "exceptional" || key === "accidentType" || 
@@ -826,15 +884,9 @@ const SubmitClaim: React.FC = () => {
 
                                                                     {key === "accidentType" && (
                                                                         <>
-                                                                            <option value="accident1">Rear end</option>
-                                                                            <option value="accident2">Rear end - Clt pushed into next vehicle</option>
-                                                                            <option value="accident3">Rear end - 3 car - Clt at front</option>
-                                                                            <option value="accident4">Other side pulled out of side road</option>
-                                                                            <option value="accident5">Other side pulled on to roundabout</option>
-                                                                            <option value="accident6">Other side drove on wrong side of the road</option>
-                                                                            <option value="accident7">Other side reversed into Clt&apos;s vehicle</option>
-                                                                            <option value="accident8">Other side changed lanes and collided with clt&apos;s vehicle</option>
-                                                                            <option value="accident9">Other side changed lanes on a roundabout colliding with clt&apos;s vehicle</option>
+                                                                            {accidentTypes.map((type, index) => (
+                                                                                <option key={index} value={type}>{type}</option>
+                                                                            ))}
                                                                         </>
                                                                     )}
 
@@ -931,7 +983,23 @@ const SubmitClaim: React.FC = () => {
                             
                             <div className="mt-8 text-center">
                                 <p className="text-gray-600 mb-4">By submitting your claim, you agree to our <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">Terms and Conditions</a></p>
-                                <button type="button" className="cursor-pointer py-3 px-8 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md transition-colors">Submit Claim</button>
+                                
+                                {submissionError && (
+                                    <p className="text-red-500 mb-4">{submissionError}</p>
+                                )}
+                                
+                                <button 
+                                    type="button" 
+                                    onClick={handleSubmitClaim} 
+                                    disabled={isSubmitting}
+                                    className={`cursor-pointer py-3 px-8 rounded-lg shadow-md transition-colors ${
+                                        isSubmitting 
+                                            ? "bg-gray-400 text-white cursor-not-allowed" 
+                                            : "bg-green-600 hover:bg-green-700 text-white font-bold"
+                                    }`}
+                                >
+                                    {isSubmitting ? "Submitting..." : "Submit Claim"}
+                                </button>
                             </div>
                         </div>
                     </div>

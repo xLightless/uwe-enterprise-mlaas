@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getUserClaims, getClaimDetails } from "../../../repositories/user-claims";
 
 type ClaimDetails = {
     gender: string;
@@ -41,122 +42,123 @@ type Claim = {
     claimId: string;
     claimDate: string;
     settlementAmount: string;
+    status: string;
     details: ClaimDetails;
 };
 
-const dummyClaims: Claim[] = [
-    {
-        claimId: "CLM001",
-        claimDate: "2023-09-15",
-        settlementAmount: "£5,000",
-        details: {
-            gender: "Male",
-            driverAge: 35,
-            vehicleType: "Car",
-            vehicleAge: 5,
-            passengers: 2,
-            exceptional: "No",
-            accidentType: "Rear-end collision",
-            accidentDate: "2023-09-10",
-            weatherConditions: "Rainy",
-            policeReport: "Yes",
-            witness: "Yes",
-            accidentDescription: "The car was rear-ended at a traffic light.",
-            dominantInjury: "Arms",
-            prognosis: 3,
-            whiplash: "Yes",
-            psychological: "No",
-            injuryDescription: "Big big ouchie on the arms.",
-            assetDamage: 2000,
-            earningsLoss: 1000,
-            usageLoss: 500,
-            generalFixes: 1500,
-            specialFixes: 0,
-            tripCosts: 0,
-            journeyExpenses: 0,
-            medications: 200,
-            rehabilitation: 300,
-            therapy: 0,
-            healthExpenses: 450,
-            specialReduction: 80,
-            specialOverage: 200, 
-            generalRest: 350,
-            additionalInjury: 750,
-            generalUplift: 300,
-            loanerVehicle: 450
-        },
-    },
-
-    {
-        claimId: "CLM002",
-        claimDate: "2023-08-20",
-        settlementAmount: "£3,200",
-        details: {
-            gender: "Female",
-            driverAge: 28,
-            vehicleType: "Motorcycle",
-            vehicleAge: 2,
-            passengers: 0,
-            exceptional: "No",
-            accidentType: "Side collision",
-            accidentDate: "2023-08-15",
-            weatherConditions: "Sunny",
-            policeReport: "Yes",
-            witness: "No",
-            accidentDescription: "A car hit the motorcycle from the side at an intersection.",
-            dominantInjury: "Legs",
-            prognosis: 6,
-            whiplash: "No",
-            psychological: "Yes",
-            injuryDescription: "Severe brainrot.",
-            assetDamage: 1000,
-            earningsLoss: 500,
-            usageLoss: 200,
-            generalFixes: 1200,
-            specialFixes: 0,
-            tripCosts: 100,
-            journeyExpenses: 50,
-            medications: 150,
-            rehabilitation: 400,
-            therapy: 300,
-            healthExpenses: 350,
-            specialReduction: 60,
-            specialOverage: 180,
-            generalRest: 320,
-            additionalInjury: 600,
-            generalUplift: 240,
-            loanerVehicle: 400
-        },
-    },
-];
-
 const PastClaims: React.FC = () => {
+    const [claims, setClaims] = useState<Claim[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
-    const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
-    const [rating, setRating] = useState<number | null>(null);
-    const [comments, setComments] = useState("");
 
-    const handleViewDetails = (claim: Claim) => {
-        setSelectedClaim(claim);
+    useEffect(() => {
+        const fetchClaims = async () => {
+            try {
+                setLoading(true);
+                const response = await getUserClaims();
+                console.log("Raw API response for past claims:", response);
+                
+                const transformedClaims = Array.isArray(response) ? response.map(claim => {
+                    console.log("Processing past claim:", claim);
+                    
+                    const claimId = claim.id || claim.claim_id || claim.claimId || `claim-${Math.random().toString(36).substring(2, 10)}`;
+                    
+                    let settlementAmount = claim.settlement_amount || claim.settlementAmount || claim.predicted_settlement_value || 0;
+                    if (typeof settlementAmount === 'number') {
+                        settlementAmount = `£${settlementAmount}`;
+                    }
+                    
+                    let status = claim.status || claim.pending_claim || 'pending';
+                    
+                    const claimDate = claim.date || claim.claimDate || claim['Claim Date'] || claim.claim_date || new Date().toISOString().split('T')[0];
+                    
+                    return {
+                        claimId,
+                        claimDate,
+                        settlementAmount,
+                        status,
+                        details: {
+                            gender: claim.Gender || claim.gender || 'N/A',
+                            driverAge: Number(claim['Driver Age'] || claim.driverAge || claim.driver_age || 0),
+                            vehicleType: claim['Vehicle Type'] || claim.vehicleType || claim.vehicle_type || 'N/A',
+                            vehicleAge: Number(claim['Vehicle Age'] || claim.vehicleAge || claim.vehicle_age || 0),
+                            passengers: Number(claim['Number of Passengers'] || claim.passengers || claim.passenger_count || 0),
+                            exceptional: claim['Exceptional_Circumstances'] ? 'Yes' : 'No',
+                            accidentType: claim.AccidentType || claim.accidentType || claim.accident_type || 'N/A',
+                            accidentDate: claim['Accident Date'] || claim.accidentDate || claim.accident_date || 'N/A',
+                            weatherConditions: claim['Weather Conditions'] || claim.weatherConditions || claim.weather_conditions || 'N/A',
+                            policeReport: claim['Police Report Filed'] ? 'Yes' : 'No',
+                            witness: claim['Witness Present'] ? 'Yes' : 'No',
+                            accidentDescription: claim['Accident Description'] || claim.accidentDescription || claim.accident_description || 'N/A',
+                            dominantInjury: claim['Dominant injury'] || claim.dominantInjury || claim.dominant_injury || 'N/A',
+                            prognosis: Number(claim['Injury_Prognosis'] || claim.prognosis || claim.injury_prognosis || 0),
+                            whiplash: claim.Whiplash ? 'Yes' : 'No',
+                            psychological: claim['Minor_Psychological_Injury'] ? 'Yes' : 'No',
+                            injuryDescription: claim['Injury Description'] || claim.injuryDescription || claim.injury_description || 'N/A',
+                            assetDamage: Number(claim.SpecialAssetDamage || claim.assetDamage || claim.asset_damage || 0),
+                            earningsLoss: Number(claim.SpecialEarningsLoss || claim.earningsLoss || claim.earnings_loss || 0),
+                            usageLoss: Number(claim.SpecialUsageLoss || claim.usageLoss || claim.usage_loss || 0),
+                            generalFixes: Number(claim.GeneralFixed || claim.generalFixes || claim.general_fixes || 0),
+                            specialFixes: Number(claim.SpecialFixes || claim.specialFixes || claim.special_fixes || 0),
+                            tripCosts: Number(claim.SpecialTripCosts || claim.tripCosts || claim.trip_costs || 0),
+                            journeyExpenses: Number(claim.SpecialJourneyExpenses || claim.journeyExpenses || claim.journey_expenses || 0),
+                            medications: Number(claim.SpecialMedication || claim.medications || claim.medication_costs || 0),
+                            rehabilitation: Number(claim.SpecialRehabilitation || claim.rehabilitation || claim.rehab_costs || 0),
+                            therapy: Number(claim.SpecialTherapy || claim.therapy || claim.therapy_costs || 0),
+                            healthExpenses: Number(claim.SpecialHealthExpenses || claim.healthExpenses || claim.health_expenses || 0),
+                            specialReduction: Number(claim.SpecialReduction || claim.specialReduction || claim.special_reduction || 0),
+                            specialOverage: Number(claim.SpecialOverage || claim.specialOverage || claim.special_overage || 0),
+                            generalRest: Number(claim.GeneralRest || claim.generalRest || claim.general_rest || 0),
+                            additionalInjury: Number(claim.SpecialAdditionalInjury || claim.additionalInjury || claim.additional_injury || 0),
+                            generalUplift: Number(claim.GeneralUplift || claim.generalUplift || claim.general_uplift || 0),
+                            loanerVehicle: Number(claim.SpecialLoanerVehicle || claim.loanerVehicle || claim.loaner_vehicle || 0)
+                        }
+                    };
+                }) : [];
+                
+                const pastClaims = transformedClaims.filter(claim => 
+                    claim.status === 'settled' || claim.status === 'rejected'
+                );
+                
+                setClaims(pastClaims);
+                
+                if (pastClaims.length === 0) {
+                    console.log("No past claims found from API");
+                }
+                
+                setError(null);
+            } catch (err) {
+                console.error("Error fetching past claims:", err);
+                setError("Failed to load claims history. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchClaims();
+    }, []);
+
+    const handleViewDetails = async (claim: Claim) => {
+        try {
+            setLoading(true);
+            try {
+                const detailedClaim = await getClaimDetails(claim.claimId);
+                setSelectedClaim(detailedClaim);
+            } catch (detailErr) {
+                console.warn("Could not fetch detailed claim info:", detailErr);
+                setSelectedClaim(claim);
+            }
+        } catch (err) {
+            console.error("Error processing claim details:", err);
+            alert("Failed to load claim details. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCloseDetails = () => {
         setSelectedClaim(null);
-    };
-
-    const handleOpenRatingPopup = () => {
-        setIsRatingPopupOpen(true);
-    };
-
-    const handleCloseRatingPopup = () => {
-        setIsRatingPopupOpen(false);
-        setRating(null);
-        setComments("");
-    };
-
-    const handleSubmitRating = () => {
-        alert("Thank you for your feedback!");
-        handleCloseRatingPopup();
     };
 
     return (
@@ -169,29 +171,49 @@ const PastClaims: React.FC = () => {
                     </div>
 
                     <div className="p-6 space-y-6">
-                        {dummyClaims.length === 0 ? (
+                        {loading ? (
+                            <div className="text-center py-8">
+                                <p className="text-gray-500 font-medium">Loading claims history...</p>
+                            </div>
+                        ) : error ? (
+                            <div className="text-center py-8">
+                                <p className="text-red-500 font-medium">{error}</p>
+                            </div>
+                        ) : claims.length === 0 ? (
                             <div className="text-center py-8">
                                 <p className="text-gray-500 font-medium">No past claims found</p>
                             </div>
                         ) : (
                             <div className="flex flex-col gap-4">
-                                {dummyClaims.map((claim) => (
+                                {claims.map((claim) => (
                                     <div key={claim.claimId} className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5 p-5 border border-gray-200 rounded-lg shadow-sm bg-white">
                                         <div className="flex flex-col gap-3 mb-3 lg:mb-0 w-full">
                                             <div className="flex flex-row items-center gap-2 self-start">
-                                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                <div className={`w-2 h-2 rounded-full ${claim.status === 'settled' ? 'bg-green-500' : 'bg-red-500'}`}></div>
                                                 <span className="font-bold text-lg">{claim.claimId}</span>
+                                                <span className={`text-xs px-2 py-1 rounded-full ${claim.status === 'settled' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                    {claim.status === 'settled' ? 'Settled' : 'Rejected'}
+                                                </span>
                                             </div>
                                             
                                             <div className="flex flex-col gap-x-8 gap-y-1 mt-2 text-center lg:text-left">
                                                 <p className="text-sm text-gray-600"><span className="font-bold">Date:</span> {claim.claimDate}</p>
-                                                <p className="text-sm text-gray-600"><span className="font-bold">Settlement:</span> <span className="font-bold text-green-600">{claim.settlementAmount}</span></p>
+                                                <p className="text-sm text-gray-600">
+                                                    <span className="font-bold">Settlement:</span> 
+                                                    <span className={`font-bold ${claim.status === 'settled' ? 'text-green-600' : 'text-red-600'}`}>
+                                                        {claim.settlementAmount}
+                                                    </span>
+                                                </p>
                                             </div>
                                         </div>
 
                                         <div className="flex flex-col lg:flex-row justify-center lg:justify-end gap-3 self-center lg:w-full">
-                                            <button onClick={() => handleViewDetails(claim)} className="cursor-pointer py-2 px-4 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors">View Details</button>
-                                            <button onClick={handleOpenRatingPopup} className="cursor-pointer py-2 px-4 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors">Leave Feedback</button>
+                                            <button 
+                                                onClick={() => handleViewDetails(claim)} 
+                                                className="cursor-pointer py-2 px-4 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+                                            >
+                                                View Details
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -210,6 +232,7 @@ const PastClaims: React.FC = () => {
                         </div>
                         
                         <div className="p-6 max-h-[70vh] overflow-y-auto">
+                            {selectedClaim.details ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                                 <div className="col-span-2 mb-2">
                                     <p className="font-bold text-white border-b p-2 rounded-lg bg-blue-500">Personal Information</p>
@@ -407,69 +430,27 @@ const PastClaims: React.FC = () => {
                                 
                                 <div className="col-span-2">
                                     <p className="text-gray-600 text-sm font-semibold">Settlement Amount</p>
-                                    <p className="font-bold text-green-600 text-lg">{selectedClaim.settlementAmount}</p>
+                                    <p className={`font-bold text-lg ${selectedClaim.status === 'settled' ? 'text-green-600' : 'text-red-600'}`}>
+                                        {selectedClaim.settlementAmount}
+                                    </p>
                                 </div>
+
+                                {selectedClaim.status === 'rejected' && (
+                                    <div className="col-span-2">
+                                        <p className="text-gray-600 text-sm font-semibold">Status</p>
+                                        <p className="font-medium text-red-600">This claim was rejected</p>
+                                    </div>
+                                )}
                             </div>
+                            ) : (
+                                <div className="text-center py-8">
+                                  <p className="text-gray-500 font-medium">No detailed information available for this claim</p>
+                                </div>
+                            )}
                         </div>
                         
                         <div className="px-6 py-4 bg-gray-50 border-t">
                             <button onClick={handleCloseDetails} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Close</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isRatingPopupOpen && (
-                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
-                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-4">
-                            <p className="text-white font-bold text-xl">Provide Feedback</p>
-                            <p className="text-blue-100 text-sm">Help us improve our service</p>
-                        </div>
-                        
-                        <div className="p-6">
-                            <form className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700" htmlFor="rating">Your Rating</label>
-                                    <select 
-                                        id="rating"
-                                        value={rating || ""}
-                                        onChange={(e) => setRating(Number(e.target.value))}
-                                        className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                    >
-                                        <option value="" disabled hidden>Select a rating</option>
-                                        <option value="5">5 - Excellent</option>
-                                        <option value="4">4 - Very Good</option>
-                                        <option value="3">3 - Good</option>
-                                        <option value="2">2 - Fair</option>
-                                        <option value="1">1 - Poor</option>
-                                    </select>
-                                </div>
-                                
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700" htmlFor="comments">Your Comments</label>
-                                    <textarea 
-                                        id="comments"
-                                        value={comments}
-                                        onChange={(e) => setComments(e.target.value)}
-                                        placeholder="Please share your experience with the claim process..."
-                                        rows={5}
-                                        className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                    />
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-end gap-3">
-                            <button onClick={handleCloseRatingPopup} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
-                            
-                            <button 
-                                onClick={handleSubmitRating}
-                                className={`py-2 px-6 rounded-lg font-medium transition-colors ${rating ? 'cursor-pointer bg-green-600 text-white hover:bg-green-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                                disabled={!rating}
-                            >
-                                Submit Feedback
-                            </button>
                         </div>
                     </div>
                 </div>
