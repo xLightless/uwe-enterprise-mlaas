@@ -204,3 +204,50 @@ export const refreshAccessToken = async () => {
         throw { error: 'Failed to refresh access token' };
     }
 }
+
+export const createStripeConnectAccount = async () => {
+    try {
+        const token = sessionStorage.getItem('access_token');
+        const response = await axios.get(
+            `http://localhost:8000/api/stripe/signup/`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        
+        return response.data;
+    } catch (error) {
+        console.error("Error creating Stripe Connect account:", error);
+        
+        if (axios.isAxiosError(error) && error.response) {
+            throw error.response.data;
+        }
+    }
+};
+
+export const addStripeAccountId = async (accountId: string) => {
+    try {
+        const token = sessionStorage.getItem('access_token');
+        const response = await axios.post(
+            `http://localhost:8000/api/stripe/add/`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: {
+                    stripe_account_id: accountId
+                }
+            }
+        );
+        
+        return response.data;
+    } catch (error) {
+        console.error("Error adding Stripe account ID:", error);
+
+        if (axios.isAxiosError(error) && error.response) {
+            throw error.response.data;
+        }
+    }
+};

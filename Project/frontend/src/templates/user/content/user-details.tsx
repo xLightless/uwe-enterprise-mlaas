@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCalendarAlt, faEnvelope, faPhone, faKey, faEdit, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCalendarAlt, faEnvelope, faPhone, faKey, faEdit, faClock, faCreditCard, faLink } from '@fortawesome/free-solid-svg-icons';
 import { fetchUserSettings } from "../../../repositories/auth";
 import { updateUserDetails } from "../../../repositories/user";
+import { createStripeConnectAccount, addStripeAccountId } from "../../../repositories/auth";
 
 const UserDetails: React.FC = () => {
     const [userDetails, setUserDetails] = useState({
@@ -21,6 +22,12 @@ const UserDetails: React.FC = () => {
     const [passwordData, setPasswordData] = useState({
         current_password: "",
         new_password: "",
+    });
+    const [isStripeAccountIdOpen, setIsStripeAccountIdOpen] = useState(false);
+    const [stripeAccountId, setStripeAccountId] = useState("");
+    const [stripeStatus, setStripeStatus] = useState({
+        message: "",
+        isError: false
     });
 
     useEffect(() => {
@@ -104,6 +111,58 @@ const UserDetails: React.FC = () => {
             });
         } catch {
             return dateString;
+        }
+    };
+
+    const handleStripeSignup = async () => {
+        try {
+            setStripeStatus({ message: "Connecting to Stripe...", isError: false });
+            const response = await createStripeConnectAccount();
+            
+            if (response && response.url) {
+                window.open(response.url, "_blank");
+                setStripeStatus({ 
+                    message: "Stripe connect window opened. Please complete the process there.", 
+                    isError: false 
+                });
+            } else {
+                setStripeStatus({ 
+                    message: "Stripe connection initiated. Check your email for further instructions.", 
+                    isError: false 
+                });
+            }
+        } catch (err) {
+            console.error("Failed to connect Stripe account:", err);
+            setStripeStatus({ 
+                message: "Failed to connect Stripe account. Please try again.", 
+                isError: true 
+            });
+        }
+    };
+    
+    const handleAddStripeAccountId = async () => {
+        try {
+            if (!stripeAccountId.trim()) {
+                setStripeStatus({ 
+                    message: "Please enter a valid Stripe account ID", 
+                    isError: true 
+                });
+                return;
+            }
+            
+            await addStripeAccountId(stripeAccountId);
+            setIsStripeAccountIdOpen(false);
+            setStripeAccountId("");
+            setStripeStatus({
+                message: "Stripe account linked successfully!",
+                isError: false
+            });
+        } catch (err) {
+            console.error("Failed to link Stripe account:", err);
+            setStripeStatus({ 
+                message: "Failed to link Stripe account. Please check the ID and try again.", 
+                isError: true 
+            });
         }
     };
 
@@ -222,6 +281,37 @@ const UserDetails: React.FC = () => {
                 </div>
             </div>
 
+            <div className="w-full bg-white rounded-xl shadow-lg overflow-hidden max-w-[800px] mx-auto mt-5">
+                <div className="bg-gradient-to-r from-green-400 to-green-600 p-4">
+                    <p className="text-white font-bold text-xl">Payments</p>
+                    <p className="text-green-100 text-sm">Connect your Stripe account for claims payments</p>
+                </div>
+
+                <div className="p-6 space-y-6">
+                    <div className="flex flex-col gap-4">
+                        <p className="text-gray-700">Connect your Stripe account to receive claim settlement payments directly to your bank account.</p>
+                        
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button 
+                                onClick={handleStripeSignup} 
+                                className="cursor-pointer py-3 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <FontAwesomeIcon icon={faCreditCard} />
+                                <span>Connect Stripe Account</span>
+                            </button>
+                            
+                            <button 
+                                onClick={() => setIsStripeAccountIdOpen(true)} 
+                                className="cursor-pointer py-3 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <FontAwesomeIcon icon={faLink} />
+                                <span>Link Existing Account</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {isEditOpen && (
                 <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
                     <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
@@ -306,6 +396,71 @@ const UserDetails: React.FC = () => {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {isStripeAccountIdOpen && (
+                <div className="fixed inset-0 flex justify-center items-center p-5 bg-black/20 backdrop-blur-sm z-[100]">
+                    <div className="max-w-md w-full bg-white rounded-xl shadow-xl overflow-hidden">
+                        <div className="bg-gradient-to-r from-green-400 to-green-600 p-4">
+                            <p className="text-white font-bold text-xl">Link Stripe Account</p>
+                            <p className="text-green-100 text-sm">Enter your Stripe account ID</p>
+                        </div>
+                        
+                        <div className="p-6">
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="stripeId">Stripe Account ID</label>
+                                <input 
+                                    id="stripeId"
+                                    type="text" 
+                                    placeholder="acct_xxxxxxxxxx" 
+                                    value={stripeAccountId} 
+                                    onChange={(e) => setStripeAccountId(e.target.value)}
+                                    className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:border-green-500 transition-all"
+                                />
+                            </div>
+                            
+                            <p className="text-sm text-gray-600 mb-4">
+                                You can find your Stripe account ID in your Stripe Dashboard under Account Settings.
+                            </p>
+                        </div>
+                        
+                        <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
+                            <button 
+                                onClick={() => {
+                                    setIsStripeAccountIdOpen(false);
+                                    setStripeAccountId("");
+                                }} 
+                                className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            
+                            <button 
+                                onClick={handleAddStripeAccountId} 
+                                className="cursor-pointer py-2 px-6 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
+                                disabled={!stripeAccountId.trim()}
+                            >
+                                Link Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {stripeStatus.message && (
+                <div className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
+                    stripeStatus.isError ? 'bg-red-100 border-l-4 border-red-500' : 'bg-green-100 border-l-4 border-green-500'
+                }`}>
+                    <p className={`text-sm ${stripeStatus.isError ? 'text-red-700' : 'text-green-700'}`}>
+                        {stripeStatus.message}
+                    </p>
+                    <button 
+                        onClick={() => setStripeStatus({ message: "", isError: false })}
+                        className="absolute top-1 right-1 text-gray-400 hover:text-gray-600"
+                    >
+                        &times;
+                    </button>
                 </div>
             )}
         </div>
