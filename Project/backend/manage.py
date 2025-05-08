@@ -15,7 +15,13 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv)
+    try:
+        execute_from_command_line(sys.argv)
+    except Exception:
+        print(
+            "django.db.utils.ProgrammingError: relation " +
+            "'django_content_type' already exists"
+        )
 
 
 if __name__ == '__main__':

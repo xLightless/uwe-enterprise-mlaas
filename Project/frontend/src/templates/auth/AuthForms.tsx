@@ -19,7 +19,7 @@ function AuthForms({ toggleAuthForms }: { toggleAuthForms: () => void }) {
           <button onClick={() => setIsRegister(!isRegister)} className="text-md text-blue-500 cursor-pointer">{isRegister ? 'Log in.' : 'Sign Up.'}</button>
         </div>
 
-        {isRegister ? <Register /> : <Login />}
+        {isRegister ? <Register toggleAuthForms={toggleAuthForms} /> : <Login toggleAuthForms={toggleAuthForms} />}
       </div>
     </div>
   )

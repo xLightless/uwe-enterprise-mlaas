@@ -14,21 +14,24 @@ create_and_init_db() {
 EOSQL
 
     # Initialize schema based on database name
+        # "insurance_db")
+        #     psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/insurance.sql
+        #     ;;
+        # "ml_db")
+        #     psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/ml.sql
+        #     ;;
+        # "payments_db")
+        #     psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/payments.sql
+        #     ;;
+        # "traffic_db")
+        #     psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/traffic.sql
+        #     ;;
+        # "users_db")
+        #     psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/users.sql
+        #     ;;
     case $database in
-        "insurance_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/insurance.sql
-            ;;
-        "ml_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/ml.sql
-            ;;
-        "payments_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/payments.sql
-            ;;
-        "traffic_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/traffic.sql
-            ;;
-        "users_db")
-            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/users.sql
+        "desd")
+            psql -U "$POSTGRES_USER" -d "$database" -f /docker-entrypoint-initdb.d/desd.sql
             ;;
     esac
 }
@@ -40,10 +43,11 @@ until pg_isready; do
 done
 
 # Create and initialize each database
-create_and_init_db "insurance_db"
-create_and_init_db "ml_db"
-create_and_init_db "payments_db"
-create_and_init_db "traffic_db"
-create_and_init_db "users_db"
+# create_and_init_db "insurance_db"
+# create_and_init_db "ml_db"
+# create_and_init_db "payments_db"
+# create_and_init_db "traffic_db"
+# create_and_init_db "users_db"
+create_and_init_db "desd"
 
 echo "Database initialization complete."
