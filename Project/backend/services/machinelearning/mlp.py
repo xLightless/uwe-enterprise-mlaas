@@ -1,3 +1,5 @@
+# flake8: noqa
+
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers, Model
@@ -28,9 +30,9 @@ tf.random.set_seed(42)
 def extract_original_feature_name(feature_name):
     """
     Extract the original feature name from a transformed feature.
-    
+
     This is super important because feature engineering and one-hot encoding
-    create feature names like 'categorical__Weather_Rainy', but we want to 
+    create feature names like 'categorical__Weather_Rainy', but we want to
     aggregate importance back to the original 'Weather' feature.
     """
     # Handle categorical columns with pattern 'categorical__Feature_Value'
@@ -39,32 +41,32 @@ def extract_original_feature_name(feature_name):
         match = re.search(r'categorical__([^_]+(?:\s[^_]+)*)_', feature_name)
         if match:
             return match.group(1)
-    
+
     # Handle other transformation patterns like 'transformer__feature'
     elif '__' in feature_name:
         parts = feature_name.split('__')
         if len(parts) >= 2:
             return parts[1]
-    
+
     # Return as is for features without transformation
     return feature_name
 
 def aggregate_feature_importances(feature_importances, feature_names):
     """
     Aggregate feature importances from encoded features back to original features.
-    
+
     This is crucial for interpretability - instead of having 10 different importances
     for one-hot encoded 'Weather' (sunny, rainy, etc.), we want one combined importance.
     """
     # Create a mapping from original feature name to encoded feature names
     original_features = {}
-    
+
     for feature_name in feature_names:
         original_name = extract_original_feature_name(feature_name)
         if original_name not in original_features:
             original_features[original_name] = []
         original_features[original_name].append(feature_name)
-    
+
     # Aggregate importances by original feature
     # We use absolute values because negative and positive importance
     # both indicate feature relevance
@@ -76,15 +78,15 @@ def aggregate_feature_importances(feature_importances, feature_names):
             if feature in feature_importances:
                 total_importance += abs(feature_importances[feature])
         aggregated_importances[original_name] = total_importance
-    
+
     # Normalize importances to sum to 1 for easier interpretation
     total_importance = sum(aggregated_importances.values())
     if total_importance > 0:
         aggregated_importances = {
-            feature: importance / total_importance 
+            feature: importance / total_importance
             for feature, importance in aggregated_importances.items()
         }
-    
+
     # Sort by importance in descending order to prioritize visualization
     return dict(sorted(aggregated_importances.items(), key=lambda x: x[1], reverse=True))
 
@@ -95,8 +97,8 @@ def aggregate_feature_importances(feature_importances, feature_names):
 def inverse_transform_target(y_pred, inverse_transform=True):
     """
     Inverse transform log-transformed target values.
-    
-    If we're working with log-transformed target (common for skewed data like 
+
+    If we're working with log-transformed target (common for skewed data like
     settlement values), we need to convert back to original scale for interpretation.
     Using np.expm1() instead of np.exp() accounts for the fact that we likely used
     np.log1p() during preprocessing.
@@ -116,7 +118,7 @@ def inverse_transform_target(y_pred, inverse_transform=True):
 class GradientReversal(layers.Layer):
     """
     Gradient Reversal Layer for Adversarial Learning.
-    
+
     This is a clever trick for adversarial training - during backpropagation,
     it reverses gradients, which forces the network to learn features that are
     invariant to sensitive attributes (like gender, age). This helps create
@@ -140,7 +142,7 @@ class GradientReversal(layers.Layer):
 class TabularTransformerBlock(layers.Layer):
     """
     Transformer block adapted for tabular data.
-    
+
     Using transformers for tabular data is relatively new but powerful.
     The self-attention mechanism helps capture complex relationships between
     features, which traditional MLPs might miss.
@@ -176,7 +178,7 @@ class TabularTransformerBlock(layers.Layer):
 class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
     """
     A transformer-enhanced MLP model for tabular regression with fairness constraints.
-    
+
     Combines the power of transformers (for complex feature interactions) with MLPs
     (for efficient tabular processing) and adversarial debiasing for fairness.
     Inherits from sklearn's BaseEstimator for compatibility with sklearn pipelines.
@@ -222,11 +224,11 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
         self.model_ = None
         self.history_ = None
         self.feature_importance_ = None
-        
+
     def _build_model(self, n_features, num_sensitive_attributes):
         """
         Build the transformer-enhanced MLP architecture with adversarial branches.
-        
+
         The architecture has three main components:
         1. Transformer blocks for feature interaction learning
         2. MLP for regression prediction
@@ -239,12 +241,12 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
 
         # Input layer
         inputs = layers.Input(shape=(n_features,))
-        
+
         # Initial feature embedding - transformers work with embeddings
         # We need to reshape inputs to (batch, sequence_length, 1) first
         reshaped_inputs = layers.Reshape((n_features, 1))(inputs)
         embeddings = layers.Dense(self.embedding_dim)(reshaped_inputs)
-        
+
         # Add positional embeddings - this helps the transformer know the order of features
         # even though attention is position-invariant
         positions = tf.range(start=0, limit=n_features, delta=1)
@@ -281,18 +283,18 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
         # These try to predict sensitive attributes from the features
         # But the gradient reversal makes the model learn to make this difficult
         adv_outputs = {}
-        
+
         # Only create adversarial branches if there are sensitive attributes
         if num_sensitive_attributes > 0:
             for i in range(num_sensitive_attributes):
                 # Use the reduced adversarial lambda
                 gr_layer = GradientReversal(self.adv_lambda)
                 adversarial_branch = gr_layer(merged_output)
-                
+
                 for units in self.adv_hidden_units:
                     adversarial_branch = layers.Dense(units, activation=self.activation)(adversarial_branch)
                     adversarial_branch = layers.Dropout(self.dropout_rate)(adversarial_branch)
-                
+
                 adv_outputs[f'adversarial_output_{i}'] = layers.Dense(
                     1, activation='sigmoid', name=f'adversarial_output_{i}'
                 )(adversarial_branch)
@@ -300,7 +302,7 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
         # Create and compile model - separate branches for regression and adversarial tasks
         if adv_outputs:
             model = Model(inputs=inputs, outputs=[regression_output] + list(adv_outputs.values()))
-            
+
             # Configure loss weights to prioritize regression over adversarial tasks
             # We care more about accuracy than perfect fairness
             losses = {'regression_output': 'mse'}
@@ -331,13 +333,13 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
     def fit(self, X, y, sensitive_attributes=None):
         """
         Fit the model to training data.
-        
+
         Handles both the regression task and fairness constraints through
         adversarial branches if sensitive attributes are provided.
         """
         # Check input data - sklearn compatibility
         X, y = check_X_y(X, y, y_numeric=True)
-        
+
         # Handle sensitive attributes properly
         if sensitive_attributes is not None:
             check_array(sensitive_attributes)
@@ -383,7 +385,7 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
             restore_best_weights=True
         )
         callbacks.append(early_stopping)
-        
+
         # Add learning rate scheduler to adaptively reduce learning rate
         # when training plateaus - helps find better minima
         reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
@@ -422,7 +424,7 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
     def _calculate_feature_importance(self, X):
         """
         Calculate feature importance using permutation importance.
-        
+
         This is a model-agnostic approach that measures how much performance
         drops when a feature is shuffled (which breaks its relationship with the target).
         """
@@ -453,22 +455,22 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
     def predict(self, X, transform=None):
         """
         Make predictions with option to transform back to original scale.
-        
+
         The transform parameter controls whether predictions are returned in
         the transformed space (e.g., log space) or original scale.
         """
         X = check_array(X)
-        
+
         # Get raw predictions from the model
         if isinstance(self.model_.output, list):
             # If multiple outputs (adversarial model), take the first (regression) output
             raw_pred = self.model_.predict(X, verbose=0)[0].flatten()
         else:
             raw_pred = self.model_.predict(X, verbose=0).flatten()
-        
+
         # Determine whether to transform
         apply_transform = self.output_transform if transform is None else transform
-        
+
         # Apply inverse transformation if requested
         if apply_transform:
             return inverse_transform_target(raw_pred, inverse_transform=True)
@@ -492,30 +494,30 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
             f'feature_{i}' for i in range(self.n_features_in_)
         ]
         return dict(zip(feature_names, self.feature_importance_))
-        
+
     def get_aggregated_feature_importance(self, X=None, aggregate=True):
         """
         Get feature importance with option to aggregate transformed features.
-        
+
         Aggregation combines importance of derived features (like one-hot encoded
         categories) back to their original feature, which is more interpretable.
         """
         # If feature importance not already calculated, do so now
         if self.feature_importance_ is None and X is not None:
             self._calculate_feature_importance(X)
-        
+
         # If we still don't have feature importances, return None
         if self.feature_importance_ is None:
             return None
-        
+
         # Get feature names
         feature_names = self.feature_names_ if self.feature_names_ is not None else [
             f'feature_{i}' for i in range(self.n_features_in_)
         ]
-        
+
         # Create dictionary mapping feature names to importances
         importances = dict(zip(feature_names, self.feature_importance_))
-        
+
         # Aggregate if requested
         if aggregate:
             return aggregate_feature_importances(importances, feature_names)
@@ -526,7 +528,7 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
     def score(self, X, y):
         """
         Return R^2 score on given test data and labels.
-        
+
         Uses raw predictions for consistency with sklearn's scoring interface.
         """
         return r2_score(y, self.predict(X, transform=False))  # Use raw predictions for consistency
@@ -538,7 +540,7 @@ class TransformerEnhancedMLP(BaseEstimator, RegressorMixin):
 class SimplePipeline:
     """
     A streamlined pipeline that wraps the model and handles feature names and transformations.
-    
+
     This simplifies common operations like fitting, predicting, and getting feature importance.
     It's not a full sklearn Pipeline but offers similar convenience for this specific model.
     """
@@ -546,7 +548,7 @@ class SimplePipeline:
         self.model = model
         self.feature_names = feature_names
         self.sensitive_features = sensitive_features
-        
+
         if sensitive_features and model.sensitive_features != sensitive_features:
             model.sensitive_features = sensitive_features
 
@@ -558,11 +560,11 @@ class SimplePipeline:
         if hasattr(X, 'columns'):
             self.feature_names = X.columns.tolist()
             self.model.set_feature_names(self.feature_names)
-        
+
         # Extract sensitive attributes if needed
         if sensitive_attributes is None and self.sensitive_features and hasattr(X, 'columns'):
             sensitive_attributes = X[self.sensitive_features].values
-        
+
         # Fit the model
         self.model.fit(X, y, sensitive_attributes)
         return self
@@ -578,7 +580,7 @@ class SimplePipeline:
         Convenience method to always predict in original scale.
         """
         return self.model.predict(X, transform=True)
-        
+
     def score(self, X, y):
         """
         Calculate R² score using raw predictions (not transformed).
@@ -590,7 +592,7 @@ class SimplePipeline:
         Get raw feature importance.
         """
         return self.model.get_feature_importance()
-        
+
     def get_aggregated_feature_importance(self, X=None, aggregate=True):
         """
         Get feature importance with option for aggregation.
@@ -598,12 +600,12 @@ class SimplePipeline:
         # Pass through to model if it has this method
         if hasattr(self.model, 'get_aggregated_feature_importance'):
             return self.model.get_aggregated_feature_importance(X, aggregate)
-        
+
         # Otherwise use standard feature importance and aggregate it ourselves
         importances = self.get_feature_importance()
         if importances is None:
             return None
-        
+
         if aggregate:
             return aggregate_feature_importances(importances, self.feature_names)
         else:
@@ -616,11 +618,11 @@ class SimplePipeline:
 def graph_features(X_test, model):
     """
     Graph the feature importances using LIME.
-    
+
     LIME (Local Interpretable Model-agnostic Explanations) creates interpretable
     explanations of model predictions by approximating them locally with simpler models.
     Great for explaining complex model decisions to stakeholders.
-    
+
     Parameters:
     -----------
     X_test : pandas DataFrame
@@ -662,27 +664,27 @@ def graph_features(X_test, model):
 def plot_training_history(history, output_dir=None):
     """
     Plot training and validation metrics from model history.
-    
+
     Visualizing training history helps diagnose overfitting/underfitting
     and understand convergence behavior.
     """
     if not hasattr(history, 'history'):
         print("No training history available to plot")
         return
-    
+
     metrics = list(history.history.keys())
-    
+
     # Filter out adversarial metrics for cleaner plots
     # We're usually more interested in the main regression performance
-    main_metrics = [m for m in metrics if not m.startswith('val_adversarial_output') 
+    main_metrics = [m for m in metrics if not m.startswith('val_adversarial_output')
                     and not m.startswith('adversarial_output')]
-    
+
     # Create subplots based on available metrics
     num_plots = len([m for m in main_metrics if not m.startswith('val_')])
     fig, axes = plt.subplots(num_plots, 1, figsize=(10, 5*num_plots))
     if num_plots == 1:
         axes = [axes]
-    
+
     plot_idx = 0
     for metric in main_metrics:
         if not metric.startswith('val_'):
@@ -691,17 +693,17 @@ def plot_training_history(history, output_dir=None):
             val_metric = f'val_{metric}'
             if val_metric in history.history:
                 axes[plot_idx].plot(history.history[val_metric], label=f'Validation {val_metric}')
-            
+
             axes[plot_idx].set_title(metric)
             axes[plot_idx].set_ylabel(metric)
             axes[plot_idx].set_xlabel('Epoch')
             axes[plot_idx].legend()
             axes[plot_idx].grid(True)
-            
+
             plot_idx += 1
-    
+
     plt.tight_layout()
-    
+
     if output_dir:
         plt.savefig(f"{output_dir}/training_history.png")
         print(f"Training history plot saved to {output_dir}/training_history.png")
@@ -712,13 +714,13 @@ def plot_training_history(history, output_dir=None):
 def plot_predictions_vs_actual(y_true, y_pred, is_transformed=True, output_dir=None):
     """
     Plot predicted vs actual values with regression line.
-    
+
     This is one of the most important diagnostic plots for regression models.
     Ideally, points should fall along the diagonal (perfect prediction line).
     Deviations from this line help identify where the model struggles.
     """
     plt.figure(figsize=(10, 8))
-    
+
     if is_transformed:
         title_suffix = " (Transformed Space)"
         xlabel = "Actual (log)"
@@ -727,32 +729,32 @@ def plot_predictions_vs_actual(y_true, y_pred, is_transformed=True, output_dir=N
         title_suffix = " (Original Space)"
         xlabel = "Actual"
         ylabel = "Predicted"
-    
+
     # Scatter plot
     plt.scatter(y_true, y_pred, alpha=0.5, label='Predictions')
-    
+
     # Add perfect prediction line
     max_val = max(max(y_true), max(y_pred))
     min_val = min(min(y_true), min(y_pred))
     plt.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
-    
+
     # Add regression line - shows systematic over/under prediction
     coeffs = np.polyfit(y_true, y_pred, 1)
     regression_line = np.poly1d(coeffs)
     plt.plot(y_true, regression_line(y_true), 'r-', label='Regression Line')
-    
+
     plt.title(f"Predicted vs Actual Values{title_suffix}")
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.legend()
     plt.grid(True)
-    
+
     # Add R² and RMSE to plot - key metrics to assess model performance
     r2 = r2_score(y_true, y_pred)
     rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    plt.text(0.05, 0.9, f"R² = {r2:.3f}\nRMSE = {rmse:.3f}", 
+    plt.text(0.05, 0.9, f"R² = {r2:.3f}\nRMSE = {rmse:.3f}",
              transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.8))
-    
+
     if output_dir:
         filename = "predictions_vs_actual_transformed.png" if is_transformed else "predictions_vs_actual_original.png"
         plt.savefig(f"{output_dir}/{filename}")
@@ -764,22 +766,22 @@ def plot_predictions_vs_actual(y_true, y_pred, is_transformed=True, output_dir=N
 def plot_residuals(y_true, y_pred, is_transformed=True, output_dir=None):
     """
     Plot residuals for model evaluation.
-    
+
     Residual plots are critical for checking model assumptions and finding patterns
     in errors. Ideally, residuals should be randomly distributed around zero
     with no discernible patterns - this indicates a well-specified model.
     """
     residuals = y_true - y_pred
-    
+
     plt.figure(figsize=(12, 6))
-    
+
     if is_transformed:
         title_suffix = " (Transformed Space)"
         xlabel = "Predicted Values (log)"
     else:
         title_suffix = " (Original Space)"
         xlabel = "Predicted Values"
-    
+
     # Residuals vs predicted - shows if variance is constant and if there's
     # non-linearity we missed in the model
     plt.subplot(1, 2, 1)
@@ -789,7 +791,7 @@ def plot_residuals(y_true, y_pred, is_transformed=True, output_dir=None):
     plt.xlabel(xlabel)
     plt.ylabel("Residuals")
     plt.grid(True)
-    
+
     # Residual histogram - shows if errors are normally distributed
     # This is important for statistical inference and confidence intervals
     plt.subplot(1, 2, 2)
@@ -798,9 +800,9 @@ def plot_residuals(y_true, y_pred, is_transformed=True, output_dir=None):
     plt.xlabel("Residuals")
     plt.ylabel("Frequency")
     plt.grid(True)
-    
+
     plt.tight_layout()
-    
+
     if output_dir:
         filename = "residuals_transformed.png" if is_transformed else "residuals_original.png"
         plt.savefig(f"{output_dir}/{filename}")
@@ -812,7 +814,7 @@ def plot_residuals(y_true, y_pred, is_transformed=True, output_dir=None):
 def plot_optuna_optimization(study, output_dir=None):
     """
     Visualize Optuna optimization results.
-    
+
     These visualizations help understand the hyperparameter search process,
     identify which parameters matter most, and see the trade-offs in the
     parameter space. Essential for interpreting and improving hyperparameter tuning.
@@ -820,23 +822,23 @@ def plot_optuna_optimization(study, output_dir=None):
     if not study:
         print("No study results available to plot")
         return
-    
+
     try:
         # Plot optimization history - shows if we've converged and helps
         # decide if more trials would be beneficial
         fig1 = optuna.visualization.plot_optimization_history(study)
         fig1.update_layout(title="Optimization History")
-        
+
         # Plot parameter importance - tells us which parameters actually matter
         # This is gold for model simplification - we can fix unimportant parameters
         fig2 = optuna.visualization.plot_param_importances(study)
         fig2.update_layout(title="Parameter Importances")
-        
+
         # Plot slice plot - shows how each parameter affects performance
         # Great for understanding sensitivities around the optimum
         fig3 = optuna.visualization.plot_slice(study)
         fig3.update_layout(title="Slice Plot")
-        
+
         # Save or show plots
         if output_dir:
             fig1.write_image(f"{output_dir}/optuna_optimization_history.png")
@@ -853,7 +855,7 @@ def plot_optuna_optimization(study, output_dir=None):
 def plot_feature_importance(pipeline, X=None, top_n=20, aggregate=True, output_dir=None):
     """
     Plot feature importance with option for aggregation.
-    
+
     Feature importance is key to understanding what drives model predictions,
     and aggregating them makes it much more interpretable for stakeholders
     by showing high-level features rather than encoded versions.
@@ -862,39 +864,39 @@ def plot_feature_importance(pipeline, X=None, top_n=20, aggregate=True, output_d
     if original_importance is None:
         print("Feature importance not available.")
         return None, None
-    
+
     if aggregate:
         # Get aggregated feature importance - this combines one-hot encoded
         # and transformed features back to originals for better interpretability
         aggregated_importance = pipeline.get_aggregated_feature_importance(X, aggregate=True)
-        
+
         # Create a side-by-side comparison plot
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
-        
+
         # Plot original importance
         orig_sorted = dict(sorted(original_importance.items(), key=lambda x: abs(x[1]), reverse=True))
         orig_top = {k: v for i, (k, v) in enumerate(orig_sorted.items()) if i < top_n}
-        
+
         ax1.barh(list(orig_top.keys()), list(orig_top.values()))
         ax1.set_title('Original Feature Importance (One-Hot Encoded)')
         ax1.set_xlabel('Importance')
         ax1.set_ylabel('Feature')
-        
+
         # Plot aggregated importance
         agg_top = {k: v for i, (k, v) in enumerate(aggregated_importance.items()) if i < top_n}
-        
+
         ax2.barh(list(agg_top.keys()), list(agg_top.values()))
         ax2.set_title('Aggregated Feature Importance')
         ax2.set_xlabel('Importance')
         ax2.set_ylabel('Feature')
-        
+
         plt.tight_layout()
-        
+
         # Save if output directory provided
         if output_dir:
             plt.savefig(f"{output_dir}/feature_importance_comparison.png")
             print(f"Feature importance comparison saved to {output_dir}/feature_importance_comparison.png")
-        
+
         # Also create a plot for just the aggregated importances
         # This is usually the one we share with stakeholders
         plt.figure(figsize=(12, 10))
@@ -903,73 +905,73 @@ def plot_feature_importance(pipeline, X=None, top_n=20, aggregate=True, output_d
         plt.xlabel('Importance')
         plt.ylabel('Feature')
         plt.tight_layout()
-        
+
         if output_dir:
             plt.savefig(f"{output_dir}/aggregated_feature_importance.png")
             print(f"Aggregated feature importance saved to {output_dir}/aggregated_feature_importance.png")
-        
+
         return original_importance, aggregated_importance
     else:
         # Just plot original importance
         plt.figure(figsize=(12, 10))
         orig_sorted = dict(sorted(original_importance.items(), key=lambda x: abs(x[1]), reverse=True))
         orig_top = {k: v for i, (k, v) in enumerate(orig_sorted.items()) if i < top_n}
-        
+
         plt.barh(list(orig_top.keys()), list(orig_top.values()))
         plt.title('Feature Importance')
         plt.xlabel('Importance')
         plt.ylabel('Feature')
         plt.tight_layout()
-        
+
         if output_dir:
             plt.savefig(f"{output_dir}/feature_importance.png")
             print(f"Feature importance saved to {output_dir}/feature_importance.png")
-        
+
         return original_importance, None
 
 def plot_all_results(pipeline, X_train, y_train, X_test, y_test, history, study, output_dir):
     """
     Create all visualization plots in one function.
-    
+
     This is a convenience function that generates a complete set of diagnostic
     visualizations for model evaluation. Essential for thorough model assessment
     and documentation of model behavior.
     """
     # Create output directory if it doesn't exist
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-    
+
     # Plot training history
     plot_training_history(history, output_dir)
-    
+
     # Get predictions for both train and test sets
     y_train_pred = pipeline.predict(X_train, transform=False)
     y_test_pred = pipeline.predict(X_test, transform=False)
-    
+
     # Plot predictions vs actual for both transformed and original space
     # This helps us evaluate model performance in both spaces
     plot_predictions_vs_actual(y_train, y_train_pred, is_transformed=True, output_dir=output_dir)
     plot_predictions_vs_actual(
-        inverse_transform_target(y_train), 
-        inverse_transform_target(y_train_pred), 
-        is_transformed=False, 
+        inverse_transform_target(y_train),
+        inverse_transform_target(y_train_pred),
+        is_transformed=False,
         output_dir=output_dir
     )
-    
+
     # Plot residuals - critical for checking model assumptions and error patterns
     plot_residuals(y_train, y_train_pred, is_transformed=True, output_dir=output_dir)
     plot_residuals(
-        inverse_transform_target(y_train), 
-        inverse_transform_target(y_train_pred), 
-        is_transformed=False, 
+        inverse_transform_target(y_train),
+        inverse_transform_target(y_train_pred),
+        is_transformed=False,
         output_dir=output_dir
     )
-    
+
     # Plot feature importance - helps understand what drives predictions
     plot_feature_importance(pipeline, X_train, top_n=20, aggregate=True, output_dir=output_dir)
-    
+
     # Plot LIME feature importance - local explanations of model behavior
     graph_features(X_test, pipeline)
-    
+
     # Plot Optuna optimization results - helps understand hyperparameter search
     plot_optuna_optimization(study, output_dir)
 
@@ -980,7 +982,7 @@ def plot_all_results(pipeline, X_train, y_train, X_test, y_test, history, study,
 def calculate_metrics(y_true, y_pred, is_transformed=True):
     """
     Calculate and return model evaluation metrics.
-    
+
     Computing metrics in both transformed and original spaces is important
     because some metrics like R² behave differently in log space vs original space.
     This helps understand model performance from multiple angles.
@@ -989,7 +991,7 @@ def calculate_metrics(y_true, y_pred, is_transformed=True):
     if is_transformed:
         y_pred_original = inverse_transform_target(y_pred, inverse_transform=True)
         y_true_original = inverse_transform_target(y_true, inverse_transform=True)
-        
+
         metrics = {
             'MSE (original)': mean_squared_error(y_true_original, y_pred_original),
             'RMSE (original)': np.sqrt(mean_squared_error(y_true_original, y_pred_original)),
@@ -1013,13 +1015,13 @@ def calculate_metrics(y_true, y_pred, is_transformed=True):
 def optimize_hyperparameters(X, y, sensitive_attributes, n_trials=10, cv=5, random_state=42):
     """
     Run hyperparameter optimization with Optuna.
-    
+
     Hyperparameter tuning is essential for optimal model performance.
     Optuna's approach is efficient and allows for early stopping,
     parameter dependencies, and visualization of the optimization process.
     """
     print(f"\n--- Starting Hyperparameter Optimization with {n_trials} trials ---")
-    
+
     def objective(trial):
         # Define hyperparameters to optimize with revised ranges
         # Lots of thought went into these ranges based on prior experiments
@@ -1042,25 +1044,25 @@ def optimize_hyperparameters(X, y, sensitive_attributes, n_trials=10, cv=5, rand
             # Reduced range for adv_lambda to prioritize predictive performance over fairness
             'adv_lambda': trial.suggest_float('adv_lambda', 0.01, 0.1, log=True)
         }
-        
+
         # Process string parameters immediately to avoid issues later
         # This converts strings like "64,32" to actual tuples (64, 32)
         if isinstance(params['mlp_hidden_units'], str):
             params['mlp_hidden_units'] = tuple(map(int, params['mlp_hidden_units'].split(',')))
-        
+
         if isinstance(params['adv_hidden_units'], str):
             params['adv_hidden_units'] = tuple(map(int, params['adv_hidden_units'].split(',')))
-        
+
         # Cross-validation to get reliable performance estimates
         kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
         cv_scores = []
-        
+
         for fold_idx, (train_idx, val_idx) in enumerate(kf.split(X)):
             print(f"  CV Fold {fold_idx + 1}/{cv}", end="", flush=True)
             X_train_fold, X_val_fold = X.iloc[train_idx], X.iloc[val_idx]
             y_train_fold, y_val_fold = y.iloc[train_idx], y.iloc[val_idx]
             sensitive_train_fold = sensitive_attributes[train_idx]
-            
+
             # Create model with trial parameters
             try:
                 model = TransformerEnhancedMLP(
@@ -1071,10 +1073,10 @@ def optimize_hyperparameters(X, y, sensitive_attributes, n_trials=10, cv=5, rand
                     sensitive_features=X.columns[X.columns.str.contains('Gender|Age', case=False)].tolist(),
                     output_transform=False  # Don't transform during training/validation
                 )
-                
+
                 # Create pipeline
                 pipeline = SimplePipeline(model=model, feature_names=X_train_fold.columns.tolist())
-                
+
                 # Train and evaluate
                 pipeline.fit(X_train_fold, y_train_fold, sensitive_train_fold)
                 y_val_pred = pipeline.predict(X_val_fold, transform=False)
@@ -1086,19 +1088,19 @@ def optimize_hyperparameters(X, y, sensitive_attributes, n_trials=10, cv=5, rand
                 # Return a very low score to indicate failure
                 # This helps Optuna avoid problematic parameter regions
                 return -999.0
-            
+
         cv_score_mean = np.mean(cv_scores)
         print(f"\nMean CV R² Score: {cv_score_mean:.4f}")
         return cv_score_mean
-    
+
     # Create and run study
     study = optuna.create_study(direction='maximize', study_name='transformer_mlp_optimization')
     study.optimize(objective, n_trials=n_trials)
-    
+
     print("\nOptimization completed!")
     print(f"Best trial: {study.best_trial.number}")
     print(f"Best value (mean CV R² score): {study.best_trial.value:.4f}")
-    
+
     # Process the best parameters
     best_params = study.best_trial.params.copy()
     # Make sure to convert these parameters correctly
@@ -1106,27 +1108,27 @@ def optimize_hyperparameters(X, y, sensitive_attributes, n_trials=10, cv=5, rand
         best_params['mlp_hidden_units'] = tuple(map(int, best_params['mlp_hidden_units'].split(',')))
     if 'adv_hidden_units' in best_params and isinstance(best_params['adv_hidden_units'], str):
         best_params['adv_hidden_units'] = tuple(map(int, best_params['adv_hidden_units'].split(',')))
-    
+
     # Print and visualize results
     print("Best hyperparameters:")
     for param, value in best_params.items():
         print(f"  {param}: {value}")
-    
+
     # Plot optimization results
     plot_optuna_optimization(study, "optuna_optimization_plots")
-    
+
     return best_params, study
 
 def train_and_evaluate(X_train, y_train, X_test, y_test, sensitive_train, sensitive_test, params, output_dir, random_state=42):
     """
     Train and evaluate the final model with the best parameters.
-    
+
     This function trains the model with the optimized hyperparameters
     and performs a comprehensive evaluation, including metrics in both
     transformed and original spaces and various visualizations.
     """
     print("\n--- Training Final Model with Best Parameters ---")
-    
+
     # Create the model with optimized parameters
     model = TransformerEnhancedMLP(
         **params,
@@ -1136,22 +1138,22 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, sensitive_train, sensit
         sensitive_features=X_train.columns[X_train.columns.str.contains('Gender|Age', case=False)].tolist(),
         output_transform=False  # We'll handle transformations explicitly
     )
-    
+
     # Create pipeline
     pipeline = SimplePipeline(
         model=model,
         feature_names=X_train.columns.tolist(),
         sensitive_features=X_train.columns[X_train.columns.str.contains('Gender|Age', case=False)].tolist()
     )
-    
+
     # Train the model - this is the final model, so we want full output
     pipeline.fit(X_train, y_train, sensitive_train)
-    
+
     # Evaluate with both transformed and original metrics
     # This is crucial for interpreting model performance in both spaces
     y_pred_transformed = pipeline.predict(X_test, transform=False)  # Raw predictions in log space
     y_pred_original = pipeline.predict(X_test, transform=True)      # Converted back to original scale
-    
+
     # Calculate metrics in both spaces
     metrics_transformed = calculate_metrics(y_test, y_pred_transformed, is_transformed=False)
     metrics_original = {
@@ -1160,56 +1162,56 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, sensitive_train, sensit
         'MAE (original)': mean_absolute_error(inverse_transform_target(y_test), y_pred_original),
         'R² (original)': r2_score(inverse_transform_target(y_test), y_pred_original)
     }
-    
+
     # Combine metrics
     metrics = {**metrics_transformed, **metrics_original}
-    
+
     print("\nTest Set Metrics:")
     print("Transformed Space (log):")
     for metric_name, value in metrics_transformed.items():
         print(f"  {metric_name}: {value:.4f}")
-    
+
     print("\nOriginal Space (exponentiated):")
     for metric_name, value in metrics_original.items():
         print(f"  {metric_name}: {value:.4f}")
-    
+
     # Create all visualization plots - comprehensive evaluation
     plot_all_results(
         pipeline, X_train, y_train, X_test, y_test,
         pipeline.model.history_, None, output_dir
     )
-    
+
     # Save model and results for future use and documentation
     save_results(pipeline, params, metrics, output_dir)
-    
+
     return pipeline, metrics
 
 def save_results(model, params, metrics, output_dir):
     """
     Save model, parameters and results using pickle.
-    
+
     Persisting models and results is essential for deployment,
     collaboration, and reproducibility. These saved files become
     the artifacts that can be loaded into production systems.
     """
     # Create output directory if it doesn't exist
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-    
+
     # Save model using pickle
     model_path = f"{output_dir}/model.pkl"
     print(f"\nSaving model to {model_path}...")
     with open(model_path, 'wb') as f:
         pickle.dump(model, f)
-    
+
     # Save parameters using pickle (for reference only)
     params_path = f"{output_dir}/params.pkl"
     print(f"Saving parameters to {params_path}...")
     with open(params_path, 'wb') as f:
         pickle.dump(params, f)
-    
+
     # Save metrics to CSV for easy analysis
     pd.DataFrame([metrics]).to_csv(f"{output_dir}/metrics.csv", index=False)
-    
+
     # Create a detailed summary report in markdown
     # This is great for sharing results with stakeholders
     summary = [
@@ -1247,10 +1249,10 @@ def save_results(model, params, metrics, output_dir):
         "",
         f"Model artifacts saved in: {output_dir}"
     ]
-    
+
     with open(f"{output_dir}/summary.md", "w") as f:
         f.write("\n".join(summary))
-    
+
     # Instructions for loading the saved model
     print(f"\nTo load the saved model, use the following code:")
     print("```python")
@@ -1258,23 +1260,23 @@ def save_results(model, params, metrics, output_dir):
     print(f"with open('{model_path}', 'rb') as f:")
     print("    loaded_model = pickle.load(f)")
     print("```")
-    
+
     print("\nTo make predictions in the original scale:")
     print("```python")
     print("original_predictions = loaded_model.predict_original_scale(X_new)")
     print("```")
-    
+
     print("\nTo get aggregated feature importances:")
     print("```python")
     print("importances = loaded_model.get_aggregated_feature_importance(X_new)")
     print("```")
-    
+
     print(f"\nAll results saved to {output_dir}")
 
 def main():
     """
     Main function to run the entire pipeline.
-    
+
     This orchestrates the complete workflow:
     1. Load and prepare data
     2. Optimize hyperparameters
@@ -1287,53 +1289,53 @@ def main():
     TARGET_COLUMN = 'SettlementValue'
     OUTPUT_DIR = 'transformer_outputs_improved'
     # For testing/development, use smaller values
-    N_TRIALS = 2 
-    CV_FOLDS = 2  
+    N_TRIALS = 2
+    CV_FOLDS = 2
     TEST_SIZE = 0.2
     RANDOM_STATE = 42
-    
+
     print("\n=== Improved Transformer-Enhanced MLP Pipeline with Feature Aggregation ===")
     print("This version includes inverse transformation of predictions, reduced adversarial impact, and aggregated feature importance")
-    
+
     # Load data
     print(f"Loading data from {DATA_PATH}...")
     try:
         df = pd.read_csv(DATA_PATH)
         print(f"Data loaded. Shape: {df.shape}")
-        
+
         # Get sensitive features - columns related to protected attributes
         # These are used for fair model training via adversarial debiasing
         sensitive_cols = df.columns[df.columns.str.contains('Gender|Age', case=False)].tolist()
         print(f"Detected sensitive features: {sensitive_cols}")
-        
+
         # Split features and target
         X = df.drop(columns=[TARGET_COLUMN])
         y = df[TARGET_COLUMN]
-        
+
         # Split into train/test sets - essential for unbiased evaluation
         # We use stratified splitting to ensure fair distribution
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE
         )
-        
+
         # Prepare sensitive attributes for fairness constraints
         sensitive_train = X_train[sensitive_cols].values
         sensitive_test = X_test[sensitive_cols].values
-        
+
         # Run hyperparameter optimization - this is computing intensive
         # but pays off in better model performance
         best_params, study = optimize_hyperparameters(
-            X_train, y_train, sensitive_train, 
+            X_train, y_train, sensitive_train,
             n_trials=N_TRIALS, cv=CV_FOLDS, random_state=RANDOM_STATE
         )
-        
+
         # Explicitly reduce adv_lambda if it's too high in the best params
         # This is a business decision - we prioritize prediction accuracy
         # over perfect fairness (which often comes at a performance cost)
         if best_params.get('adv_lambda', 0) > 0.05:
             print("\nReducing adversarial lambda to prioritize predictive performance")
             best_params['adv_lambda'] = 0.05
-        
+
         # Train and evaluate final model with aggregated feature importance
         # This is the model that would go to production
         trained_pipeline, metrics = train_and_evaluate(
@@ -1341,13 +1343,13 @@ def main():
             sensitive_train, sensitive_test,
             best_params, OUTPUT_DIR, RANDOM_STATE
         )
-        
+
         # Save optimization study for future reference and analysis
         study_path = f"{OUTPUT_DIR}/study.pkl"
         print(f"\nSaving optimization study to {study_path}...")
         with open(study_path, 'wb') as f:
             pickle.dump(study, f)
-        
+
         # Demonstrate prediction with inverse transformation
         # This helps users understand how to interpret model outputs
         print("\n=== Demonstration of Inverse Transformation ===")
@@ -1356,14 +1358,14 @@ def main():
         sample_indices = np.random.choice(len(X_test), sample_size, replace=False)
         X_sample = X_test.iloc[sample_indices]
         y_sample = y_test.iloc[sample_indices]
-        
+
         # Make predictions in both spaces
         y_pred_transformed = trained_pipeline.predict(X_sample, transform=False)  # Log space
         y_pred_original = trained_pipeline.predict(X_sample, transform=True)      # Original space
-        
+
         # Convert true values from log space to original for comparison
         y_sample_original = inverse_transform_target(y_sample)
-        
+
         # Create comparison table - this is extremely useful for understanding
         # the effect of transformations on model outputs
         comparison = pd.DataFrame({
@@ -1372,27 +1374,27 @@ def main():
             'True (original)': y_sample_original,
             'Predicted (original)': y_pred_original
         })
-        
+
         print("\nSample predictions comparison:")
         print(comparison)
-        
+
         # Save the comparison to CSV for documentation
         comparison.to_csv(f"{OUTPUT_DIR}/prediction_samples.csv")
-        
+
         # Generate LIME feature importance visualization
         # LIME provides local, instance-level explanations
         # which complement global feature importance
         print("\n=== Generating LIME Feature Importance Visualization ===")
         graph_features(X_test, trained_pipeline)
-        
+
         print("\n=== Pipeline execution completed successfully ===")
         print(f"All outputs saved to {OUTPUT_DIR}")
-        
+
     except Exception as e:
-        
+
         print(f"Error: {e}")
         traceback.print_exc()
 
 if __name__ == "__main__":
-    # Standard Python idiom to run the main function 
+    # Standard Python idiom to run the main function
     main()
