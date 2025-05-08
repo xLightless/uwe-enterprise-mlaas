@@ -4,26 +4,26 @@ from django.contrib.auth.password_validation import validate_password
 from ...models import Users, Role
 from twilio.rest import Client
 from django.conf import settings
-import function.util.debug as DEBUG
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Users
-        fields = ['email', 'password', 'password2', 'full_name', 'phone_number']
+        fields = ['email', 'password', 'password2',
+                'full_name', 'phone_number']
         extra_kwargs = {
             'full_name': {'required': True},
             'phone_number': {'required': True},
-
         }
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-
+            raise serializers.ValidationError({
+                "password": "Password fields didn't match."})
         return attrs
 
     def create(self, validated_data):
@@ -36,21 +36,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             full_name=validated_data['full_name'],
             role=default_role,
-
             phone_number=validated_data['phone_number'],
-
         )
         user.set_password(validated_data['password'])
         user.save()
 
         # Send OTP using Twilio (SMS)
-
-        if not DEBUG.SKIP_TWILIO:
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            client.verify.services(settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
-                to="+44" + validated_data['phone_number'],
-                channel='sms'
-            )
-
+        client = Client(
+            settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        client.verify.services(
+            settings.TWILIO_VERIFY_SERVICE_SID).verifications.create(
+            to="+44" + validated_data['phone_number'],
+            channel='sms'
+        )
         return user
-
