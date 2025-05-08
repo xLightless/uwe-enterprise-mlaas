@@ -225,7 +225,6 @@ const MLAASTraffic: React.FC = () => {
     return (
         <>
             <div className="w-full h-full grid grid-rows-2 gap-4">
-            {JSON.stringify(clickedModel)}
                 <div className="w-full h-full grid grid-cols-[325px_1fr] gap-x-4">
                     {/* Selected Model Information */}
                     <div className="bg-gray-200 rounded shadow-md">
