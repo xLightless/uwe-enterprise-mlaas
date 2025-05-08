@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getUserSessionContext } from './user'
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000/api/auth',
@@ -93,6 +94,25 @@ export const loginUser = async (userData: {
         sessionStorage.setItem('access_token', response.data.access)
         sessionStorage.setItem('refresh_token', response.data.refresh)
 
+
+
+        // Fetch the new session context
+        const userSession = await getUserSessionContext();
+
+        /**
+         * Store the new login session into context. This will be picked up
+         * by the token provider contextualiser to update the session state.
+         */
+        if (userSession && userSession.data) {
+            // Save the new session context to localStorage
+            sessionStorage.setItem("session", JSON.stringify(userSession.data));
+            console.log("[loginUser] Updated Session:", userSession.data);
+        } else {
+            console.error("Invalid user session data:", userSession);
+        }
+
+
+
         return response.data
     } catch (error) {
         console.error('Login failed:', error)
@@ -117,6 +137,14 @@ export const handleLogoutUser = async () => {
 
         sessionStorage.removeItem('access_token')
         sessionStorage.removeItem('refresh_token')
+
+        /**
+         * Removes any previous member permissions from the session storage.
+         * This is important to ensure that the user does not have access to any
+         * previously cached permissions that are no longer valid.
+         */
+        sessionStorage.removeItem('session')
+        sessionStorage.removeItem('clickedItemIndex');
 
         return response.data
     } catch (error) {

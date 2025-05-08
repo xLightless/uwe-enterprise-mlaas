@@ -32,12 +32,12 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
         <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="flex flex-col">
                 <label htmlFor="emailLog" className="self-start ml-4">Email</label>
-                
+
                 <div className="w-full relative">
                     <img src={mail_icon} width="17px" height="17px" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
                     <input type="email" placeholder="john.doe@example.co.uk" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border border-slate-200"/>
                 </div>
-                
+
             </div>
 
             <div className="flex flex-col">
