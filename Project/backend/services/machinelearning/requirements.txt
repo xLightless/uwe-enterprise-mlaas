@@ -55,3 +55,6 @@ scikit-learn
 lime
 google-generativeai
 flask
+optuna
+onnxruntime
+catboost

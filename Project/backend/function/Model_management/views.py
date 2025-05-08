@@ -1,13 +1,17 @@
 # flake8: noqa
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+import requests
 
 from function.monitoring.middleware import api_user_agent
 from function.models import Model, UserModelFeedback
 
+
+from django.utils import timezone
 
 @api_user_agent("AI Engineer has added a new model.")
 @api_view(['POST'])
@@ -17,12 +21,17 @@ def add_model(request):
     Adds a new ML model to the system.
     """
     try:
+        # Get uploaded_at from request or use current time
+        uploaded_at = request.data.get('uploaded_at')
+        if uploaded_at is None:
+            uploaded_at = timezone.now()
+
         # Create model directly from request data
         model = Model.objects.create(
             model_name=request.data.get('model_name'),
             model_description=request.data.get('model_description'),
             model_version=request.data.get('model_version'),
-            uploaded_at=request.data.get('uploaded_at'),
+            uploaded_at=uploaded_at,
             model_file=request.data.get('model_file'),
             label_encoder_file=request.data.get('label_encoder_file', '')
         )
@@ -225,3 +234,74 @@ def view_model_feedback(request, model_id):
         "message": "Model feedback retrieved successfully.",
         "data": feedback_list
     }, status=status.HTTP_200_OK)
+
+
+
+@api_user_agent("AI Engineer has reloaded the ML model.")
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reload_active_model(request):
+    """
+    Triggers a reload of the active ML model in the prediction service.
+    """
+    try:
+        # URL of the Flask ML service reload endpoint
+        reload_url = f"{settings.ML_SERVICE_URL}/reload-model"
+        
+        # Log the URL we're trying to connect to
+        print(f"Attempting to connect to ML service at: {reload_url}")
+        
+        # Send POST request to the Flask service with additional debugging
+        try:
+            response = requests.post(reload_url, timeout=30)
+            print(f"Response received: Status {response.status_code}, Content length: {len(response.content)}")
+            
+            # Check if the request was successful
+            if response.status_code == 200:
+                try:
+                    # Try to parse as JSON first
+                    return Response({
+                        "status": True,
+                        "message": "Model reloaded successfully.",
+                        "data": response.json()
+                    }, status=status.HTTP_200_OK)
+                except ValueError as json_err:
+                    # Handle case where response isn't valid JSON
+                    print(f"Warning: Could not parse response as JSON: {str(json_err)}")
+                    print(f"Response content: {response.content[:200]}...")  # Print first 200 chars
+                    return Response({
+                        "status": True,
+                        "message": "Model reloaded successfully.",
+                        "data": {"raw_response": response.text}
+                    }, status=status.HTTP_200_OK)
+            else:
+                # For error responses, handle potential non-JSON responses
+                print(f"ML service returned error status: {response.status_code}")
+                try:
+                    error_details = response.json()
+                except ValueError:
+                    error_details = {"raw_response": response.text or "No response content"}
+                    
+                return Response({
+                    "status": False,
+                    "message": "Failed to reload model.",
+                    "details": error_details
+                }, status=response.status_code)
+        except requests.RequestException as e:
+            # Connection error - log details
+            print(f"Connection error to ML service: {str(e)}")
+            print(f"Error type: {type(e).__name__}")
+            return Response({
+                "status": False,
+                "message": "Failed to connect to ML service.",
+                "details": str(e)
+            }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    except Exception as e:
+        print(f"Unexpected error in reload_active_model: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return Response({
+            "status": False,
+            "message": "An unexpected error occurred.",
+            "details": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
