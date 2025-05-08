@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import mail_icon from '../../assets/mail_icon.svg'
 import pwd_icon from '../../assets/pwd_icon.svg'
 import { loginUser } from '../../repositories/auth'
+import { useSession } from '../../common/contexts/user/session-context'
 
 function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const session = useSession();
 
     const [error, setError] = useState('')
 
@@ -21,7 +24,17 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
             console.log('Logged in successfully:', data)
 
             toggleAuthForms()
-            navigate("/user-dashboard")
+
+            // console.log(session?.hasPermission("view_user_dashboard"), session?.hasPermission("view_admin_dashboard"))
+
+            if (session?.hasPermission("view_user_dashboard")) {
+                navigate('/user-dashboard')
+            }
+
+            if (session?.hasPermission("view_admin_dashboard")) {
+                navigate('/admin-dashboard')
+            }
+
         } catch (err) {
             setError((err instanceof Error ? err.message : 'Login failed'))
         }

@@ -3,7 +3,7 @@ This module handles imputing methods for the processing of datasets.
 
 Written by Reece Turner, 22036698.
 """
-#file for preprocessor type 1
+# file for preprocessor type 1
 # from datetime import datetime
 import pandas as pd
 from sklearn.impute import SimpleImputer

@@ -99,15 +99,15 @@ const UserDetails: React.FC = () => {
 
     const formatDate = (dateString: string) => {
         if (dateString === "N/A") return dateString;
-        
+
         try {
             const date = new Date(dateString);
-            return date.toLocaleString('en-GB', { 
-                day: 'numeric', 
-                month: 'short', 
-                year: 'numeric', 
-                hour: '2-digit', 
-                minute: '2-digit' 
+            return date.toLocaleString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
         } catch {
             return dateString;
@@ -118,38 +118,38 @@ const UserDetails: React.FC = () => {
         try {
             setStripeStatus({ message: "Connecting to Stripe...", isError: false });
             const response = await createStripeConnectAccount();
-            
+
             if (response && response.url) {
                 window.open(response.url, "_blank");
-                setStripeStatus({ 
-                    message: "Stripe connect window opened. Please complete the process there.", 
-                    isError: false 
+                setStripeStatus({
+                    message: "Stripe connect window opened. Please complete the process there.",
+                    isError: false
                 });
             } else {
-                setStripeStatus({ 
-                    message: "Stripe connection initiated. Check your email for further instructions.", 
-                    isError: false 
+                setStripeStatus({
+                    message: "Stripe connection initiated. Check your email for further instructions.",
+                    isError: false
                 });
             }
         } catch (err) {
             console.error("Failed to connect Stripe account:", err);
-            setStripeStatus({ 
-                message: "Failed to connect Stripe account. Please try again.", 
-                isError: true 
+            setStripeStatus({
+                message: "Failed to connect Stripe account. Please try again.",
+                isError: true
             });
         }
     };
-    
+
     const handleAddStripeAccountId = async () => {
         try {
             if (!stripeAccountId.trim()) {
-                setStripeStatus({ 
-                    message: "Please enter a valid Stripe account ID", 
-                    isError: true 
+                setStripeStatus({
+                    message: "Please enter a valid Stripe account ID",
+                    isError: true
                 });
                 return;
             }
-            
+
             await addStripeAccountId(stripeAccountId);
             setIsStripeAccountIdOpen(false);
             setStripeAccountId("");
@@ -159,9 +159,9 @@ const UserDetails: React.FC = () => {
             });
         } catch (err) {
             console.error("Failed to link Stripe account:", err);
-            setStripeStatus({ 
-                message: "Failed to link Stripe account. Please check the ID and try again.", 
-                isError: true 
+            setStripeStatus({
+                message: "Failed to link Stripe account. Please check the ID and try again.",
+                isError: true
             });
         }
     };
@@ -182,13 +182,13 @@ const UserDetails: React.FC = () => {
                                     <FontAwesomeIcon icon={faUser} className="text-white text-5xl" />
                                 </div>
                             </div>
-                            
+
                             <div className="w-full md:w-2/3">
                                 <div className="mb-4 pb-4 border-b border-gray-200">
                                     <p className="text-sm text-gray-500">USER ID</p>
                                     <p className="text-lg font-semibold">{userDetails.user_id}</p>
                                 </div>
-                                
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex items-center gap-2">
                                         <FontAwesomeIcon icon={faCalendarAlt} className="text-blue-500" />
@@ -290,18 +290,18 @@ const UserDetails: React.FC = () => {
                 <div className="p-6 space-y-6">
                     <div className="flex flex-col gap-4">
                         <p className="text-gray-700">Connect your Stripe account to receive claim settlement payments directly to your bank account.</p>
-                        
+
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button 
-                                onClick={handleStripeSignup} 
+                            <button
+                                onClick={handleStripeSignup}
                                 className="cursor-pointer py-3 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                             >
                                 <FontAwesomeIcon icon={faCreditCard} />
                                 <span>Connect Stripe Account</span>
                             </button>
-                            
-                            <button 
-                                onClick={() => setIsStripeAccountIdOpen(true)} 
+
+                            <button
+                                onClick={() => setIsStripeAccountIdOpen(true)}
                                 className="cursor-pointer py-3 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
                             >
                                 <FontAwesomeIcon icon={faLink} />
@@ -319,20 +319,20 @@ const UserDetails: React.FC = () => {
                             <p className="text-white font-bold text-xl">Update {currentField.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</p>
                             <p className="text-blue-100 text-sm">Enter your new information below</p>
                         </div>
-                        
+
                         <div className="p-6">
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fieldValue">New {currentField.replace("_", " ").replace(/\b\w/g, l => l.toUpperCase())}</label>
-                                <input 
+                                <input
                                     id="fieldValue"
-                                    type="text" 
-                                    value={currentValue} 
-                                    onChange={(e) => setCurrentValue(e.target.value)} 
+                                    type="text"
+                                    value={currentValue}
+                                    onChange={(e) => setCurrentValue(e.target.value)}
                                     className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg transition-all"
                                 />
                             </div>
                         </div>
-                        
+
                         <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
                             <button onClick={closeEdit} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
                             <button onClick={handleSave} className="cursor-pointer py-2 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors">Update</button>
@@ -348,15 +348,15 @@ const UserDetails: React.FC = () => {
                             <p className="text-white font-bold text-xl">Change Password</p>
                             <p className="text-blue-100 text-sm">Update your account password</p>
                         </div>
-                        
+
                         <div className="p-6">
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="currentPassword">Current Password</label>
-                                <input 
+                                <input
                                     id="currentPassword"
-                                    type="password" 
-                                    placeholder="Enter your current password" 
-                                    value={passwordData.current_password} 
+                                    type="password"
+                                    placeholder="Enter your current password"
+                                    value={passwordData.current_password}
                                     onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
                                     className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:border-blue-500 transition-all"
                                 />
@@ -364,11 +364,11 @@ const UserDetails: React.FC = () => {
 
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="newPassword">New Password</label>
-                                <input 
+                                <input
                                     id="newPassword"
-                                    type="password" 
-                                    placeholder="Enter your new password" 
-                                    value={passwordData.new_password} 
+                                    type="password"
+                                    placeholder="Enter your new password"
+                                    value={passwordData.new_password}
                                     onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
                                     className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:border-blue-500 transition-all"
                                 />
@@ -384,13 +384,13 @@ const UserDetails: React.FC = () => {
                                 </ul>
                             </div>
                         </div>
-                        
+
                         <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
                             <button onClick={closePasswordChange} className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors">Cancel</button>
-                            
-                            <button 
-                                onClick={handlePasswordChange} 
-                                className="cursor-pointer py-2 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors" 
+
+                            <button
+                                onClick={handlePasswordChange}
+                                className="cursor-pointer py-2 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
                                 disabled={!passwordData.current_password || !passwordData.new_password}>
                                 Change Password
                             </button>
@@ -406,38 +406,38 @@ const UserDetails: React.FC = () => {
                             <p className="text-white font-bold text-xl">Link Stripe Account</p>
                             <p className="text-green-100 text-sm">Enter your Stripe account ID</p>
                         </div>
-                        
+
                         <div className="p-6">
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="stripeId">Stripe Account ID</label>
-                                <input 
+                                <input
                                     id="stripeId"
-                                    type="text" 
-                                    placeholder="acct_xxxxxxxxxx" 
-                                    value={stripeAccountId} 
+                                    type="text"
+                                    placeholder="acct_xxxxxxxxxx"
+                                    value={stripeAccountId}
                                     onChange={(e) => setStripeAccountId(e.target.value)}
                                     className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:border-green-500 transition-all"
                                 />
                             </div>
-                            
+
                             <p className="text-sm text-gray-600 mb-4">
                                 You can find your Stripe account ID in your Stripe Dashboard under Account Settings.
                             </p>
                         </div>
-                        
+
                         <div className="px-6 py-4 bg-gray-50 border-t flex justify-between gap-3">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setIsStripeAccountIdOpen(false);
                                     setStripeAccountId("");
-                                }} 
+                                }}
                                 className="cursor-pointer py-2 px-6 rounded-lg bg-gray-600 text-white font-medium hover:bg-gray-700 transition-colors"
                             >
                                 Cancel
                             </button>
-                            
-                            <button 
-                                onClick={handleAddStripeAccountId} 
+
+                            <button
+                                onClick={handleAddStripeAccountId}
                                 className="cursor-pointer py-2 px-6 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors"
                                 disabled={!stripeAccountId.trim()}
                             >
@@ -447,7 +447,7 @@ const UserDetails: React.FC = () => {
                     </div>
                 </div>
             )}
-            
+
             {stripeStatus.message && (
                 <div className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
                     stripeStatus.isError ? 'bg-red-100 border-l-4 border-red-500' : 'bg-green-100 border-l-4 border-green-500'
@@ -455,7 +455,7 @@ const UserDetails: React.FC = () => {
                     <p className={`text-sm ${stripeStatus.isError ? 'text-red-700' : 'text-green-700'}`}>
                         {stripeStatus.message}
                     </p>
-                    <button 
+                    <button
                         onClick={() => setStripeStatus({ message: "", isError: false })}
                         className="absolute top-1 right-1 text-gray-400 hover:text-gray-600"
                     >

@@ -413,7 +413,7 @@ const RolePermissions: React.FC = () => {
     return (
         <>
             {toggleEditUser &&
-                <Overlay onClose={() => setToggleEditUser(false)}>
+                <Overlay onClose={() => setToggleEditUser(false)} className="max-w-lg">
                     <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
                         <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
                             <h1 className="font-bold">User ID Information</h1>
@@ -465,7 +465,7 @@ const RolePermissions: React.FC = () => {
             }
 
             {toggleNewRoleCreation &&
-                <Overlay onClose={() => setToggleNewRoleCreation(false)}>
+                <Overlay onClose={() => setToggleNewRoleCreation(false)} className="max-w-lg">
                     <div className="mx-auto max-w-7xl bg-white rounded-md shadow p-4 h-fit space-y-4">
                         <div className="flex flex-row justify-between items-center">
                             <h1 className="font-bold typography text-left">Create a new role</h1>

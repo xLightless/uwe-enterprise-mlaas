@@ -4,6 +4,7 @@ import home_cover from '../../assets/home_cover.jpg'
 import Nav from "../../components/navigation/Nav"
 
 function Home() {
+
     return (
         <div className="container-primary">
             <Nav />

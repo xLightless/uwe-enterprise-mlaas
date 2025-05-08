@@ -29,7 +29,9 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ metricType, metricValue
 };
 
 const Models: React.FC<ModelsProps> = ({ models, setClickedModel, clickedModel }) => {
+    // console.log("Models:", models);
     const [mlModels, ] = useState<ModelProps[]>(models.map((model: ModelProps) => {
+        console.log("Model:", model);
         return {
             modelName: model.model_name,
             modelDescription: model.model_description,
@@ -178,6 +180,7 @@ const MLAASTraffic: React.FC = () => {
 
     async function fetchModels() {
         const models = await getModels();
+        console.log("Models:", models);
         setMLModels(models.data as ModelProps[]);
         console.log("ML Models:", models.data);
     }
@@ -222,6 +225,7 @@ const MLAASTraffic: React.FC = () => {
     return (
         <>
             <div className="w-full h-full grid grid-rows-2 gap-4">
+            {JSON.stringify(clickedModel)}
                 <div className="w-full h-full grid grid-cols-[325px_1fr] gap-x-4">
                     {/* Selected Model Information */}
                     <div className="bg-gray-200 rounded shadow-md">

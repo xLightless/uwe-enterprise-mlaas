@@ -92,6 +92,7 @@ def view_models(request):
             'model_name': model.model_name,
             'model_description': model.model_description,
             'model_version': str(model.model_version),
+            'model_file': model.model_file,
             'uploaded_at': model.uploaded_at,
             'is_active': model.is_active,
             'num_accepted_claims': model.num_accepted_claims,
@@ -247,15 +248,15 @@ def reload_active_model(request):
     try:
         # URL of the Flask ML service reload endpoint
         reload_url = f"{settings.ML_SERVICE_URL}/reload-model"
-        
+
         # Log the URL we're trying to connect to
         print(f"Attempting to connect to ML service at: {reload_url}")
-        
+
         # Send POST request to the Flask service with additional debugging
         try:
             response = requests.post(reload_url, timeout=30)
             print(f"Response received: Status {response.status_code}, Content length: {len(response.content)}")
-            
+
             # Check if the request was successful
             if response.status_code == 200:
                 try:
@@ -281,7 +282,7 @@ def reload_active_model(request):
                     error_details = response.json()
                 except ValueError:
                     error_details = {"raw_response": response.text or "No response content"}
-                    
+
                 return Response({
                     "status": False,
                     "message": "Failed to reload model.",

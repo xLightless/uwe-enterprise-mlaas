@@ -14,7 +14,9 @@ function App() {
     <SessionProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={
+              <Home />
+          } />
           <Route path="/user-dashboard" element={
             <TokenProvider>
               <UserDashboard />
