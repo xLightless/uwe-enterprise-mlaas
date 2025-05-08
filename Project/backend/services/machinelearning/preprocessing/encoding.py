@@ -12,7 +12,10 @@ from sklearn.preprocessing import (
 
 import pandas as pd
 import numpy as np
-#file for preprocessor type 1
+
+# file for preprocessor type 1
+
+
 class Encoder:
     """
     Encoder class for handling categorical data in dataframes.

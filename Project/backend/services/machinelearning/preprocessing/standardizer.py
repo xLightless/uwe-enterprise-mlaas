@@ -3,7 +3,7 @@ Standardizer class for scaling features to a standard normal distribution.
 
 Written by Reece Turner, 22036698.
 """
-#file for preprocessor type 1
+# file for preprocessor type 1
 from datetime import datetime
 import pandas as pd
 

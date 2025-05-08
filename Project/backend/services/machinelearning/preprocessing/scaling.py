@@ -4,7 +4,7 @@ normalised format that models can interpret.
 
 Written by Reece Turner, 22036698.
 """
-#file for preprocessor type 1
+# file for preprocessor type 1
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
