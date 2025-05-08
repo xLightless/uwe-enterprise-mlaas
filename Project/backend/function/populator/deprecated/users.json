@@ -1,0 +1,316 @@
+{
+  "Users": [
+    {
+      "phone_number": "07696907001",
+      "role_id": 1,
+      "full_name": "Alice Johnson",
+      "email": "email1@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-26T09:10:00",
+      "last_login": "2025-04-26T11:20:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907002",
+      "role_id": 2,
+      "full_name": "Bob Williams",
+      "email": "email2@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-25T08:15:00",
+      "last_login": "2025-04-26T10:45:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907003",
+      "role_id": 3,
+      "full_name": "Carla Davis",
+      "email": "email3@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-24T07:30:00",
+      "last_login": "2025-04-26T12:15:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907004",
+      "role_id": 4,
+      "full_name": "David Clark",
+      "email": "email4@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-20T06:00:00",
+      "last_login": "2025-04-26T13:05:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907005",
+      "role_id": 1,
+      "full_name": "Emma Lewis",
+      "email": "email5@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-23T13:20:00",
+      "last_login": "2025-04-26T14:25:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907006",
+      "role_id": 2,
+      "full_name": "Frank Moore",
+      "email": "email6@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-22T14:00:00",
+      "last_login": "2025-04-26T15:45:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907007",
+      "role_id": 3,
+      "full_name": "Grace Taylor",
+      "email": "email7@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-21T11:25:00",
+      "last_login": "2025-04-26T16:30:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907008",
+      "role_id": 4,
+      "full_name": "Henry Robinson",
+      "email": "email8@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-19T10:10:00",
+      "last_login": "2025-04-26T17:00:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907009",
+      "role_id": 1,
+      "full_name": "Isla Evans",
+      "email": "email9@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-18T09:40:00",
+      "last_login": "2025-04-26T17:35:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907010",
+      "role_id": 2,
+      "full_name": "Jack Anderson",
+      "email": "email10@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-17T08:50:00",
+      "last_login": "2025-04-26T18:10:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907011",
+      "role_id": 3,
+      "full_name": "Kathy Martinez",
+      "email": "email11@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-16T07:45:00",
+      "last_login": "2025-04-26T18:55:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907012",
+      "role_id": 4,
+      "full_name": "Liam Hernandez",
+      "email": "email12@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-15T06:55:00",
+      "last_login": "2025-04-26T19:20:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907013",
+      "role_id": 1,
+      "full_name": "Megan King",
+      "email": "email13@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-14T06:10:00",
+      "last_login": "2025-04-26T20:00:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907014",
+      "role_id": 2,
+      "full_name": "Nathan Allen",
+      "email": "email14@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-13T05:30:00",
+      "last_login": "2025-04-26T20:40:00",
+      "is_active": true,
+      "is_verified": true
+    },
+    {
+      "phone_number": "07696907015",
+      "role_id": 3,
+      "full_name": "Olivia Scott",
+      "email": "email15@example.com",
+      "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+      "created_at": "2025-04-12T04:25:00",
+      "last_login": "2025-04-26T21:15:00",
+      "is_active": true,
+      "is_verified": true
+    }
+  ],
+
+  "Permissions": [
+    {
+      "permission_name": "upload_text_records"
+    },
+    {
+      "permission_name": "receive_trained_predictions"
+    },
+    {
+      "permission_name": "submit_feedback_prompt"
+    },
+    {
+      "permission_name": "view_logs"
+    },
+    {
+      "permission_name": "upload_new_ml_models"
+    },
+    {
+      "permission_name": "crud_models"
+    },
+    {
+      "permission_name": "access_end_user_interactions"
+    },
+    {
+      "permission_name": "export_anonymized_data"
+    },
+    {
+      "permission_name": "view_system_log_metrics"
+    },
+    {
+      "permission_name": "manage_user_accounts"
+    },
+    {
+      "permission_name": "manage_roles_permissions"
+    },
+    {
+      "permission_name": "view_network_activity"
+    },
+    {
+      "permission_name": "view_audit_logs"
+    },
+    {
+      "permission_name": "manage_audit_log_compliance"
+    },
+    {
+      "permission_name": "view_invoices"
+    },
+    {
+      "permission_name": "view_billing"
+    },
+    {
+      "permission_name": "generate_billing_documents"
+    },
+    {
+      "permission_name": "generate_invoices"
+    }
+  ],
+
+  "Roles": [
+    {
+      "role_name": "End User"
+    },
+    {
+      "role_name": "AI Engineer"
+    },
+    {
+      "role_name": "Administrator"
+    },
+    {
+      "role_name": "Finance Team Member"
+    }
+  ],
+
+  "RolePermissions": [
+    {
+      "role_id": 1,
+      "permission_id": 1
+    },
+    {
+      "role_id": 1,
+      "permission_id": 2
+    },
+    {
+      "role_id": 1,
+      "permission_id": 3
+    },
+    {
+      "role_id": 1,
+      "permission_id": 4
+    },
+    {
+      "role_id": 2,
+      "permission_id": 5
+    },
+    {
+      "role_id": 2,
+      "permission_id": 6
+    },
+    {
+      "role_id": 2,
+      "permission_id": 7
+    },
+    {
+      "role_id": 2,
+      "permission_id": 8
+    },
+    {
+      "role_id": 2,
+      "permission_id": 9
+    },
+    {
+      "role_id": 3,
+      "permission_id": 10
+    },
+    {
+      "role_id": 3,
+      "permission_id": 11
+    },
+    {
+      "role_id": 3,
+      "permission_id": 12
+    },
+    {
+      "role_id": 3,
+      "permission_id": 13
+    },
+    {
+      "role_id": 3,
+      "permission_id": 14
+    },
+    {
+      "role_id": 4,
+      "permission_id": 15
+    },
+    {
+      "role_id": 4,
+      "permission_id": 16
+    },
+    {
+      "role_id": 4,
+      "permission_id": 17
+    },
+    {
+      "role_id": 4,
+      "permission_id": 18
+    }
+  ]
+}

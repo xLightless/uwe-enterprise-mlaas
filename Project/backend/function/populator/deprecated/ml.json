@@ -1,0 +1,54 @@
+{
+        "Models": [
+        {
+            "model_name": "ClaimPredictor",
+            "model_description": "A machine learning model to predict claim acceptance likelihood.",
+            "model_version": 1.0,
+            "uploaded_at": "2025-04-20T10:00:00",
+            "is_active": true,
+            "num_accepted_claims": 1200,
+            "num_rejected_claims": 300,
+            "model_file": "claim_predictor_v1.pkl"
+        },
+        {
+            "model_name": "SettlementEstimator",
+            "model_description": "A regression model to estimate settlement values for claims.",
+            "model_version": 2.1,
+            "uploaded_at": "2025-04-21T14:30:00",
+            "is_active": false,
+            "num_accepted_claims": 950,
+            "num_rejected_claims": 250,
+            "model_file": "settlement_estimator_v2.pkl"
+        },
+        {
+            "model_name": "FraudDetector",
+            "model_description": "A classification model to detect fraudulent claims.",
+            "model_version": 1.5,
+            "uploaded_at": "2025-04-22T08:45:00",
+            "is_active": true,
+            "num_accepted_claims": 800,
+            "num_rejected_claims": 400,
+            "model_file": "fraud_detector_v1_5.pkl"
+        },
+        {
+            "model_name": "WeatherImpactAnalyzer",
+            "model_description": "A model to analyze the impact of weather conditions on accidents.",
+            "model_version": 1.2,
+            "uploaded_at": "2025-04-23T12:00:00",
+            "is_active": false,
+            "num_accepted_claims": 600,
+            "num_rejected_claims": 200,
+            "model_file": "weather_impact_analyzer_v1_2.pkl"
+        },
+        {
+            "model_name": "DriverRiskProfiler",
+            "model_description": "A model to profile driver risk based on historical data.",
+            "model_version": 3.0,
+            "uploaded_at": "2025-04-24T16:15:00",
+            "is_active": true,
+            "num_accepted_claims": 1500,
+            "num_rejected_claims": 500,
+            "model_file": "driver_risk_profiler_v3.pkl"
+        }
+    ]
+}

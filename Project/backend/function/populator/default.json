@@ -1,0 +1,2807 @@
+
+{
+    "Claims": [
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T22:24:30",
+            "SpecialHealthExpenses": 1250.00,
+            "SpecialReduction": 180.50,
+            "SpecialOverage": 85.25,
+            "GeneralRest": 750.00,
+            "SpecialAdditionalInjury": 350.75,
+            "SpecialEarningsLoss": 2100.00,
+            "SpecialUsageLoss": 320.00,
+            "SpecialMedication": 175.50,
+            "SpecialAssetDamage": 450.00,
+            "SpecialRehabilitation": 825.00,
+            "SpecialFixes": 220.75,
+            "GeneralFixed": 1500.00,
+            "GeneralUplift": 300.00,
+            "SpecialLoanerVehicle": 450.00,
+            "SpecialTripCosts": 125.50,
+            "SpecialJourneyExpenses": 80.25,
+            "SpecialTherapy": 675.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Neck strain",
+            "Whiplash": true
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T07:01:06",
+            "SpecialHealthExpenses": 450.00,
+            "SpecialReduction": 90.25,
+            "SpecialOverage": 0.00,
+            "GeneralRest": 200.00,
+            "SpecialAdditionalInjury": 0.00,
+            "SpecialEarningsLoss": 850.00,
+            "SpecialUsageLoss": 120.00,
+            "SpecialMedication": 75.50,
+            "SpecialAssetDamage": 310.00,
+            "SpecialRehabilitation": 0.00,
+            "SpecialFixes": 180.25,
+            "GeneralFixed": 750.00,
+            "GeneralUplift": 0.00,
+            "SpecialLoanerVehicle": 250.00,
+            "SpecialTripCosts": 60.75,
+            "SpecialJourneyExpenses": 40.25,
+            "SpecialTherapy": 0.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Abrasions",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "7 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-22T19:47:48",
+            "SpecialHealthExpenses": 1750.00,
+            "SpecialReduction": 250.50,
+            "SpecialOverage": 120.75,
+            "GeneralRest": 1100.00,
+            "SpecialAdditionalInjury": 450.25,
+            "SpecialEarningsLoss": 3200.00,
+            "SpecialUsageLoss": 480.00,
+            "SpecialMedication": 225.75,
+            "SpecialAssetDamage": 600.00,
+            "SpecialRehabilitation": 1200.00,
+            "SpecialFixes": 350.50,
+            "GeneralFixed": 2200.00,
+            "GeneralUplift": 450.00,
+            "SpecialLoanerVehicle": 650.00,
+            "SpecialTripCosts": 180.25,
+            "SpecialJourneyExpenses": 110.75,
+            "SpecialTherapy": 950.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Severe neck strain",
+            "Whiplash": true
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Minor cuts and scrapes.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-20T12:32:06",
+            "SpecialHealthExpenses": 850.00,
+            "SpecialReduction": 120.75,
+            "SpecialOverage": 45.50,
+            "GeneralRest": 500.00,
+            "SpecialAdditionalInjury": 175.25,
+            "SpecialEarningsLoss": 1800.00,
+            "SpecialUsageLoss": 240.00,
+            "SpecialMedication": 150.25,
+            "SpecialAssetDamage": 380.00,
+            "SpecialRehabilitation": 600.00,
+            "SpecialFixes": 200.50,
+            "GeneralFixed": 1200.00,
+            "GeneralUplift": 150.00,
+            "SpecialLoanerVehicle": 350.00,
+            "SpecialTripCosts": 95.75,
+            "SpecialJourneyExpenses": 65.50,
+            "SpecialTherapy": 450.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Lacerations",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Concussion and bruised ribs.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-21T13:07:06",
+            "SpecialHealthExpenses": 1500.00,
+            "SpecialReduction": 200.25,
+            "SpecialOverage": 95.75,
+            "GeneralRest": 850.00,
+            "SpecialAdditionalInjury": 400.50,
+            "SpecialEarningsLoss": 2400.00,
+            "SpecialUsageLoss": 350.00,
+            "SpecialMedication": 200.25,
+            "SpecialAssetDamage": 520.00,
+            "SpecialRehabilitation": 950.00,
+            "SpecialFixes": 275.50,
+            "GeneralFixed": 1800.00,
+            "GeneralUplift": 350.00,
+            "SpecialLoanerVehicle": 550.00,
+            "SpecialTripCosts": 150.75,
+            "SpecialJourneyExpenses": 95.25,
+            "SpecialTherapy": 800.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Head trauma",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Whiplash and minor bruises.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-23T14:36:10",
+            "SpecialHealthExpenses": 1600.00,
+            "SpecialReduction": 220.00,
+            "SpecialOverage": 100.00,
+            "GeneralRest": 950.00,
+            "SpecialAdditionalInjury": 400.00,
+            "SpecialEarningsLoss": 2900.00,
+            "SpecialUsageLoss": 420.00,
+            "SpecialMedication": 215.00,
+            "SpecialAssetDamage": 540.00,
+            "SpecialRehabilitation": 1100.00,
+            "SpecialFixes": 280.00,
+            "GeneralFixed": 2100.00,
+            "GeneralUplift": 400.00,
+            "SpecialLoanerVehicle": 550.00,
+            "SpecialTripCosts": 170.00,
+            "SpecialJourneyExpenses": 90.00,
+            "SpecialTherapy": 920.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Neck strain",
+            "Whiplash": true
+        },
+        {
+            "injury_prognosis": "1 month",
+            "injury_description": "Sprained ankle.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-24T10:12:50",
+            "SpecialHealthExpenses": 300.00,
+            "SpecialReduction": 50.25,
+            "SpecialOverage": 20.00,
+            "GeneralRest": 100.00,
+            "SpecialAdditionalInjury": 50.00,
+            "SpecialEarningsLoss": 400.00,
+            "SpecialUsageLoss": 60.00,
+            "SpecialMedication": 30.00,
+            "SpecialAssetDamage": 120.00,
+            "SpecialRehabilitation": 0.00,
+            "SpecialFixes": 50.00,
+            "GeneralFixed": 200.00,
+            "GeneralUplift": 0.00,
+            "SpecialLoanerVehicle": 100.00,
+            "SpecialTripCosts": 30.00,
+            "SpecialJourneyExpenses": 20.00,
+            "SpecialTherapy": 0.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Sprain",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Broken leg.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-25T16:40:30",
+            "SpecialHealthExpenses": 2000.00,
+            "SpecialReduction": 300.00,
+            "SpecialOverage": 150.00,
+            "GeneralRest": 1200.00,
+            "SpecialAdditionalInjury": 600.00,
+            "SpecialEarningsLoss": 2700.00,
+            "SpecialUsageLoss": 480.00,
+            "SpecialMedication": 300.00,
+            "SpecialAssetDamage": 800.00,
+            "SpecialRehabilitation": 1500.00,
+            "SpecialFixes": 400.00,
+            "GeneralFixed": 2500.00,
+            "GeneralUplift": 500.00,
+            "SpecialLoanerVehicle": 700.00,
+            "SpecialTripCosts": 200.00,
+            "SpecialJourneyExpenses": 120.00,
+            "SpecialTherapy": 1000.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Leg fracture",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Dislocated shoulder.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-26T09:02:17",
+            "SpecialHealthExpenses": 1300.00,
+            "SpecialReduction": 200.00,
+            "SpecialOverage": 75.00,
+            "GeneralRest": 700.00,
+            "SpecialAdditionalInjury": 350.00,
+            "SpecialEarningsLoss": 1600.00,
+            "SpecialUsageLoss": 200.00,
+            "SpecialMedication": 125.00,
+            "SpecialAssetDamage": 400.00,
+            "SpecialRehabilitation": 700.00,
+            "SpecialFixes": 250.00,
+            "GeneralFixed": 1800.00,
+            "GeneralUplift": 150.00,
+            "SpecialLoanerVehicle": 300.00,
+            "SpecialTripCosts": 80.00,
+            "SpecialJourneyExpenses": 60.00,
+            "SpecialTherapy": 650.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Shoulder dislocation",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Sprained wrist and bruises.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-26T08:45:15",
+            "SpecialHealthExpenses": 400.00,
+            "SpecialReduction": 80.00,
+            "SpecialOverage": 10.50,
+            "GeneralRest": 180.00,
+            "SpecialAdditionalInjury": 75.00,
+            "SpecialEarningsLoss": 900.00,
+            "SpecialUsageLoss": 120.00,
+            "SpecialMedication": 40.50,
+            "SpecialAssetDamage": 150.00,
+            "SpecialRehabilitation": 200.00,
+            "SpecialFixes": 50.00,
+            "GeneralFixed": 500.00,
+            "GeneralUplift": 50.00,
+            "SpecialLoanerVehicle": 150.00,
+            "SpecialTripCosts": 30.00,
+            "SpecialJourneyExpenses": 25.00,
+            "SpecialTherapy": 100.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Wrist sprain",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "6 months",
+            "injury_description": "Knee ligament injury.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-27T09:10:22",
+            "SpecialHealthExpenses": 2000.00,
+            "SpecialReduction": 300.00,
+            "SpecialOverage": 100.00,
+            "GeneralRest": 1500.00,
+            "SpecialAdditionalInjury": 600.00,
+            "SpecialEarningsLoss": 4000.00,
+            "SpecialUsageLoss": 550.00,
+            "SpecialMedication": 250.00,
+            "SpecialAssetDamage": 700.00,
+            "SpecialRehabilitation": 1400.00,
+            "SpecialFixes": 350.00,
+            "GeneralFixed": 3000.00,
+            "GeneralUplift": 500.00,
+            "SpecialLoanerVehicle": 850.00,
+            "SpecialTripCosts": 150.00,
+            "SpecialJourneyExpenses": 100.00,
+            "SpecialTherapy": 1300.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Knee injury",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "3 months",
+            "injury_description": "Back injury (muscle strain).",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-28T11:30:35",
+            "SpecialHealthExpenses": 800.00,
+            "SpecialReduction": 100.00,
+            "SpecialOverage": 50.00,
+            "GeneralRest": 400.00,
+            "SpecialAdditionalInjury": 100.00,
+            "SpecialEarningsLoss": 1000.00,
+            "SpecialUsageLoss": 150.00,
+            "SpecialMedication": 60.00,
+            "SpecialAssetDamage": 200.00,
+            "SpecialRehabilitation": 300.00,
+            "SpecialFixes": 75.00,
+            "GeneralFixed": 1200.00,
+            "GeneralUplift": 100.00,
+            "SpecialLoanerVehicle": 200.00,
+            "SpecialTripCosts": 40.00,
+            "SpecialJourneyExpenses": 35.00,
+            "SpecialTherapy": 250.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Muscle strain",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "1 month",
+            "injury_description": "Severe ankle sprain.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-04-29T15:14:22",
+            "SpecialHealthExpenses": 350.00,
+            "SpecialReduction": 50.00,
+            "SpecialOverage": 20.00,
+            "GeneralRest": 150.00,
+            "SpecialAdditionalInjury": 30.00,
+            "SpecialEarningsLoss": 400.00,
+            "SpecialUsageLoss": 90.00,
+            "SpecialMedication": 35.00,
+            "SpecialAssetDamage": 90.00,
+            "SpecialRehabilitation": 0.00,
+            "SpecialFixes": 50.00,
+            "GeneralFixed": 300.00,
+            "GeneralUplift": 25.00,
+            "SpecialLoanerVehicle": 100.00,
+            "SpecialTripCosts": 30.00,
+            "SpecialJourneyExpenses": 10.00,
+            "SpecialTherapy": 0.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Sprained ankle",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "8 months",
+            "injury_description": "Multiple fractures in the leg.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-30T18:25:50",
+            "SpecialHealthExpenses": 5000.00,
+            "SpecialReduction": 700.00,
+            "SpecialOverage": 250.00,
+            "GeneralRest": 2500.00,
+            "SpecialAdditionalInjury": 1000.00,
+            "SpecialEarningsLoss": 6000.00,
+            "SpecialUsageLoss": 800.00,
+            "SpecialMedication": 400.00,
+            "SpecialAssetDamage": 1200.00,
+            "SpecialRehabilitation": 2200.00,
+            "SpecialFixes": 500.00,
+            "GeneralFixed": 4000.00,
+            "GeneralUplift": 700.00,
+            "SpecialLoanerVehicle": 1000.00,
+            "SpecialTripCosts": 250.00,
+            "SpecialJourneyExpenses": 150.00,
+            "SpecialTherapy": 1800.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Leg fractures",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "5 months",
+            "injury_description": "Shoulder dislocation.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-05-01T12:50:20",
+            "SpecialHealthExpenses": 1500.00,
+            "SpecialReduction": 200.00,
+            "SpecialOverage": 50.00,
+            "GeneralRest": 600.00,
+            "SpecialAdditionalInjury": 200.00,
+            "SpecialEarningsLoss": 3000.00,
+            "SpecialUsageLoss": 400.00,
+            "SpecialMedication": 120.00,
+            "SpecialAssetDamage": 350.00,
+            "SpecialRehabilitation": 800.00,
+            "SpecialFixes": 100.00,
+            "GeneralFixed": 1800.00,
+            "GeneralUplift": 250.00,
+            "SpecialLoanerVehicle": 500.00,
+            "SpecialTripCosts": 100.00,
+            "SpecialJourneyExpenses": 60.00,
+            "SpecialTherapy": 600.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Shoulder dislocation",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "4 months",
+            "injury_description": "Fractured ribs.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-05-02T16:01:11",
+            "SpecialHealthExpenses": 2000.00,
+            "SpecialReduction": 250.00,
+            "SpecialOverage": 75.00,
+            "GeneralRest": 1200.00,
+            "SpecialAdditionalInjury": 500.00,
+            "SpecialEarningsLoss": 3500.00,
+            "SpecialUsageLoss": 500.00,
+            "SpecialMedication": 200.00,
+            "SpecialAssetDamage": 450.00,
+            "SpecialRehabilitation": 1000.00,
+            "SpecialFixes": 250.00,
+            "GeneralFixed": 2500.00,
+            "GeneralUplift": 350.00,
+            "SpecialLoanerVehicle": 800.00,
+            "SpecialTripCosts": 180.00,
+            "SpecialJourneyExpenses": 120.00,
+            "SpecialTherapy": 700.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Rib fracture",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "3 months",
+            "injury_description": "Elbow fracture.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-05-03T17:23:55",
+            "SpecialHealthExpenses": 1200.00,
+            "SpecialReduction": 150.00,
+            "SpecialOverage": 40.00,
+            "GeneralRest": 500.00,
+            "SpecialAdditionalInjury": 100.00,
+            "SpecialEarningsLoss": 1500.00,
+            "SpecialUsageLoss": 200.00,
+            "SpecialMedication": 75.00,
+            "SpecialAssetDamage": 200.00,
+            "SpecialRehabilitation": 400.00,
+            "SpecialFixes": 50.00,
+            "GeneralFixed": 1000.00,
+            "GeneralUplift": 150.00,
+            "SpecialLoanerVehicle": 150.00,
+            "SpecialTripCosts": 40.00,
+            "SpecialJourneyExpenses": 30.00,
+            "SpecialTherapy": 300.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Elbow fracture",
+            "Whiplash": false
+            },
+            {
+            "injury_prognosis": "7 months",
+            "injury_description": "Facial lacerations and concussion.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-05-04T14:05:30",
+            "SpecialHealthExpenses": 2500.00,
+            "SpecialReduction": 350.00,
+            "SpecialOverage": 150.00,
+            "GeneralRest": 1800.00,
+            "SpecialAdditionalInjury": 600.00,
+            "SpecialEarningsLoss": 5000.00,
+            "SpecialUsageLoss": 700.00,
+            "SpecialMedication": 300.00,
+            "SpecialAssetDamage": 800.00,
+            "SpecialRehabilitation": 1600.00,
+            "SpecialFixes": 400.00,
+            "GeneralFixed": 2200.00,
+            "GeneralUplift": 400.00,
+            "SpecialLoanerVehicle": 1000.00,
+            "SpecialTripCosts": 200.00,
+            "SpecialJourneyExpenses": 150.00,
+            "SpecialTherapy": 1500.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Facial injury",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Fractured leg and concussion.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-03-15T14:12:30",
+            "SpecialHealthExpenses": 2100.00,
+            "SpecialReduction": 190.75,
+            "SpecialOverage": 95.30,
+            "GeneralRest": 1200.00,
+            "SpecialAdditionalInjury": 450.60,
+            "SpecialEarningsLoss": 3500.00,
+            "SpecialUsageLoss": 550.00,
+            "SpecialMedication": 250.00,
+            "SpecialAssetDamage": 650.00,
+            "SpecialRehabilitation": 1025.00,
+            "SpecialFixes": 320.50,
+            "GeneralFixed": 2000.00,
+            "GeneralUplift": 400.00,
+            "SpecialLoanerVehicle": 600.00,
+            "SpecialTripCosts": 150.50,
+            "SpecialJourneyExpenses": 100.75,
+            "SpecialTherapy": 850.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Leg fracture",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Sprained ankle and back pain.",
+            "police_report_filed": false,
+            "witness_present": false,
+            "claim_date": "2025-04-05T18:45:20",
+            "SpecialHealthExpenses": 1500.00,
+            "SpecialReduction": 110.25,
+            "SpecialOverage": 65.00,
+            "GeneralRest": 950.00,
+            "SpecialAdditionalInjury": 200.50,
+            "SpecialEarningsLoss": 1800.00,
+            "SpecialUsageLoss": 240.00,
+            "SpecialMedication": 100.00,
+            "SpecialAssetDamage": 150.00,
+            "SpecialRehabilitation": 420.00,
+            "SpecialFixes": 180.00,
+            "GeneralFixed": 1400.00,
+            "GeneralUplift": 250.00,
+            "SpecialLoanerVehicle": 500.00,
+            "SpecialTripCosts": 90.00,
+            "SpecialJourneyExpenses": 75.50,
+            "SpecialTherapy": 520.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Back pain",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "8 months",
+            "injury_description": "Knee fracture and internal bleeding.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-02-19T10:00:40",
+            "SpecialHealthExpenses": 3000.00,
+            "SpecialReduction": 250.00,
+            "SpecialOverage": 120.00,
+            "GeneralRest": 1500.00,
+            "SpecialAdditionalInjury": 600.00,
+            "SpecialEarningsLoss": 4200.00,
+            "SpecialUsageLoss": 750.00,
+            "SpecialMedication": 400.00,
+            "SpecialAssetDamage": 800.00,
+            "SpecialRehabilitation": 1600.00,
+            "SpecialFixes": 400.00,
+            "GeneralFixed": 2300.00,
+            "GeneralUplift": 500.00,
+            "SpecialLoanerVehicle": 700.00,
+            "SpecialTripCosts": 200.00,
+            "SpecialJourneyExpenses": 150.00,
+            "SpecialTherapy": 1200.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Knee fracture",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Burns and eye injury.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-04-10T16:30:10",
+            "SpecialHealthExpenses": 800.00,
+            "SpecialReduction": 50.00,
+            "SpecialOverage": 25.00,
+            "GeneralRest": 600.00,
+            "SpecialAdditionalInjury": 100.00,
+            "SpecialEarningsLoss": 1000.00,
+            "SpecialUsageLoss": 180.00,
+            "SpecialMedication": 75.00,
+            "SpecialAssetDamage": 200.00,
+            "SpecialRehabilitation": 200.00,
+            "SpecialFixes": 90.00,
+            "GeneralFixed": 1100.00,
+            "GeneralUplift": 150.00,
+            "SpecialLoanerVehicle": 300.00,
+            "SpecialTripCosts": 80.00,
+            "SpecialJourneyExpenses": 40.00,
+            "SpecialTherapy": 300.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Burns",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "1 year",
+            "injury_description": "Multiple fractures and head trauma.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-01-12T09:20:30",
+            "SpecialHealthExpenses": 4000.00,
+            "SpecialReduction": 300.00,
+            "SpecialOverage": 150.00,
+            "GeneralRest": 2000.00,
+            "SpecialAdditionalInjury": 800.00,
+            "SpecialEarningsLoss": 6000.00,
+            "SpecialUsageLoss": 1000.00,
+            "SpecialMedication": 500.00,
+            "SpecialAssetDamage": 1000.00,
+            "SpecialRehabilitation": 2000.00,
+            "SpecialFixes": 500.00,
+            "GeneralFixed": 3000.00,
+            "GeneralUplift": 700.00,
+            "SpecialLoanerVehicle": 1000.00,
+            "SpecialTripCosts": 300.00,
+            "SpecialJourneyExpenses": 250.00,
+            "SpecialTherapy": 1500.00,
+            "Exceptional_Circumstances": true,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Head trauma",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Sprained wrist and abrasions.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-03-02T17:20:25",
+            "SpecialHealthExpenses": 400.00,
+            "SpecialReduction": 30.00,
+            "SpecialOverage": 15.00,
+            "GeneralRest": 300.00,
+            "SpecialAdditionalInjury": 50.00,
+            "SpecialEarningsLoss": 800.00,
+            "SpecialUsageLoss": 100.00,
+            "SpecialMedication": 40.00,
+            "SpecialAssetDamage": 70.00,
+            "SpecialRehabilitation": 150.00,
+            "SpecialFixes": 60.00,
+            "GeneralFixed": 600.00,
+            "GeneralUplift": 100.00,
+            "SpecialLoanerVehicle": 200.00,
+            "SpecialTripCosts": 60.00,
+            "SpecialJourneyExpenses": 30.00,
+            "SpecialTherapy": 180.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Wrist sprain",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "5 months",
+            "injury_description": "Fractured rib and mild concussion.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-03-29T21:45:30",
+            "SpecialHealthExpenses": 2000.00,
+            "SpecialReduction": 160.00,
+            "SpecialOverage": 90.00,
+            "GeneralRest": 1200.00,
+            "SpecialAdditionalInjury": 400.00,
+            "SpecialEarningsLoss": 3000.00,
+            "SpecialUsageLoss": 500.00,
+            "SpecialMedication": 150.00,
+            "SpecialAssetDamage": 400.00,
+            "SpecialRehabilitation": 800.00,
+            "SpecialFixes": 220.00,
+            "GeneralFixed": 1800.00,
+            "GeneralUplift": 300.00,
+            "SpecialLoanerVehicle": 400.00,
+            "SpecialTripCosts": 130.00,
+            "SpecialJourneyExpenses": 85.00,
+            "SpecialTherapy": 750.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Rib fracture",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "3 months",
+            "injury_description": "Dislocated shoulder and minor head injury.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-02-01T12:40:10",
+            "SpecialHealthExpenses": 950.00,
+            "SpecialReduction": 75.00,
+            "SpecialOverage": 50.00,
+            "GeneralRest": 750.00,
+            "SpecialAdditionalInjury": 180.00,
+            "SpecialEarningsLoss": 1600.00,
+            "SpecialUsageLoss": 280.00,
+            "SpecialMedication": 100.00,
+            "SpecialAssetDamage": 130.00,
+            "SpecialRehabilitation": 350.00,
+            "SpecialFixes": 140.00,
+            "GeneralFixed": 1200.00,
+            "GeneralUplift": 220.00,
+            "SpecialLoanerVehicle": 250.00,
+            "SpecialTripCosts": 70.00,
+            "SpecialJourneyExpenses": 45.00,
+            "SpecialTherapy": 450.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Shoulder dislocation",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "6 months",
+            "injury_description": "Spinal injury and cuts.",
+            "police_report_filed": true,
+            "witness_present": true,
+            "claim_date": "2025-03-22T19:15:40",
+            "SpecialHealthExpenses": 1800.00,
+            "SpecialReduction": 140.00,
+            "SpecialOverage": 70.00,
+            "GeneralRest": 1000.00,
+            "SpecialAdditionalInjury": 250.00,
+            "SpecialEarningsLoss": 2500.00,
+            "SpecialUsageLoss": 400.00,
+            "SpecialMedication": 180.00,
+            "SpecialAssetDamage": 220.00,
+            "SpecialRehabilitation": 500.00,
+            "SpecialFixes": 150.00,
+            "GeneralFixed": 1400.00,
+            "GeneralUplift": 300.00,
+            "SpecialLoanerVehicle": 350.00,
+            "SpecialTripCosts": 90.00,
+            "SpecialJourneyExpenses": 70.00,
+            "SpecialTherapy": 600.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": true,
+            "Dominant_injury": "Spinal injury",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "4 months",
+            "injury_description": "Ankle sprain and facial lacerations.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-03-18T11:20:50",
+            "SpecialHealthExpenses": 1250.00,
+            "SpecialReduction": 90.00,
+            "SpecialOverage": 55.00,
+            "GeneralRest": 800.00,
+            "SpecialAdditionalInjury": 180.00,
+            "SpecialEarningsLoss": 2000.00,
+            "SpecialUsageLoss": 350.00,
+            "SpecialMedication": 120.00,
+            "SpecialAssetDamage": 300.00,
+            "SpecialRehabilitation": 600.00,
+            "SpecialFixes": 150.00,
+            "GeneralFixed": 1300.00,
+            "GeneralUplift": 200.00,
+            "SpecialLoanerVehicle": 400.00,
+            "SpecialTripCosts": 100.00,
+            "SpecialJourneyExpenses": 60.00,
+            "SpecialTherapy": 550.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Facial lacerations",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "2 months",
+            "injury_description": "Fractured wrist.",
+            "police_report_filed": true,
+            "witness_present": false,
+            "claim_date": "2025-03-30T14:50:15",
+            "SpecialHealthExpenses": 600.00,
+            "SpecialReduction": 50.00,
+            "SpecialOverage": 30.00,
+            "GeneralRest": 400.00,
+            "SpecialAdditionalInjury": 100.00,
+            "SpecialEarningsLoss": 1200.00,
+            "SpecialUsageLoss": 200.00,
+            "SpecialMedication": 80.00,
+            "SpecialAssetDamage": 150.00,
+            "SpecialRehabilitation": 300.00,
+            "SpecialFixes": 100.00,
+            "GeneralFixed": 800.00,
+            "GeneralUplift": 150.00,
+            "SpecialLoanerVehicle": 250.00,
+            "SpecialTripCosts": 70.00,
+            "SpecialJourneyExpenses": 40.00,
+            "SpecialTherapy": 400.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Wrist fracture",
+            "Whiplash": false
+        },
+        {
+            "injury_prognosis": "1 month",
+            "injury_description": "Minor cuts and bruises.",
+            "police_report_filed": false,
+            "witness_present": true,
+            "claim_date": "2025-04-01T10:30:25",
+            "SpecialHealthExpenses": 200.00,
+            "SpecialReduction": 20.00,
+            "SpecialOverage": 10.00,
+            "GeneralRest": 100.00,
+            "SpecialAdditionalInjury": 30.00,
+            "SpecialEarningsLoss": 500.00,
+            "SpecialUsageLoss": 80.00,
+            "SpecialMedication": 20.00,
+            "SpecialAssetDamage": 50.00,
+            "SpecialRehabilitation": 100.00,
+            "SpecialFixes": 40.00,
+            "GeneralFixed": 300.00,
+            "GeneralUplift": 50.00,
+            "SpecialLoanerVehicle": 150.00,
+            "SpecialTripCosts": 40.00,
+            "SpecialJourneyExpenses": 20.00,
+            "SpecialTherapy": 200.00,
+            "Exceptional_Circumstances": false,
+            "Minor_Psychological_Injury": false,
+            "Dominant_injury": "Cuts and bruises",
+            "Whiplash": false
+        }
+    ],
+
+    "Accidents": [
+        {
+            "accident_type": "Rear end"
+        },
+        {
+            "accident_type": "Rear end - Clt pushed into next vehicle"
+        },
+        {
+            "accident_type": "Rear end - 3 car - Clt at front"
+        },
+        {
+            "accident_type": "Other side pulled out of side road"
+        },
+        {
+            "accident_type": "Other side pulled on to roundabout"
+        },
+        {
+            "accident_type": "Other side drove on wrong side of the road"
+        },
+        {
+            "accident_type": "Other side reversed into Clt's vehicle"
+        },
+        {
+            "accident_type": "Other side changed lanes and collided with clt's vehicle"
+        },
+        {
+            "accident_type": "Other side changed lanes on a roundabout colliding with clt's vehicle"
+        }
+    ],
+
+    "Drivers": [
+        {
+            "driver_age": 35,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 28,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 16,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 30,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 50,
+            "gender": "Male",
+            "number_of_passengers": 4
+        },
+        {
+            "driver_age": 17,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 40,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 29,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 15,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 45,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 37,
+            "gender": "Male",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 26,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 48,
+            "gender": "Male",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 31,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 14,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 24,
+            "gender": "Female",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 41,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 27,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 36,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 44,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 38,
+            "gender": "Male",
+            "number_of_passengers": 1
+        },
+        {
+            "driver_age": 25,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 47,
+            "gender": "Male",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 32,
+            "gender": "Female",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 46,
+            "gender": "Male",
+            "number_of_passengers": 4
+        },
+        {
+            "driver_age": 13,
+            "gender": "Female",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 43,
+            "gender": "Male",
+            "number_of_passengers": 2
+        },
+        {
+            "driver_age": 29,
+            "gender": "Female",
+            "number_of_passengers": 3
+        },
+        {
+            "driver_age": 34,
+            "gender": "Male",
+            "number_of_passengers": 0
+        },
+        {
+            "driver_age": 49,
+            "gender": "Female",
+            "number_of_passengers": 2
+        }
+    ],
+
+    "Weather": [
+        {
+            "weather_conditions": "Sunny"
+        },
+        {
+            "weather_conditions": "Rainy"
+        },
+        {
+            "weather_conditions": "Snowy"
+        }
+    ],
+
+    "Vehicles": [
+        {
+            "vehicle_type": "Motorcycle"
+        },
+        {
+            "vehicle_type": "Truck"
+        },
+        {
+            "vehicle_type": "Car"
+        }
+    ],
+
+    "UserAccident": [
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-04-20T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-04-21T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-04-22T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-04-23T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-04-24T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-04-25T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-04-26T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-04-27T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-04-28T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-04-29T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-04-30T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-01T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-05-02T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-05-03T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-05-04T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-05-05T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-05-06T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-05-07T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-05-08T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-05-09T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-10T08:45:00"
+        },
+        {
+            "accident_id": 4,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle pulled out of a side road on a sunny day.",
+            "accident_date": "2025-05-11T12:00:00"
+        },
+        {
+            "accident_id": 5,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle pulled onto a roundabout during rain.",
+            "accident_date": "2025-05-12T16:15:00"
+        },
+        {
+            "accident_id": 6,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle drove on the wrong side of the road in snowy conditions.",
+            "accident_date": "2025-05-13T09:30:00"
+        },
+        {
+            "accident_id": 7,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Vehicle reversed into another vehicle on a sunny day.",
+            "accident_date": "2025-05-14T11:45:00"
+        },
+        {
+            "accident_id": 8,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Vehicle changed lanes and collided with another during rain.",
+            "accident_date": "2025-05-15T15:00:00"
+        },
+        {
+            "accident_id": 9,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Vehicle changed lanes on a roundabout and collided with another in snowy conditions.",
+            "accident_date": "2025-05-16T18:30:00"
+        },
+        {
+            "accident_id": 1,
+            "weather_id": 1,
+            "user_vehicle_id": 3,
+            "accident_description": "Rear-end collision on a sunny day.",
+            "accident_date": "2025-05-17T10:15:00"
+        },
+        {
+            "accident_id": 2,
+            "weather_id": 2,
+            "user_vehicle_id": 1,
+            "accident_description": "Rear-end collision with multiple vehicles during rain.",
+            "accident_date": "2025-05-18T14:30:00"
+        },
+        {
+            "accident_id": 3,
+            "weather_id": 3,
+            "user_vehicle_id": 2,
+            "accident_description": "Three-car rear-end collision on a snowy road.",
+            "accident_date": "2025-05-19T08:45:00"
+        }
+    ],
+
+    "UserClaims": [
+        {
+            "user_accident_id": 1,
+            "claim_id": 1,
+            "predicted_settlement_value": 5000.00,
+            "pending_claim": "pending",
+            "user_id": 1
+        },
+        {
+            "user_accident_id": 2,
+            "claim_id": 2,
+            "predicted_settlement_value": 3000.00,
+            "pending_claim": "pending",
+            "user_id": 2
+        },
+        {
+            "user_accident_id": 3,
+            "claim_id": 3,
+            "predicted_settlement_value": 7000.00,
+            "pending_claim": "approved",
+            "user_id": 3
+        },
+        {
+            "user_accident_id": 4,
+            "claim_id": 4,
+            "predicted_settlement_value": 4000.00,
+            "pending_claim": "approved",
+            "user_id": 4
+        },
+        {
+            "user_accident_id": 5,
+            "claim_id": 5,
+            "predicted_settlement_value": 3500.00,
+            "pending_claim": "approved",
+            "user_id": 5
+        },
+        {
+            "user_accident_id": 6,
+            "claim_id": 6,
+            "predicted_settlement_value": 6000.00,
+            "pending_claim": "pending",
+            "user_id": 6
+        },
+        {
+            "user_accident_id": 7,
+            "claim_id": 7,
+            "predicted_settlement_value": 4500.00,
+            "pending_claim": "rejected",
+            "user_id": 7
+        },
+        {
+            "user_accident_id": 8,
+            "claim_id": 8,
+            "predicted_settlement_value": 5500.00,
+            "pending_claim": "rejected",
+            "user_id": 8
+        },
+        {
+            "user_accident_id": 9,
+            "claim_id": 9,
+            "predicted_settlement_value": 6200.00,
+            "pending_claim": "rejected",
+            "user_id": 9
+        },
+        {
+            "user_accident_id": 10,
+            "claim_id": 10,
+            "predicted_settlement_value": 2800.00,
+            "pending_claim": "rejected",
+            "user_id": 10
+        },
+        {
+            "user_accident_id": 11,
+            "claim_id": 11,
+            "predicted_settlement_value": 5000.00,
+            "pending_claim": "rejected",
+            "user_id": 11
+        },
+        {
+            "user_accident_id": 12,
+            "claim_id": 12,
+            "predicted_settlement_value": 3000.00,
+            "pending_claim": "rejected",
+            "user_id": 12
+        },
+        {
+            "user_accident_id": 13,
+            "claim_id": 13,
+            "predicted_settlement_value": 7000.00,
+            "pending_claim": "settled",
+            "user_id": 13
+        },
+        {
+            "user_accident_id": 14,
+            "claim_id": 14,
+            "predicted_settlement_value": 4000.00,
+            "pending_claim": "settled",
+            "user_id": 14
+        },
+        {
+            "user_accident_id": 15,
+            "claim_id": 15,
+            "predicted_settlement_value": 3500.00,
+            "pending_claim": "settled",
+            "user_id": 15
+        },
+        {
+            "user_accident_id": 16,
+            "claim_id": 16,
+            "predicted_settlement_value": 6000.00,
+            "pending_claim": "settled",
+            "user_id": 16
+        },
+        {
+            "user_accident_id": 17,
+            "claim_id": 17,
+            "predicted_settlement_value": 4500.00,
+            "pending_claim": "settled",
+            "user_id": 17
+        },
+        {
+            "user_accident_id": 18,
+            "claim_id": 18,
+            "predicted_settlement_value": 5500.00,
+            "pending_claim": "settled",
+            "user_id": 18
+        },
+        {
+            "user_accident_id": 19,
+            "claim_id": 19,
+            "predicted_settlement_value": 6200.00,
+            "pending_claim": "settled",
+            "user_id": 19
+        },
+        {
+            "user_accident_id": 20,
+            "claim_id": 20,
+            "predicted_settlement_value": 2800.00,
+            "pending_claim": "settled",
+            "user_id": 20
+        },
+        {
+            "user_accident_id": 21,
+            "claim_id": 21,
+            "predicted_settlement_value": 5000.00,
+            "pending_claim": "settled",
+            "user_id": 21
+        },
+        {
+            "user_accident_id": 22,
+            "claim_id": 22,
+            "predicted_settlement_value": 3000.00,
+            "pending_claim": "settled",
+            "user_id": 22
+        },
+        {
+            "user_accident_id": 23,
+            "claim_id": 23,
+            "predicted_settlement_value": 7000.00,
+            "pending_claim": "settled",
+            "user_id": 23
+        },
+        {
+            "user_accident_id": 24,
+            "claim_id": 24,
+            "predicted_settlement_value": 4000.00,
+            "pending_claim": "settled",
+            "user_id": 24
+        },
+        {
+            "user_accident_id": 25,
+            "claim_id": 25,
+            "predicted_settlement_value": 3500.00,
+            "pending_claim": "settled",
+            "user_id": 25
+        },
+        {
+            "user_accident_id": 26,
+            "claim_id": 26,
+            "predicted_settlement_value": 6000.00,
+            "pending_claim": "settled",
+            "user_id": 26
+        },
+        {
+            "user_accident_id": 27,
+            "claim_id": 27,
+            "predicted_settlement_value": 4500.00,
+            "pending_claim": "settled",
+            "user_id": 27
+        },
+        {
+            "user_accident_id": 28,
+            "claim_id": 28,
+            "predicted_settlement_value": 5500.00,
+            "pending_claim": "settled",
+            "user_id": 28
+        },
+        {
+            "user_accident_id": 29,
+            "claim_id": 29,
+            "predicted_settlement_value": 6200.00,
+            "pending_claim": "settled",
+            "user_id": 29
+        },
+        {
+            "user_accident_id": 30,
+            "claim_id": 30,
+            "predicted_settlement_value": 2800.00,
+            "pending_claim": "settled",
+            "user_id": 30
+        }
+    ],
+
+    "UserVehicle": [
+        {
+            "user_id": 1,
+            "vehicle_id": 1,
+            "vehicle_age": 5,
+            "driver_id": 1
+        },
+        {
+            "user_id": 2,
+            "vehicle_id": 2,
+            "vehicle_age": 3,
+            "driver_id": 2
+        },
+        {
+            "user_id": 3,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 3
+        },
+        {
+            "user_id": 4,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 4
+        },
+        {
+            "user_id": 5,
+            "vehicle_id": 2,
+            "vehicle_age": 6,
+            "driver_id": 5
+        },
+        {
+            "user_id": 6,
+            "vehicle_id": 3,
+            "vehicle_age": 2,
+            "driver_id": 6
+        },
+        {
+            "user_id": 7,
+            "vehicle_id": 1,
+            "vehicle_age": 8,
+            "driver_id": 7
+        },
+        {
+            "user_id": 8,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 8
+        },
+        {
+            "user_id": 9,
+            "vehicle_id": 3,
+            "vehicle_age": 3,
+            "driver_id": 9
+        },
+        {
+            "user_id": 10,
+            "vehicle_id": 1,
+            "vehicle_age": 6,
+            "driver_id": 10
+        },
+        {
+            "user_id": 11,
+            "vehicle_id": 2,
+            "vehicle_age": 4,
+            "driver_id": 11
+        },
+        {
+            "user_id": 12,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 12
+        },
+        {
+            "user_id": 13,
+            "vehicle_id": 1,
+            "vehicle_age": 2,
+            "driver_id": 13
+        },
+        {
+            "user_id": 14,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 14
+        },
+        {
+            "user_id": 15,
+            "vehicle_id": 3,
+            "vehicle_age": 6,
+            "driver_id": 15
+        },
+        {
+            "user_id": 16,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 16
+        },
+        {
+            "user_id": 17,
+            "vehicle_id": 2,
+            "vehicle_age": 3,
+            "driver_id": 17
+        },
+        {
+            "user_id": 18,
+            "vehicle_id": 3,
+            "vehicle_age": 7,
+            "driver_id": 18
+        },
+        {
+            "user_id": 19,
+            "vehicle_id": 1,
+            "vehicle_age": 6,
+            "driver_id": 19
+        },
+        {
+            "user_id": 20,
+            "vehicle_id": 2,
+            "vehicle_age": 5,
+            "driver_id": 20
+        },
+        {
+            "user_id": 21,
+            "vehicle_id": 3,
+            "vehicle_age": 4,
+            "driver_id": 21
+        },
+        {
+            "user_id": 22,
+            "vehicle_id": 1,
+            "vehicle_age": 8,
+            "driver_id": 22
+        },
+        {
+            "user_id": 23,
+            "vehicle_id": 2,
+            "vehicle_age": 2,
+            "driver_id": 23
+        },
+        {
+            "user_id": 24,
+            "vehicle_id": 3,
+            "vehicle_age": 6,
+            "driver_id": 24
+        },
+        {
+            "user_id": 25,
+            "vehicle_id": 1,
+            "vehicle_age": 3,
+            "driver_id": 25
+        },
+        {
+            "user_id": 26,
+            "vehicle_id": 2,
+            "vehicle_age": 7,
+            "driver_id": 26
+        },
+        {
+            "user_id": 27,
+            "vehicle_id": 3,
+            "vehicle_age": 5,
+            "driver_id": 27
+        },
+        {
+            "user_id": 28,
+            "vehicle_id": 1,
+            "vehicle_age": 4,
+            "driver_id": 28
+        },
+        {
+            "user_id": 29,
+            "vehicle_id": 2,
+            "vehicle_age": 6,
+            "driver_id": 29
+        },
+        {
+            "user_id": 30,
+            "vehicle_id": 3,
+            "vehicle_age": 3,
+            "driver_id": 30
+        }
+    ],
+
+    "Models": [
+        {
+            "model_name": "RandomForestSettlementPredictor",
+            "model_description": "A Random Forest regression model to predict claim settlement amounts.",
+            "model_version": 1.0,
+            "uploaded_at": "2025-04-20T10:00:00",
+            "is_active": true,
+            "num_accepted_claims": 1200,
+            "num_rejected_claims": 300,
+            "model_file": "rf_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "XGBoostSettlementPredictor",
+            "model_description": "An XGBoost regression model to estimate claim settlement values.",
+            "model_version": 2.1,
+            "uploaded_at": "2025-04-21T14:30:00",
+            "is_active": false,
+            "num_accepted_claims": 950,
+            "num_rejected_claims": 250,
+            "model_file": "xgb_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "CatBoostSettlementPredictor",
+            "model_description": "A CatBoost regression model to calculate accurate settlement amounts.",
+            "model_version": 1.5,
+            "uploaded_at": "2025-04-22T08:45:00",
+            "is_active": true,
+            "num_accepted_claims": 800,
+            "num_rejected_claims": 400,
+            "model_file": "catboost_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "HybridLinearSettlementPredictor",
+            "model_description": "A Hybrid Linear model to appraise appropriate settlement amounts.",
+            "model_version": 1.2,
+            "uploaded_at": "2025-04-23T12:00:00",
+            "is_active": false,
+            "num_accepted_claims": 600,
+            "num_rejected_claims": 200,
+            "model_file": "hybrid_linear_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "MARSSettlementPredictor",
+            "model_description": "A Multivariate Adaptive Regression Splines model for settlement prediction.",
+            "model_version": 3.0,
+            "uploaded_at": "2025-04-24T16:15:00",
+            "is_active": true,
+            "num_accepted_claims": 1500,
+            "num_rejected_claims": 500,
+            "model_file": "mars_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "EBMSettlementPredictor",
+            "model_description": "An Explainable Boosting Machine model to assess settlement amounts.",
+            "model_version": 2.3,
+            "uploaded_at": "2025-04-25T09:30:00",
+            "is_active": true,
+            "num_accepted_claims": 1100,
+            "num_rejected_claims": 350,
+            "model_file": "ebm_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "MesoSettlementPredictor",
+            "model_description": "A Meso ensemble model to optimize insurance claim settlement offers.",
+            "model_version": 1.8,
+            "uploaded_at": "2025-04-26T11:45:00",
+            "is_active": false,
+            "num_accepted_claims": 750,
+            "num_rejected_claims": 225,
+            "model_file": "meso_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        },
+        {
+            "model_name": "MLPSettlementPredictor",
+            "model_description": "A Multi-Layer Perceptron neural network for evaluating settlement amounts.",
+            "model_version": 2.5,
+            "uploaded_at": "2025-04-27T15:00:00",
+            "is_active": true,
+            "num_accepted_claims": 1350,
+            "num_rejected_claims": 450,
+            "model_file": "mlp_settlement_predictor.pkl",
+            "label_encoder_file": "label_encoder.pkl"
+        }
+    ],
+
+    "Payments": [
+        {
+            "user_id": 7,
+            "amount": 250.50,
+            "status": true,
+            "created_at": "2025-04-21T20:50:00"
+        },
+        {
+            "user_id": 5,
+            "amount": 180.75,
+            "status": true,
+            "created_at": "2025-04-21T20:55:00"
+        },
+        {
+            "user_id": 13,
+            "amount": 320.00,
+            "status": false,
+            "created_at": "2025-04-21T21:00:00"
+        },
+        {
+            "user_id": 10,
+            "amount": 500.25,
+            "status": true,
+            "created_at": "2025-04-21T21:05:00"
+        },
+        {
+            "user_id": 8,
+            "amount": 150.00,
+            "status": true,
+            "created_at": "2025-04-21T21:10:00"
+        },
+        {
+            "user_id": 4,
+            "amount": 200.50,
+            "status": false,
+            "created_at": "2025-04-21T21:15:00"
+        },
+        {
+            "user_id": 2,
+            "amount": 110.00,
+            "status": true,
+            "created_at": "2025-04-21T21:20:00"
+        },
+        {
+            "user_id": 6,
+            "amount": 300.00,
+            "status": true,
+            "created_at": "2025-04-21T21:25:00"
+        },
+        {
+            "user_id": 9,
+            "amount": 450.75,
+            "status": true,
+            "created_at": "2025-04-21T21:30:00"
+        },
+        {
+            "user_id": 1,
+            "amount": 350.00,
+            "status": true,
+            "created_at": "2025-04-21T21:35:00"
+        },
+        {
+            "user_id": 3,
+            "amount": 120.00,
+            "status": false,
+            "created_at": "2025-04-21T21:40:00"
+        },
+        {
+            "user_id": 11,
+            "amount": 210.50,
+            "status": true,
+            "created_at": "2025-04-21T21:45:00"
+        },
+        {
+            "user_id": 12,
+            "amount": 275.00,
+            "status": true,
+            "created_at": "2025-04-21T21:50:00"
+        },
+        {
+            "user_id": 14,
+            "amount": 360.00,
+            "status": true,
+            "created_at": "2025-04-21T21:55:00"
+        },
+        {
+            "user_id": 15,
+            "amount": 420.00,
+            "status": true,
+            "created_at": "2025-04-21T22:00:00"
+        }
+    ],
+
+    "Invoices": [
+        {
+            "user_id": 7,
+            "total_amount": 250.50,
+            "due_date": "2025-05-21T20:50:00",
+            "status": true,
+            "generated_at": "2025-04-21T20:50:00"
+        },
+        {
+            "user_id": 5,
+            "total_amount": 180.75,
+            "due_date": "2025-05-21T20:55:00",
+            "status": true,
+            "generated_at": "2025-04-21T20:55:00"
+        },
+        {
+            "user_id": 13,
+            "total_amount": 320.00,
+            "due_date": "2025-05-21T21:00:00",
+            "status": false,
+            "generated_at": "2025-04-21T21:00:00"
+        },
+        {
+            "user_id": 10,
+            "total_amount": 500.25,
+            "due_date": "2025-05-21T21:05:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:05:00"
+        },
+        {
+            "user_id": 8,
+            "total_amount": 150.00,
+            "due_date": "2025-05-21T21:10:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:10:00"
+        },
+        {
+            "user_id": 4,
+            "total_amount": 200.50,
+            "due_date": "2025-05-21T21:15:00",
+            "status": false,
+            "generated_at": "2025-04-21T21:15:00"
+        },
+        {
+            "user_id": 2,
+            "total_amount": 110.00,
+            "due_date": "2025-05-21T21:20:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:20:00"
+        },
+        {
+            "user_id": 6,
+            "total_amount": 300.00,
+            "due_date": "2025-05-21T21:25:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:25:00"
+        },
+        {
+            "user_id": 9,
+            "total_amount": 450.75,
+            "due_date": "2025-05-21T21:30:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:30:00"
+        },
+        {
+            "user_id": 1,
+            "total_amount": 350.00,
+            "due_date": "2025-05-21T21:35:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:35:00"
+        },
+        {
+            "user_id": 3,
+            "total_amount": 120.00,
+            "due_date": "2025-05-21T21:40:00",
+            "status": false,
+            "generated_at": "2025-04-21T21:40:00"
+        },
+        {
+            "user_id": 11,
+            "total_amount": 210.50,
+            "due_date": "2025-05-21T21:45:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:45:00"
+        },
+        {
+            "user_id": 12,
+            "total_amount": 275.00,
+            "due_date": "2025-05-21T21:50:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:50:00"
+        },
+        {
+            "user_id": 14,
+            "total_amount": 360.00,
+            "due_date": "2025-05-21T21:55:00",
+            "status": true,
+            "generated_at": "2025-04-21T21:55:00"
+        },
+        {
+            "user_id": 15,
+            "total_amount": 420.00,
+            "due_date": "2025-05-21T22:00:00",
+            "status": true,
+            "generated_at": "2025-04-21T22:00:00"
+        }
+    ],
+
+    "ActivityLogs": [
+        {
+            "user_id": 2,
+            "ip_address": "192.168.1.12",
+            "description": "Uploaded a new ML model to the system.",
+            "status_code": 200,
+            "generated_at": "2025-04-21 21:10:00",
+            "event_type": "upload_new_ml_models",
+            "device_info": "Chrome on Windows 11"
+        },
+        {
+            "user_id": 3,
+            "ip_address": "192.168.1.15",
+            "description": "Managed user accounts.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 09:30:00",
+            "event_type": "manage_user_accounts",
+            "device_info": "Firefox on macOS"
+        },
+        {
+            "user_id": 4,
+            "ip_address": "192.168.1.20",
+            "description": "Generated a billing document.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 10:15:00",
+            "event_type": "generate_billing_documents",
+            "device_info": "Edge on Windows 10"
+        },
+        {
+            "user_id": 1,
+            "ip_address": "192.168.1.25",
+            "description": "Submitted feedback for a prompt.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 11:00:00",
+            "event_type": "submit_feedback_prompt",
+            "device_info": "Safari on iOS"
+        },
+        {
+            "user_id": 2,
+            "ip_address": "192.168.1.30",
+            "description": "Accessed end-user interactions.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 11:45:00",
+            "event_type": "access_end_user_interactions",
+            "device_info": "Chrome on Windows 11"
+        },
+        {
+            "user_id": 5,
+            "ip_address": "192.168.1.35",
+            "description": "Uploaded text records.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 12:00:00",
+            "event_type": "upload_text_records",
+            "device_info": "Chrome on Windows 10"
+        },
+        {
+            "user_id": 6,
+            "ip_address": "192.168.1.40",
+            "description": "Uploaded a new ML model to the system.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 12:30:00",
+            "event_type": "upload_new_ml_models",
+            "device_info": "Firefox on Linux"
+        },
+        {
+            "user_id": 7,
+            "ip_address": "192.168.1.45",
+            "description": "Managed roles and permissions.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 13:00:00",
+            "event_type": "manage_roles_permissions",
+            "device_info": "Safari on macOS"
+        },
+        {
+            "user_id": 8,
+            "ip_address": "192.168.1.50",
+            "description": "Viewed invoices.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 13:30:00",
+            "event_type": "view_invoices",
+            "device_info": "Edge on Windows 11"
+        },
+        {
+            "user_id": 9,
+            "ip_address": "192.168.1.55",
+            "description": "Submitted feedback for a prompt.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 14:00:00",
+            "event_type": "submit_feedback_prompt",
+            "device_info": "Chrome on Android"
+        },
+        {
+            "user_id": 10,
+            "ip_address": "192.168.1.60",
+            "description": "Exported anonymized data.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 14:30:00",
+            "event_type": "export_anonymized_data",
+            "device_info": "Firefox on Windows 10"
+        },
+        {
+            "user_id": 11,
+            "ip_address": "192.168.1.65",
+            "description": "Viewed audit logs.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 15:00:00",
+            "event_type": "view_audit_logs",
+            "device_info": "Safari on iOS"
+        },
+        {
+            "user_id": 12,
+            "ip_address": "192.168.1.70",
+            "description": "Generated invoices.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 15:30:00",
+            "event_type": "generate_invoices",
+            "device_info": "Edge on Windows 10"
+        },
+        {
+            "user_id": 13,
+            "ip_address": "192.168.1.75",
+            "description": "Received trained predictions.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 16:00:00",
+            "event_type": "receive_trained_predictions",
+            "device_info": "Chrome on Windows 11"
+        },
+        {
+            "user_id": 14,
+            "ip_address": "192.168.1.80",
+            "description": "Accessed end-user interactions.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 16:30:00",
+            "event_type": "access_end_user_interactions",
+            "device_info": "Firefox on Linux"
+        },
+        {
+            "user_id": 15,
+            "ip_address": "192.168.1.85",
+            "description": "Managed audit log compliance.",
+            "status_code": 200,
+            "generated_at": "2025-04-22 17:00:00",
+            "event_type": "manage_audit_log_compliance",
+            "device_info": "Safari on macOS"
+        }
+    ],
+
+    "AuditLogs": [
+        {
+            "user_id": 7,
+            "created_at": "2025-04-21T20:48:45",
+            "crud_action_type": "UPDATE",
+            "table_name": "Users",
+            "table_column": "phone_number",
+            "table_record_id": 7,
+            "action_details": "Updated user with phone number '1234567890' to '0987654321'"
+        },
+        {
+            "user_id": 5,
+            "created_at": "2025-04-21T20:46:10",
+            "crud_action_type": "DELETE",
+            "table_name": "Users",
+            "table_column": "full_name",
+            "table_record_id": 5,
+            "action_details": "Deleted user with full name 'John Doe'"
+        },
+        {
+            "user_id": 13,
+            "created_at": "2025-04-21T20:56:00",
+            "crud_action_type": "CREATE",
+            "table_name": "Roles",
+            "table_column": "role_name",
+            "table_record_id": 14,
+            "action_details": "Created new role 'Manager' with ID 14"
+        },
+        {
+            "user_id": 10,
+            "created_at": "2025-04-21T20:52:25",
+            "crud_action_type": "UPDATE",
+            "table_name": "Users",
+            "table_column": "last_login",
+            "table_record_id": 10,
+            "action_details": "Updated user last login to '2025-04-21 14:32:00'"
+        },
+        {
+            "user_id": 8,
+            "created_at": "2025-04-21T21:01:10",
+            "crud_action_type": "CREATE",
+            "table_name": "Accidents",
+            "table_column": "accident_type",
+            "table_record_id": 12,
+            "action_details": "Created accident report with type 'Collision'"
+        },
+        {
+            "user_id": 4,
+            "created_at": "2025-04-21T20:45:30",
+            "crud_action_type": "SELECT",
+            "table_name": "Claims",
+            "table_column": "injury_description",
+            "table_record_id": 5,
+            "action_details": "Viewed claim with injury description 'Fractured leg'"
+        },
+        {
+            "user_id": 2,
+            "created_at": "2025-04-21T21:10:50",
+            "crud_action_type": "UPDATE",
+            "table_name": "Vehicles",
+            "table_column": "vehicle_type",
+            "table_record_id": 3,
+            "action_details": "Updated vehicle type to 'SUV' for vehicle ID 3"
+        },
+        {
+            "user_id": 6,
+            "created_at": "2025-04-21T21:12:20",
+            "crud_action_type": "DELETE",
+            "table_name": "Permissions",
+            "table_column": "permission_name",
+            "table_record_id": 4,
+            "action_details": "Deleted permission 'View Claims' from system"
+        },
+        {
+            "user_id": 9,
+            "created_at": "2025-04-21T21:15:35",
+            "crud_action_type": "CREATE",
+            "table_name": "ModelUsageLogs",
+            "table_column": "model_id",
+            "table_record_id": 2,
+            "action_details": "Logged new model usage with ID 2 for model 'Risk Predictor'"
+        },
+        {
+            "user_id": 1,
+            "created_at": "2025-04-21T21:18:10",
+            "crud_action_type": "UPDATE",
+            "table_name": "Weather",
+            "table_column": "weather_type",
+            "table_record_id": 7,
+            "action_details": "Updated weather type to 'Storm' for weather ID 7"
+        },
+        {
+            "user_id": 3,
+            "created_at": "2025-04-21T21:25:40",
+            "crud_action_type": "SELECT",
+            "table_name": "Invoices",
+            "table_column": "status",
+            "table_record_id": 6,
+            "action_details": "Viewed invoice with status 'Paid' for invoice ID 6"
+        },
+        {
+            "user_id": 11,
+            "created_at": "2025-04-21T21:30:00",
+            "crud_action_type": "UPDATE",
+            "table_name": "UserVehicle",
+            "table_column": "vehicle_age",
+            "table_record_id": 15,
+            "action_details": "Updated vehicle age to 5 years for user vehicle ID 15"
+        },
+        {
+            "user_id": 12,
+            "created_at": "2025-04-21T22:00:00",
+            "crud_action_type": "CREATE",
+            "table_name": "Permissions",
+            "table_column": "permission_name",
+            "table_record_id": 1,
+            "action_details": "Created new permission 'View Reports' for user 12"
+        },
+        {
+            "user_id": 14,
+            "created_at": "2025-04-21T22:05:00",
+            "crud_action_type": "DELETE",
+            "table_name": "Accidents",
+            "table_column": "accident_type",
+            "table_record_id": 7,
+            "action_details": "Deleted accident report with ID 7"
+        },
+        {
+            "user_id": 15,
+            "created_at": "2025-04-21T22:10:00",
+            "crud_action_type": "UPDATE",
+            "table_name": "Roles",
+            "table_column": "role_name",
+            "table_record_id": 6,
+            "action_details": "Updated user 15's role to 'Administrator'"
+        }
+    ],
+
+    "ModelUsageLogs": [
+        {
+            "user_id": 3,
+            "model_id": 5,
+            "num_predictions": 1000,
+            "model_duration": "00:30:00",
+            "created_at": "2025-04-21T20:00:00"
+        },
+        {
+            "user_id": 6,
+            "model_id": 8,
+            "num_predictions": 500,
+            "model_duration": "00:20:00",
+            "created_at": "2025-04-21T21:10:30"
+        },
+        {
+            "user_id": 7,
+            "model_id": 3,
+            "num_predictions": 200,
+            "model_duration": "00:15:00",
+            "created_at": "2025-04-21T21:30:45"
+        },
+        {
+            "user_id": 9,
+            "model_id": 2,
+            "num_predictions": 1500,
+            "model_duration": "01:00:00",
+            "created_at": "2025-04-21T22:00:10"
+        },
+        {
+            "user_id": 10,
+            "model_id": 7,
+            "num_predictions": 300,
+            "model_duration": "00:25:30",
+            "created_at": "2025-04-21T22:30:00"
+        },
+        {
+            "user_id": 8,
+            "model_id": 6,
+            "num_predictions": 800,
+            "model_duration": "00:45:00",
+            "created_at": "2025-04-21T23:00:00"
+        },
+        {
+            "user_id": 5,
+            "model_id": 8,
+            "num_predictions": 600,
+            "model_duration": "00:35:00",
+            "created_at": "2025-04-22T00:00:00"
+        },
+        {
+            "user_id": 2,
+            "model_id": 1,
+            "num_predictions": 300,
+            "model_duration": "00:20:00",
+            "created_at": "2025-04-22T01:00:00"
+        },
+        {
+            "user_id": 4,
+            "model_id": 5,
+            "num_predictions": 1200,
+            "model_duration": "00:40:00",
+            "created_at": "2025-04-22T02:00:00"
+        },
+        {
+            "user_id": 11,
+            "model_id": 8,
+            "num_predictions": 750,
+            "model_duration": "00:22:30",
+            "created_at": "2025-04-22T02:30:00"
+        },
+        {
+            "user_id": 6,
+            "model_id": 2,
+            "num_predictions": 2000,
+            "model_duration": "01:10:00",
+            "created_at": "2025-04-22T03:00:00"
+        },
+        {
+            "user_id": 7,
+            "model_id": 4,
+            "num_predictions": 450,
+            "model_duration": "00:18:00",
+            "created_at": "2025-04-22T03:45:00"
+        },
+        {
+            "user_id": 9,
+            "model_id": 4,
+            "num_predictions": 1300,
+            "model_duration": "00:55:00",
+            "created_at": "2025-04-22T04:10:00"
+        },
+        {
+            "user_id": 8,
+            "model_id": 6,
+            "num_predictions": 950,
+            "model_duration": "00:50:00",
+            "created_at": "2025-04-22T05:00:00"
+        },
+        {
+            "user_id": 3,
+            "model_id": 7,
+            "num_predictions": 600,
+            "model_duration": "00:30:00",
+            "created_at": "2025-04-22T05:30:00"
+        },
+        {
+            "user_id": 10,
+            "model_id": 1,
+            "num_predictions": 300,
+            "model_duration": "00:20:00",
+            "created_at": "2025-04-22T06:00:00"
+        },
+        {
+            "user_id": 12,
+            "model_id": 3,
+            "num_predictions": 1800,
+            "model_duration": "01:00:00",
+            "created_at": "2025-04-22T06:45:00"
+        },
+        {
+            "user_id": 5,
+            "model_id": 2,
+            "num_predictions": 500,
+            "model_duration": "00:25:00",
+            "created_at": "2025-04-22T07:15:00"
+        },
+        {
+            "user_id": 4,
+            "model_id": 8,
+            "num_predictions": 1200,
+            "model_duration": "00:35:00",
+            "created_at": "2025-04-22T07:45:00"
+        },
+        {
+            "user_id": 6,
+            "model_id": 1,
+            "num_predictions": 900,
+            "model_duration": "00:45:00",
+            "created_at": "2025-04-22T08:00:00"
+        }
+    ],
+
+    "Users": [
+        {
+            "phone_number": "07696907001",
+            "role_id": 1,
+            "full_name": "Alice Johnson",
+            "email": "email1@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-26T09:10:00",
+            "last_login": "2025-04-26T11:20:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907002",
+            "role_id": 2,
+            "full_name": "Bob Williams",
+            "email": "email2@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-25T08:15:00",
+            "last_login": "2025-04-26T10:45:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907003",
+            "role_id": 3,
+            "full_name": "Carla Davis",
+            "email": "email3@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-24T07:30:00",
+            "last_login": "2025-04-26T12:15:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907004",
+            "role_id": 4,
+            "full_name": "David Clark",
+            "email": "email4@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-20T06:00:00",
+            "last_login": "2025-04-26T13:05:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907005",
+            "role_id": 1,
+            "full_name": "Emma Lewis",
+            "email": "email5@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-23T13:20:00",
+            "last_login": "2025-04-26T14:25:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907006",
+            "role_id": 2,
+            "full_name": "Frank Moore",
+            "email": "email6@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-22T14:00:00",
+            "last_login": "2025-04-26T15:45:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907007",
+            "role_id": 3,
+            "full_name": "Grace Taylor",
+            "email": "email7@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-21T11:25:00",
+            "last_login": "2025-04-26T16:30:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907008",
+            "role_id": 4,
+            "full_name": "Henry Robinson",
+            "email": "email8@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-19T10:10:00",
+            "last_login": "2025-04-26T17:00:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907009",
+            "role_id": 1,
+            "full_name": "Isla Evans",
+            "email": "email9@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-18T09:40:00",
+            "last_login": "2025-04-26T17:35:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907010",
+            "role_id": 2,
+            "full_name": "Jack Anderson",
+            "email": "email10@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-17T08:50:00",
+            "last_login": "2025-04-26T18:10:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907011",
+            "role_id": 3,
+            "full_name": "Kathy Martinez",
+            "email": "email11@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-16T07:45:00",
+            "last_login": "2025-04-26T18:55:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907012",
+            "role_id": 4,
+            "full_name": "Liam Hernandez",
+            "email": "email12@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-15T06:55:00",
+            "last_login": "2025-04-26T19:20:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907013",
+            "role_id": 1,
+            "full_name": "Megan King",
+            "email": "email13@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-14T06:10:00",
+            "last_login": "2025-04-26T20:00:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907014",
+            "role_id": 2,
+            "full_name": "Nathan Allen",
+            "email": "email14@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-13T05:30:00",
+            "last_login": "2025-04-26T20:40:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907015",
+            "role_id": 3,
+            "full_name": "Olivia Scott",
+            "email": "email15@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-12T04:25:00",
+            "last_login": "2025-04-26T21:15:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907016",
+            "role_id": 4,
+            "full_name": "Paul Adams",
+            "email": "email16@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-11T03:50:00",
+            "last_login": "2025-04-26T21:45:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907017",
+            "role_id": 1,
+            "full_name": "Quinn Baker",
+            "email": "email17@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-10T02:40:00",
+            "last_login": "2025-04-26T22:10:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907018",
+            "role_id": 2,
+            "full_name": "Rachel Carter",
+            "email": "email18@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-09T01:30:00",
+            "last_login": "2025-04-26T22:40:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907019",
+            "role_id": 3,
+            "full_name": "Samuel Diaz",
+            "email": "email19@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-08T00:20:00",
+            "last_login": "2025-04-26T23:05:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907020",
+            "role_id": 4,
+            "full_name": "Tina Edwards",
+            "email": "email20@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-07T11:15:00",
+            "last_login": "2025-04-27T00:10:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907021",
+            "role_id": 1,
+            "full_name": "Ursula Foster",
+            "email": "email21@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-06T10:00:00",
+            "last_login": "2025-04-27T00:45:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907022",
+            "role_id": 2,
+            "full_name": "Victor Green",
+            "email": "email22@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-05T09:10:00",
+            "last_login": "2025-04-27T01:25:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907023",
+            "role_id": 3,
+            "full_name": "Wendy Hall",
+            "email": "email23@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-04T08:20:00",
+            "last_login": "2025-04-27T02:00:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907024",
+            "role_id": 4,
+            "full_name": "Xavier Hughes",
+            "email": "email24@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-03T07:25:00",
+            "last_login": "2025-04-27T02:30:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907025",
+            "role_id": 1,
+            "full_name": "Yara Ingram",
+            "email": "email25@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-02T06:40:00",
+            "last_login": "2025-04-27T03:10:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907026",
+            "role_id": 2,
+            "full_name": "Zane Jefferson",
+            "email": "email26@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-04-01T05:55:00",
+            "last_login": "2025-04-27T03:40:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907027",
+            "role_id": 3,
+            "full_name": "Abigail Kelly",
+            "email": "email27@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-03-31T05:15:00",
+            "last_login": "2025-04-27T04:05:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907028",
+            "role_id": 4,
+            "full_name": "Benjamin Lee",
+            "email": "email28@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-03-30T04:30:00",
+            "last_login": "2025-04-27T04:45:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907029",
+            "role_id": 1,
+            "full_name": "Charlotte Wright",
+            "email": "email29@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-03-29T03:40:00",
+            "last_login": "2025-04-27T05:20:00",
+            "is_active": true,
+            "is_verified": true
+        },
+        {
+            "phone_number": "07696907030",
+            "role_id": 2,
+            "full_name": "Daniel Young",
+            "email": "email30@example.com",
+            "password_hash": "pbkdf2_sha256$720000$c4hbEplEWJEU3RNtODxT2Y$tOeiSQ3CGCnPbvEffAoZa5prdVPcr9YuFf6qq43ePaA=",
+            "created_at": "2025-03-28T02:50:00",
+            "last_login": "2025-04-27T06:00:00",
+            "is_active": true,
+            "is_verified": true
+        }
+    ],
+
+    "Permissions": [
+        {
+            "permission_name": "view_network_activity"
+        },
+        {
+            "permission_name": "view_audit_logs"
+        },
+        {
+            "permission_name": "view_mlaas_traffic"
+        },
+        {
+            "permission_name": "view_role_permissions"
+        },
+        {
+            "permission_name": "view_account_recovery"
+        },
+        {
+            "permission_name": "view_invoice_settlements"
+        },
+        {
+            "permission_name": "view_claims_handling"
+        },
+        {
+            "permission_name": "view_user_dashboard"
+        },
+        {
+            "permission_name": "view_admin_dashboard"
+        }
+    ],
+
+    "Roles": [
+        {
+            "role_name": "End User"
+        },
+        {
+            "role_name": "AI Engineer"
+        },
+        {
+            "role_name": "Administrator"
+        },
+        {
+            "role_name": "Finance Team Member"
+        }
+    ],
+
+    "RolePermissions": [
+        {
+            "role_id": 1,
+            "permission_id": 8
+        },
+        {
+            "role_id": 2,
+            "permission_id": 3
+        },
+        {
+            "role_id": 2,
+            "permission_id": 1
+        },
+        {
+            "role_id": 2,
+            "permission_id": 2
+        },
+        {
+            "role_id": 2,
+            "permission_id": 9
+        },
+        {
+            "role_id": 3,
+            "permission_id": 4
+        },
+        {
+            "role_id": 3,
+            "permission_id": 5
+        },
+        {
+            "role_id": 3,
+            "permission_id": 7
+        },
+        {
+            "role_id": 3,
+            "permission_id": 9
+        },
+        {
+            "role_id": 4,
+            "permission_id": 6
+        },
+        {
+            "role_id": 4,
+            "permission_id": 9
+        }
+
+    ]
+}

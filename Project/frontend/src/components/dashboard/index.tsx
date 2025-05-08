@@ -1,13 +1,14 @@
 import { faTimes, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect, useRef } from "react";
-import { SidebarItem } from "../../common/interfaces";
+import { mapGetUserFromSession, SidebarItem, UserMeProps } from "../../common/interfaces";
 import { createPortal } from "react-dom";
 import { KeyboardCloseEvent } from "../../events/keyboard";
 import Sidebar from "./sidebar";
 import Searchbar from "../searchbar";
 import UserSettingsDropdown from "../user-settings";
 import { Scrollbar } from "../scrollbar";
+import { getUserFromSession } from "../../repositories/user";
 
 interface OverlayAdminDashboardSidebarProps {
     sidebarItems: SidebarItem[];
@@ -64,6 +65,13 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
     const [isHambugerClicked, setIsHamburgerClicked] = useState(false);
     const [dashboardSearchTerm, setDashboardSearchTerm] = useState<string>("");
 
+    const [loggedUser, setLoggedUser] = useState<UserMeProps | null>(null);
+
+    async function fetchLoggedInUser() {
+        const response = await getUserFromSession();
+        setLoggedUser(mapGetUserFromSession(response as unknown as Record<string, unknown | Record<string, unknown>>));
+    };
+
     function toggleSidebar() {
         setIsHamburgerClicked(!isHambugerClicked);
 
@@ -76,6 +84,10 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
             setShowSidebarOverlay(!showSidebarOverlay);
         }
     }
+
+    useEffect(() => {
+        fetchLoggedInUser();
+    }, []);
 
     useEffect(() => {
         function monitorComponentResize() {
@@ -195,7 +207,11 @@ const Dashboard: React.FC<DashboardProps> = ({ sideBarItems, onDisplayUpdate, ch
 
                         {/* User Settings */}
                         <div className='w-full w-full items-end flex justify-end items-center'>
-                            <UserSettingsDropdown user={{ fullName: "John Doe", email: "john.doe@example.com" }}/>
+                            <UserSettingsDropdown user={{
+                                fullName: loggedUser?.fullName || "",
+                                email: loggedUser?.email || "",
+                                userId: loggedUser?.userId || 0,
+                            }}/>
                         </div>
                     </div>
 

@@ -10,16 +10,24 @@ class UserLoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
+        print("validating creds: ", email, password)
+
         if email and password:
             user = authenticate(
-                request=self.context.get(
-                    'request'), email=email, password=password)
+                request=self.context.get('request'),
+                email=email,
+                password=password
+            )
+
             if not user:
                 raise serializers.ValidationError('Invalid credentials')
+
+            if not user.is_active:
+                raise serializers.ValidationError('User account is disabled')
         else:
             raise serializers.ValidationError(
                 'Must include "email" and "password"')
 
         attrs['user'] = user
-        attrs['role_id'] = user.role.role_id 
+        attrs['role_id'] = user.role.role_id
         return attrs

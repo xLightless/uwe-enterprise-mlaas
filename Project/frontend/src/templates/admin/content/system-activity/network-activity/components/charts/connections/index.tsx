@@ -22,7 +22,7 @@ const NetworkConnectionsChart: React.FC<NetworkConnectionChartProps> = ({ data }
         <ResponsiveContainer width="100%" height={400}>
             <BarChart data={data}>
                 <XAxis dataKey="date" />
-                <YAxis label={{ value: 'API Calls per Day', angle: -90 }} />
+                <YAxis label={{ value: 'API Calls per Day', angle: -90 }} tick={false} />
                 <Tooltip cursor={{ fill: "oklch(0.928 0.006 264.531)"}}/>
                 <Bar dataKey="count" fill="#8884d8"/>
             </BarChart>

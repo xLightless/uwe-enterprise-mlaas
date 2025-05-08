@@ -1,10 +1,12 @@
 import React from "react"
 import { Link } from 'react-router-dom'
 import home_cover from '../../assets/home_cover.jpg'
+import Nav from "../../components/navigation/Nav"
 
 function Home() {
     return (
         <div className="container-primary">
+            <Nav />
             <div className="flex justify-end h-[400px] w-full" style={{backgroundImage: `url(${home_cover})`, backgroundSize: 'cover', backgroundPosition: 'center',}}>
                 <div className="flex flex-col justify-center gap-5 p-5 max-w-1/2 bg-gray-500/50 backdrop-blur-sm text-white">
                     <p className="font-bold text-2xl">TITLE</p>

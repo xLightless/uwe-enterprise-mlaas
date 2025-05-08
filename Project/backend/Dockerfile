@@ -14,13 +14,15 @@ RUN pip install --upgrade pip && \
 
 # Copy the project files
 COPY . .
+RUN pip install joblib
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Make scripts executable
 RUN chmod +x ./entrypoint.sh
 RUN chmod +x ./wait-for
 
 # Set the port
-EXPOSE 8000
+EXPOSE 5000
 
 # Run entrypoint script
 ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]

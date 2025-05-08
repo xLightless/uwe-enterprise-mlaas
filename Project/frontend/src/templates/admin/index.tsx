@@ -16,36 +16,27 @@ import AuditLogs from './content/system-activity/audit-logs';
 import MLAAS_Traffic from './content/system-activity/mlaas-traffic';
 import RolesPermissions from './content/manage-accounts/roles-permissions';
 import Recovery from './content/manage-accounts/recovery';
-import DataRegulation from './content/manage-accounts/data-regulation';
-import { Invoices, Billing } from './content/finances';
-import { RoleProvider } from '../../common/contexts/role';
-import { UserProvider } from '../../common/contexts/user';
-
-/**
- * Wraps all providers and contexts of admin dashboard in a single component.
- * @param param0
- * @returns
- */
-const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
-        <UserProvider>
-            <RoleProvider>
-                {children}
-            </RoleProvider>
-        </UserProvider>
-    )
-};
+import { Invoices } from './content/finances';
+import ClaimsHandling from './content/claims-handling';
+import { useSession } from '../../common/contexts/user/session-context';
 
 const AdminDashboard: React.FC = () => {
+    const session = useSession();
+
+    if (!session.hasPermission("view_admin_dashboard")) {
+        return session.PermissionDenied();
+    }
+
+    const userPermissions = session.sessionContext?.role.permissions?.map((permission) => permission.permissionName) || [];
+
     const componentMapping: { [key: string]: React.FC } = {
         "Network Activity": NetworkActivity,
         "Audit Logs": AuditLogs,
         "MLAAS Traffic": MLAAS_Traffic,
         "Roles & Permissions": RolesPermissions,
         "Recovery": Recovery,
-        "Data & Regulation": DataRegulation,
-        "Invoices": Invoices,
-        "Billing": Billing,
+        "Invoices & Payments": Invoices,
+        "Claims Handling": ClaimsHandling,
     };
 
     const sidebarItems: SidebarItem[] = [
@@ -53,29 +44,40 @@ const AdminDashboard: React.FC = () => {
             name: "System Activity",
             sideBarIcon: <FontAwesomeIcon icon={faServer} />,
             items: [
-                ["Network Activity", () => onSidebarUpdate("Network Activity"), <FontAwesomeIcon key={1} icon={faNetworkWired} />],
-                ["Audit Logs", () => onSidebarUpdate("Audit Logs"), <FontAwesomeIcon key={2} icon={faCommentNodes} />],
-                ["MLAAS Traffic", () => onSidebarUpdate("MLAAS Traffic"), <FontAwesomeIcon key={3} icon={faMicrochip} />],
-            ] as [string, () => void | null, JSX.Element | null][],
+                ["Network Activity", () => onSidebarUpdate("Network Activity"), <FontAwesomeIcon key={1} icon={faNetworkWired} />, "view_network_activity"],
+                ["Audit Logs", () => onSidebarUpdate("Audit Logs"), <FontAwesomeIcon key={2} icon={faCommentNodes} />, "view_audit_logs"],
+                ["MLAAS Traffic", () => onSidebarUpdate("MLAAS Traffic"), <FontAwesomeIcon key={3} icon={faMicrochip} />, "view_mlaas_traffic"],
+            ] as [string, () => void | null, JSX.Element | null, string][],
         },
         {
             name: "Manage Accounts",
             sideBarIcon: <FontAwesomeIcon icon={faUser} />,
             items: [
-                ["Roles & Permissions", () => onSidebarUpdate("Roles & Permissions"), <FontAwesomeIcon key={4} icon={faNetworkWired} />],
-                ["Recovery", () => onSidebarUpdate("Recovery"), <FontAwesomeIcon key={5} icon={faCommentNodes} />],
-                ["Data & Regulation", () => onSidebarUpdate("Data & Regulation"), <FontAwesomeIcon key={6} icon={faMicrochip} />],
-            ] as [string, () => void | null, JSX.Element | null][],
+                ["Roles & Permissions", () => onSidebarUpdate("Roles & Permissions"), <FontAwesomeIcon key={4} icon={faNetworkWired} />, "view_role_permissions"],
+                ["Recovery", () => onSidebarUpdate("Recovery"), <FontAwesomeIcon key={5} icon={faCommentNodes} />, "view_account_recovery"],
+            ] as [string, () => void | null, JSX.Element | null, string][],
         },
         {
             name: "Review Finances",
             sideBarIcon: <FontAwesomeIcon icon={faCreditCard} />,
             items: [
-                ["Invoices", () => onSidebarUpdate("Invoices"), <FontAwesomeIcon key={7} icon={faFileInvoice} />],
-                ["Billing", () => onSidebarUpdate("Billing"), <FontAwesomeIcon key={8} icon={faCreditCard} />],
-            ] as [string, () => void | null, JSX.Element | null][],
+                ["Invoices & Payments", () => onSidebarUpdate("Invoices & Payments"), <FontAwesomeIcon key={7} icon={faFileInvoice} />, "view_invoice_settlements"],
+            ] as [string, () => void | null, JSX.Element | null, string][],
         },
+        {
+            name: "Claims Handling",
+            sideBarIcon: <FontAwesomeIcon icon={faFileInvoice} />,
+            items: [
+                ["Claims Handling", () => onSidebarUpdate("Claims Handling"), <FontAwesomeIcon key={8} icon={faFileInvoice} />, "view_claims_handling"],
+            ] as [string, () => void | null, JSX.Element | null, string][],
+        }
     ];
+
+    // Filter sidebar items based on user permissions
+    const filteredSidebarItems = sidebarItems.map((section) => ({
+        ...section,
+        items: section.items.filter(([, , , permission]) => userPermissions.includes(permission)),
+    })).filter((section) => section.items.length > 0);
 
 
     /**
@@ -85,7 +87,7 @@ const AdminDashboard: React.FC = () => {
      * @returns {string} - The sidebar item to render.
      */
     const getRelativeSidebarDisplay = () => {
-        const itemIndex = localStorage.getItem('clickedItemIndex');
+        const itemIndex = sessionStorage.getItem('clickedItemIndex');
         if (itemIndex !== null) {
             const index = parseInt(itemIndex, 10);
             let idx = 0;
@@ -98,25 +100,33 @@ const AdminDashboard: React.FC = () => {
                 }
             }
         }
-        return "Network Activity";
+
+        return "";
     };
+
     const [displayChoice, setDisplayChoice] = useState<string>(getRelativeSidebarDisplay);
 
     function onSidebarUpdate(name: string) {
         setDisplayChoice(name);
     };
 
-    /**
-     * Creates a map of components and render
-     * them based on the sidebar item clicked.
-     */
     const DisplayComponent = componentMapping[displayChoice];
 
+    const hasPermission = filteredSidebarItems.some((section) =>
+        section.items.some((item) => item[0] === displayChoice)
+    );
+    const FallbackComponent = () => {
+        const firstValidItem = filteredSidebarItems[0]?.items[0]?.[0];
+        if (firstValidItem) {
+            setDisplayChoice(firstValidItem);
+            return componentMapping[firstValidItem] ? React.createElement(componentMapping[firstValidItem]) : null;
+        }
+        return null;
+    };
+
     return (
-        // searchBarOptions={componentMapping}
-        <Dashboard sideBarItems={sidebarItems} onDisplayUpdate={onSidebarUpdate}>
+        <Dashboard sideBarItems={filteredSidebarItems} onDisplayUpdate={onSidebarUpdate}>
             <div className="grid grid-rows-[auto_1fr] w-full h-full gap-y-4">
-                {/* Descriptor */}
                 <div className="flex items-center justify-start">
                     <h1 className="font-bold">
                         Dashboard
@@ -124,16 +134,15 @@ const AdminDashboard: React.FC = () => {
                     </h1>
                 </div>
 
-                {/*
-                    Wrap the admin dashboard with role context
-                    to allow cached permissible states.
-                */}
-                <Providers>
+                {/* Adds fallback component to prevent rendering old pages. */}
+                {hasPermission && DisplayComponent ? (
                     <DisplayComponent />
-                </Providers>
+                ) : (
+                    <FallbackComponent />
+                )}
             </div>
         </Dashboard>
-    )
+    );
 };
 
 

@@ -24,7 +24,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ placeholder, value, onSearchChang
                     <input
                         type="search"
                         name="search"
-                        id="search"
+                        id={`search-${Date.now()}`}
                         value={value}
                         className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-3xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm"
                         placeholder={placeholder}

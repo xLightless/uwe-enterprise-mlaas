@@ -1,0 +1,190 @@
+[1mdiff --cc Project/backend/Dockerfile[m
+[1mindex 69bcc41,db70b69..0000000[m
+[1m--- a/Project/backend/Dockerfile[m
+[1m+++ b/Project/backend/Dockerfile[m
+[36m@@@ -16,10 -16,8 +16,7 @@@[m [mRUN pip install --upgrade pip && [m
+  COPY . .[m
+  RUN pip install joblib[m
+  RUN pip install --no-cache-dir -r requirements.txt[m
+[31m- COPY ./function/prediction/label_encoders.pkl ./function/prediction/label_encoders.pkl[m
+[31m- COPY ./function/prediction/random_forest_model.pkl ./function/prediction/random_forest_model.pkl[m
+[31m- COPY ./function/prediction/training_data.pkl ./function/prediction/training_data.pkl[m
+  [m
+[31m -[m
+  # Make scripts executable[m
+  RUN chmod +x ./entrypoint.sh[m
+  RUN chmod +x ./wait-for[m
+[1mdiff --cc Project/backend/config/settings.py[m
+[1mindex b16fd79,9ab8260..0000000[m
+[1m--- a/Project/backend/config/settings.py[m
+[1m+++ b/Project/backend/config/settings.py[m
+[36m@@@ -43,9 -44,8 +44,9 @@@[m [mINSTALLED_APPS = [m
+      "django.contrib.messages",[m
+      "django.contrib.staticfiles",[m
+      "function",[m
+[31m-     "function.users",[m
+[31m -    [m
+[32m++[m
+      "rest_framework",[m
+[32m +    'rest_framework.authtoken',[m
+      "djoser",[m
+      "rest_framework_simplejwt",[m
+      "rest_framework_simplejwt.token_blacklist",[m
+[36m@@@ -53,15 -53,19 +54,20 @@@[m
+      'corsheaders',[m
+  ][m
+  [m
+[32m +[m
+  CORS_ALLOWED_ORIGINS = [[m
+      "http://localhost:5173",[m
+[31m-     "http://localhost:5174",[m
+[31m -    [m
+[32m++[m
+  ][m
+  [m
+[31m- # Machine Learning Service settings[m
+[31m- # In config/settings.py[m
+[32m+ [m
+  ML_SERVICE_URL = os.environ.get('ML_SERVICE_URL', 'http://ml-service:5000')[m
+[32m+ STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')[m
+[32m+ # Add this line near the other URL configurations[m
+[32m+ [m
+[32m+ # Frontend URL for redirects[m
+[32m+ FRONTEND_URL = 'Localhost:8000'[m
+[32m+ [m
+  [m
+  TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')[m
+  TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')[m
+[1mdiff --cc Project/backend/function/Model_management/views.py[m
+[1mindex f625e18,247dccd..0000000[m
+[1m--- a/Project/backend/function/Model_management/views.py[m
+[1m+++ b/Project/backend/function/Model_management/views.py[m
+[36m@@@ -17,9 -16,29 +16,29 @@@[m [mdef add_model(request)[m
+      """[m
+      Adds a new ML model to the system.[m
+      """[m
+[31m-     serializer = ModelSerializer(data=request.data)[m
+[31m-     if serializer.is_valid():[m
+[31m-         serializer.save()[m
+[32m+     try:[m
+[32m+         # Create model directly from request data[m
+[32m+         model = Model.objects.create([m
+[32m+             model_name=request.data.get('model_name'),[m
+[32m+             model_description=request.data.get('model_description'),[m
+[32m+             model_version=request.data.get('model_version'),[m
+[32m+             uploaded_at=request.data.get('uploaded_at'),[m
+[32m+             model_file=request.data.get('model_file'),[m
+[32m+             label_encoder_file=request.data.get('label_encoder_file', '')[m
+[32m+         )[m
+[31m -        [m
+[32m++[m
+[32m+         # Return model data as dictionary[m
+[32m+         model_data = {[m
+[32m+             'model_id': model.model_id,[m
+[32m+             'model_name': model.model_name,[m
+[32m+             'model_description': model.model_description,[m
+[32m+             'model_version': str(model.model_version),[m
+[32m+             'uploaded_at': model.uploaded_at,[m
+[32m+             'is_active': model.is_active,[m
+[32m+             'model_file': model.model_file,[m
+[32m+             'label_encoder_file': model.label_encoder_file[m
+[32m+         }[m
+[31m -        [m
+[32m++[m
+          return Response({[m
+              "status": True,[m
+              "message": "Model added successfully.",[m
+[36m@@@ -55,7 -75,20 +75,20 @@@[m [mdef view_models(request)[m
+      View all ML models in the system.[m
+      """[m
+      models = Model.objects.all()[m
+[31m-     serializer = ModelSerializer(models, many=True)[m
+[32m+     model_list = [][m
+[31m -    [m
+[32m++[m
+[32m+     for model in models:[m
+[32m+         model_list.append({[m
+[32m+             'model_id': model.model_id,[m
+[32m+             'model_name': model.model_name,[m
+[32m+             'model_description': model.model_description,[m
+[32m+             'model_version': str(model.model_version),[m
+[32m+             'uploaded_at': model.uploaded_at,[m
+[32m+             'is_active': model.is_active,[m
+[32m+             'num_accepted_claims': model.num_accepted_claims,[m
+[32m+             'num_rejected_claims': model.num_rejected_claims[m
+[32m+         })[m
+[31m -    [m
+[32m++[m
+      return Response({[m
+          "status": True,[m
+          "message": "Models retrieved successfully.",[m
+[36m@@@ -88,26 -121,58 +121,58 @@@[m [mdef model_detail(request, pk)[m
+      Retrieve, update or delete a model instance[m
+      """[m
+      model = get_object_or_404(Model, pk=pk)[m
+[31m -    [m
+[32m++[m
+      if request.method == 'GET':[m
+[31m-         serializer = ModelSerializer(model)[m
+[32m+         model_data = {[m
+[32m+             'model_id': model.model_id,[m
+[32m+             'model_name': model.model_name,[m
+[32m+             'model_description': model.model_description,[m
+[32m+             'model_version': str(model.model_version),[m
+[32m+             'uploaded_at': model.uploaded_at,[m
+[32m+             'is_active': model.is_active,[m
+[32m+             'model_file': model.model_file,[m
+[32m+             'label_encoder_file': model.label_encoder_file[m
+[32m+         }[m
+[31m -        [m
+[32m++[m
+          return Response({[m
+              "status": True,[m
+              "message": "Model details retrieved successfully.",[m
+[31m-             "data": serializer.data}, status=status.HTTP_200_OK)[m
+[32m+             "data": model_data[m
+[32m+         }, status=status.HTTP_200_OK)[m
+[31m -        [m
+[32m++[m
+      elif request.method == 'PUT':[m
+[31m-         serializer = ModelSerializer(model, data=request.data)[m
+[31m-         if serializer.is_valid():[m
+[31m-             serializer.save()[m
+[32m+         try:[m
+[32m+             model.model_name = request.data.get('model_name', model.model_name)[m
+[32m+             model.model_description = request.data.get('model_description', model.model_description)[m
+[32m+             model.model_version = request.data.get('model_version', model.model_version)[m
+[32m+             model.model_file = request.data.get('model_file', model.model_file)[m
+[32m+             model.label_encoder_file = request.data.get('label_encoder_file', model.label_encoder_file)[m
+[32m+             model.save()[m
+[31m -            [m
+[32m++[m
+[32m+             model_data = {[m
+[32m+                 'model_id': model.model_id,[m
+[32m+                 'model_name': model.model_name,[m
+[32m+                 'model_description': model.model_description,[m
+[32m+                 'model_version': str(model.model_version),[m
+[32m+                 'uploaded_at': model.uploaded_at,[m
+[32m+                 'is_active': model.is_active,[m
+[32m+                 'model_file': model.model_file,[m
+[32m+                 'label_encoder_file': model.label_encoder_file[m
+[32m+             }[m
+[31m -            [m
+[32m++[m
+              return Response({[m
+                  "status": True,[m
+                  "message": "Model updated successfully.",[m
+[31m-                 "data": serializer.data[m
+[32m+                 "data": model_data[m
+              }, status=status.HTTP_200_OK)[m
+[31m-         return Response({[m
+[31m-             "status": False,[m
+[31m-             "message": "Failed to update model.",[m
+[31m-             "details": serializer.errors[m
+[31m-         }, status=status.HTTP_400_BAD_REQUEST)[m
+[31m -            [m
+[32m++[m
+[32m+         except Exception as e:[m
+[32m+             return Response({[m
+[32m+                 "status": False,[m
+[32m+                 "message": "Failed to
