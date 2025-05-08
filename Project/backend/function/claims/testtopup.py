@@ -1,3 +1,4 @@
+# flake8: noqa
 import stripe
 
 stripe.api_key = 'sk_test_51RLjwsQWp6sm6nVBVkxojARY1qOfMp6Sgmt8PYJ0XZUIq9lpGJ8wJqVnpyUvuXXCW11xOFuYSUc2fa9RuVUYaO7u00N9TPynYh'  # Your platform's secret key
