@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { APIUsersProps, JSONResponse, UserProps } from '../common/interfaces';
+import { APIUsersProps, JSONResponse, mapGetUserFromSession, Permission, SessionContextProps, UserMeProps, UserProps } from '../common/interfaces';
 import { getTokenAccess } from '../common/session';
+import { getPermissionsOfRoleId } from './permissions';
 
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8000/api/users',
@@ -153,11 +154,64 @@ const createUser = async (user: UserProps): Promise<JSONResponse<UserProps>> => 
         });
 };
 
+/**
+ * Get the current user's basic information:
+ * - User ID
+ * - Role ID, Role Name, and Permissions.
+ * @returns {Promise<JSONResponse>} - A promise that resolves to the user's information.?
+ */
+const getUserFromSession = async (): Promise<JSONResponse> => {
+    return axiosInstance.get<JSONResponse>('/me/',
+        {
+            headers: {
+                Authorization: getTokenAccess(true),
+            },
+        }
+    )
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error fetching user from session:', error);
+            throw error;
+        });
+}
+
+const getUserSessionContext = async (): Promise<JSONResponse<SessionContextProps>> => {
+    const me = await getUserFromSession();
+    const user = mapGetUserFromSession(me as unknown as Record<string, unknown | Record<string, unknown>>) as UserMeProps;
+
+    const fetchedPermissionsArray = await getPermissionsOfRoleId(user.role.roleId as number);
+    const permissionsMap = fetchedPermissionsArray.data?.permissions?.map(
+        (permission: Permission) => {
+            return {
+                permissionName: permission.permission_name,
+            };
+        }
+    ) || [];
+
+    return {
+        status: 'success',
+        message: 'User session context retrieved successfully',
+        data: {
+            userId: user.userId,
+            role: {
+                roleId: user.role.roleId,
+                roleName: user.role.roleName,
+                permissions: permissionsMap,
+            },
+        } as SessionContextProps,
+    };
+}
+
+
+
+
 export {
     updateUserDetails,
     getUserDetails,
     getUsers,
     adminUpdateUserDetails,
     deleteUserById,
-    createUser
+    createUser,
+    getUserFromSession,
+    getUserSessionContext
 }

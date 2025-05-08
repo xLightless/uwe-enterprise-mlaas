@@ -1,4 +1,4 @@
-import { faUser, faCog, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { UserProps } from "../../common/interfaces";
@@ -19,13 +19,13 @@ const UserSettingsDropdown: React.FC<UserSettingsDropdownProps> = ({ user }) => 
             await handleLogoutUser();
 
             console.log("Logged out successfully");
-            
+
             navigate("/");
         } catch (err) {
             console.error("Logout failed:", err);
         }
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function openUserSettings() {
         // Replace with actual fetch request
         return true;
@@ -51,13 +51,13 @@ const UserSettingsDropdown: React.FC<UserSettingsDropdownProps> = ({ user }) => 
                 </div>
 
                 {isProfileClicked && (
-                <div className="absolute top-full left-0 right-0 w-full max-w-[150px] bg-gray-300 z-10 border-l border-b border-r" onMouseLeave={toggleProfileDropdown}>
+                <div className="absolute top-full left-0 right-0 w-full max-w-[150px] bg-gray-300 z-10 border-l border-b border-r" onMouseLeave={() => toggleProfileDropdown()}>
                     <ul className="">
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2" onClick={openUserSettings}>
+                        {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2" onClick={() => openUserSettings()}>
                             <FontAwesomeIcon icon={faCog} />
                             <span>Settings</span>
-                        </li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2" onClick={logoutUser}>
+                        </li> */}
+                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-2" onClick={() => logoutUser()}>
                             <FontAwesomeIcon icon={faArrowRightFromBracket} />
                             <span>Logout</span>
                         </li>

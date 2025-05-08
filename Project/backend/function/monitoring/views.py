@@ -30,7 +30,7 @@ def get_activity_logs_next(request, start_index=None, end_index=None):
         }, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        logs = ActivityLog.objects.using('traffic_db').order_by(
+        logs = ActivityLog.objects.using('default').order_by(
             "-generated_at"
         )[start_index:end_index+1]
 
@@ -60,7 +60,7 @@ def count_connections(request):
         start_date = today - timedelta(days=90)
 
         logs = (
-            ActivityLog.objects.using('traffic_db')
+            ActivityLog.objects.using('default')
             .filter(generated_at__gte=start_date)
             .annotate(date=TruncDate('generated_at'))
             .values('date')

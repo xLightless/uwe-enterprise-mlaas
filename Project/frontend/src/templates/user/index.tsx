@@ -13,8 +13,14 @@ import SubmitClaim from './content/submit-claim';
 import UploadCSV from './content/upload-csv';
 import OngoingClaims from './content/ongoing-claims';
 import PastClaims from './content/past-claims';
+import { useSession } from '../../common/contexts/user/session-context';
 
 const UserDashboard: React.FC = () => {
+    const session = useSession();
+    if (!session.hasPermission("view_user_dashboard")) {
+        return session.PermissionDenied();
+    }
+
     const componentMapping: { [key: string]: React.FC } = {
         "User Details": UserDetails,
         "Submit Claim": SubmitClaim,

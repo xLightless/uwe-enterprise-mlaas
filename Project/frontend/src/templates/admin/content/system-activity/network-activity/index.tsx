@@ -7,10 +7,10 @@ import { getActivityLogsNext, getPastConnections } from "../../../../../reposito
 import { getUserDetails } from "../../../../../repositories/user";
 
 const NetworkActivity: React.FC = () => {
+
     const [data, setNetworkActivityData] = useState<TableData | null>(null);
     const [user, setUser] = useState<UserProps | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
-    // const userContext = useUserContext();
 
     const [chartData, setChartData] = useState<{ date: string, count: number }[]>([]);
 
@@ -115,7 +115,7 @@ const NetworkActivity: React.FC = () => {
     async function fetchedChartData() {
         try {
             const response = await getPastConnections();
-            console.log("Response:", response);
+            // console.log("Response:", response);
 
             if (response.status && response.message === "Activity log chart data retrieved successfully") {
                 const pastConnections = response.data;
@@ -128,7 +128,7 @@ const NetworkActivity: React.FC = () => {
 
                     // Save the connection data into a state to be rendered by the chart.
                     setChartData(chartData);
-                    console.log("Chart data successfully set:", chartData);
+                    // console.log("Chart data successfully set:", chartData);
                 } else {
                     console.warn("Invalid data format for pastConnections:", pastConnections);
                 }

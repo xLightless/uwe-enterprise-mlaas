@@ -1,23 +1,33 @@
+import React from 'react'
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
 import './App.css'
 
 import Home from './templates/home/Home';
 import AdminDashboard from './templates/admin';
 import UserDashboard from './templates/user';
-import TestDashboard from './templates/examples/dashboard';
-
+import { SessionProvider } from './common/contexts/user/session-context';
+import TokenProvider from './common/contexts/token-provider';
 
 function App() {
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/test" element={<TestDashboard />} />
-      </Routes>
-    </Router>
+    <SessionProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/user-dashboard" element={
+            <TokenProvider>
+              <UserDashboard />
+            </TokenProvider>
+          } />
+          <Route path="/admin-dashboard" element={
+            <TokenProvider>
+              <AdminDashboard />
+            </TokenProvider>
+          } />
+        </Routes>
+      </Router>
+    </SessionProvider>
   )
 }
 

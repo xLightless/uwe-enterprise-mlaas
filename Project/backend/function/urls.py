@@ -67,17 +67,6 @@ urlpatterns = [
     path('users/', list_all_users, name='list-users'),
     path('users/<int:user_id>/', get_user_by_id, name='get_user_by_id'),
     path('users/<int:user_id>/update/', admin_update_user,
-         name='admin-update-user'),
-    path('users/<int:user_id>/delete/', delete_user, name='delete-user'),
-    # Include Djoser URLs
-    path('auth/', include('djoser.urls')),
-
-    # USER MANAGEMENT
-    path('users/me/', get_user_details, name='get_user_details'),
-    path('users/me/update/', update_user_profile, name='update_user_profile'),
-    path('users/', list_all_users, name='list-users'),
-    path('users/<int:user_id>/', get_user_by_id, name='get_user_by_id'),
-    path('users/<int:user_id>/update/', admin_update_user,
          name='admin_update_user'),
     path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
 
@@ -120,22 +109,19 @@ urlpatterns = [
     path('logs/activity/<int:start_index>/<int:end_index>/', get_activity_logs_next, name='get_activity_logs_next'),
     path('logs/activity/chart/', count_connections, name='count_connections'),
 
-
-    #claims handeling stuff
-    path('finance/claims-to-settle/', finance_get_claims_to_settle, name='finance_get_claims_to_settle'),
-    path('finance/initiate-payment/<str:claim_id>/', finance_initiate_payment, name='finance_initiate_payment'),
-
-
-
     # User Claim Management
     path('claims/submit/', submit_claim, name='submit_claim'),
     path('claims/list/', get_user_claims, name='get_user_claims'),
     path('claims/<str:claim_id>/', get_claim_details, name='get_claim_details'),
-    # Finance Management
+    # Finamce Management - Payment
     path('stripe/signup/', create_stripe_connect_account, name='create_stripe_connect_account'),
     path('stripe/add/', add_stripe_account_id, name='link_test_stripe_account'),
-    path('finance/claims/', finance_get_claims_to_settle, name='finance_get_claims_to_settle'),
+
+    # Finance Management - Claims
+    # path('finance/claims/', finance_get_claims_to_settle, name='finance_get_claims_to_settle'),
     path('finance/claims/<int:claim_id>/payment/', finance_initiate_payment, name='finance_initiate_payment'),
+    path('finance/claims-to-settle/', finance_get_claims_to_settle, name='finance_get_claims_to_settle'),
+    path('finance/initiate-payment/<str:claim_id>/', finance_initiate_payment, name='finance_initiate_payment'),
     path('claims/<int:claim_id>/payment_status/', user_get_payment_status, name='user_get_payment_status'),
 
     # Admin Management

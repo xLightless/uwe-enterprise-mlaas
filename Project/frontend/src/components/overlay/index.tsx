@@ -10,9 +10,11 @@ interface OverlayProps {
 
 const Overlay: React.FC<OverlayProps> = ({ children, className, onClose }) => {
     return createPortal(
-        <div className="fixed inset-0 flex items-center justify-center p-4 bg-gray-500/75 z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500/75 z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             {<KeyboardCloseEvent operation={onClose} />}
-            <div className={`relative w-full max-w-lg ${className}`}>
+
+            {/* p-4 */}
+            <div className={`relative w-full ${className}`}>
                 {children}
             </div>
         </div>,

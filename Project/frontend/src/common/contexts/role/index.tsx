@@ -12,7 +12,7 @@ interface RoleContextProps {
 
 const RoleContext = createContext<RoleContextProps>({
     roleId: null,
-    roleName: null,
+    roleName: "",
     permissions: [],
     setRole: () => {},
     removeRole: () => {},
@@ -30,6 +30,10 @@ const RoleProvider: React.FC<{children: ReactNode}> = ({ children }) => {
      * roleId, roleName, and permissions in the context.
      */
     const setRole = (role: Role) => {
+        if (!role.roleId) {
+            console.error("Invalid role object passed to setRole:", role);
+            return;
+        }
         setRoleId(role.roleId);
         setRoleName(role.roleName);
         setPermissions(role.permissions);

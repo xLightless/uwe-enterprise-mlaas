@@ -98,7 +98,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
     const [clickedItemIndex, setClickedItemIndex] = useState<number | null>(() => {
-        const storedClickedItemIndex = localStorage.getItem('clickedItemIndex');
+        const storedClickedItemIndex = sessionStorage.getItem('clickedItemIndex');
         return storedClickedItemIndex !== null ? parseInt(storedClickedItemIndex, 10) : null;
     });
 
@@ -106,7 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
 
     useEffect(() => {
         if (clickedItemIndex !== null) {
-            localStorage.setItem('clickedItemIndex', clickedItemIndex.toString());
+            sessionStorage.setItem('clickedItemIndex', clickedItemIndex.toString());
         }
     }, [clickedItemIndex]);
 

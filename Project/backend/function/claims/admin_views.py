@@ -19,41 +19,41 @@ def admin_get_claims_by_status(request, status_filter):
     """
     Retrieve claims filtered by status (pending, approved, rejected, settled).
     """
-    
+
     # Validate status parameter
     if status_filter not in ['pending', 'approved', 'rejected', 'settled', 'all']:
         return Response({
             "error": "Invalid status filter. Must be one of: pending, approved, rejected, settled, all"
         }, status=status.HTTP_400_BAD_REQUEST)
-    
+
     try:
         # Apply filter unless 'all' is specified
         if status_filter == 'all':
             user_claims = UserClaim.objects.all()
         else:
             user_claims = UserClaim.objects.filter(pending_claim=status_filter)
-        
+
         # Apply sorting if provided
         sort_by = request.query_params.get('sort_by', 'claim__claim_date')
         sort_order = request.query_params.get('sort_order', 'desc')
-        
+
         if sort_order.lower() == 'desc':
             sort_by = f"-{sort_by}"
-        
+
         user_claims = user_claims.order_by(sort_by)
-        
+
         # Apply pagination
         page = int(request.query_params.get('page', 1))
         page_size = int(request.query_params.get('page_size', 20))
         start_idx = (page - 1) * page_size
         end_idx = start_idx + page_size
-        
+
         # Get total count before pagination
         total_count = user_claims.count()
-        
+
         # Apply pagination
         user_claims = user_claims[start_idx:end_idx]
-        
+
         claims_data = []
         for user_claim in user_claims:
             claims_data.append({
@@ -69,7 +69,7 @@ def admin_get_claims_by_status(request, status_filter):
                 "dominant_injury": user_claim.claim.Dominant_injury,
                 "vehicle_type": user_claim.user_accident.user_vehicle.vehicle.vehicle_type
             })
-        
+
         return Response({
             "claims": claims_data,
             "total_count": total_count,
@@ -77,7 +77,7 @@ def admin_get_claims_by_status(request, status_filter):
             "page_size": page_size,
             "total_pages": (total_count + page_size - 1) // page_size  # Ceiling division
         }, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to retrieve claims: {str(e)}"
@@ -92,7 +92,7 @@ def admin_update_claim(request, claim_id):
     """
     try:
         user_claim = get_object_or_404(UserClaim, user_claim_id=claim_id)
-        
+
         # Check for status update
         new_status = request.data.get('status')
         if new_status:
@@ -100,16 +100,16 @@ def admin_update_claim(request, claim_id):
                 return Response({
                     "error": "Invalid status provided. Must be one of: pending, approved, rejected, settled"
                 }, status=status.HTTP_400_BAD_REQUEST)
-            
+
             user_claim.pending_claim = new_status
-        
+
         # Check for settlement amount override
         new_settlement = request.data.get('settlement_amount')
         if new_settlement is not None:
             try:
                 # Ensure settlement_amount is a valid decimal
                 settlement_amount = Decimal(str(new_settlement))
-                
+
                 # If the model doesn't have settled_amount field, add it
                 if not hasattr(UserClaim, 'settled_amount'):
                     # This is a temporary solution - ideally you'd migrate the database
@@ -117,7 +117,7 @@ def admin_update_claim(request, claim_id):
                     user_claim.settled_amount = settlement_amount
                 else:
                     user_claim.settled_amount = settlement_amount
-                
+
                 # If status is being set to 'settled', update the predicted value too
                 if new_status == 'settled':
                     user_claim.predicted_settlement_value = settlement_amount
@@ -125,7 +125,7 @@ def admin_update_claim(request, claim_id):
                 return Response({
                     "error": "Invalid settlement amount provided"
                 }, status=status.HTTP_400_BAD_REQUEST)
-        
+
         # Add admin notes if provided
         admin_notes = request.data.get('admin_notes')
         if admin_notes:
@@ -134,17 +134,17 @@ def admin_update_claim(request, claim_id):
                 user_claim.admin_notes = admin_notes
             else:
                 user_claim.admin_notes = admin_notes
-        
+
         # Save changes
         user_claim.save()
-        
+
         return Response({
             "message": "Claim updated successfully",
             "claim_id": user_claim.user_claim_id,
             "status": user_claim.pending_claim,
             "settlement_amount": getattr(user_claim, 'settled_amount', user_claim.predicted_settlement_value)
         }, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to update claim: {str(e)}"
@@ -157,16 +157,16 @@ def admin_get_claim_details(request, claim_id):
     """
     Retrieve detailed information about a specific claim for admin.
     """
-    
+
     try:
         user_claim = get_object_or_404(UserClaim, user_claim_id=claim_id)
-        
+
         # Get related objects
         claim = user_claim.claim
         user_accident = user_claim.user_accident
         user_vehicle = user_accident.user_vehicle
         driver = user_vehicle.driver
-        
+
         # Calculate total special damages
         special_damages_total = (
             claim.SpecialHealthExpenses +
@@ -184,20 +184,20 @@ def admin_get_claim_details(request, claim_id):
             claim.SpecialJourneyExpenses +
             claim.SpecialTherapy
         )
-        
+
         # Calculate total general damages
         general_damages_total = (
             claim.GeneralRest +
             claim.GeneralFixed +
             claim.GeneralUplift
         )
-        
+
         # Compile detailed claim information
         claim_data = {
             "claim_id": user_claim.user_claim_id,
             "status": user_claim.pending_claim,
             "predicted_settlement": user_claim.predicted_settlement_value,
-            
+
             # User details
             "user_info": {
                 "user_id": user_claim.user.user_id,
@@ -205,7 +205,7 @@ def admin_get_claim_details(request, claim_id):
                 "email": user_claim.user.email,
                 "phone_number": user_claim.user.phone_number
             },
-            
+
             # Accident details
             "accident_info": {
                 "accident_type": user_accident.accident.accident_type,
@@ -213,20 +213,20 @@ def admin_get_claim_details(request, claim_id):
                 "accident_description": user_accident.accident_description,
                 "weather_conditions": user_accident.weather.weather_conditions
             },
-            
+
             # Vehicle details
             "vehicle_info": {
                 "vehicle_type": user_vehicle.vehicle.vehicle_type,
                 "vehicle_age": user_vehicle.vehicle_age
             },
-            
+
             # Driver details
             "driver_info": {
                 "driver_age": driver.driver_age,
                 "gender": driver.gender,
                 "number_of_passengers": driver.number_of_passengers
             },
-            
+
             # Claim details
             "claim_info": {
                 "claim_date": claim.claim_date,
@@ -235,7 +235,7 @@ def admin_get_claim_details(request, claim_id):
                 "police_report_filed": claim.police_report_filed,
                 "witness_present": claim.witness_present
             },
-            
+
             # Special damages
             "special_damages": {
                 "health_expenses": claim.SpecialHealthExpenses,
@@ -254,7 +254,7 @@ def admin_get_claim_details(request, claim_id):
                 "therapy": claim.SpecialTherapy,
                 "total_special_damages": special_damages_total
             },
-            
+
             # General damages
             "general_damages": {
                 "rest": claim.GeneralRest,
@@ -262,7 +262,7 @@ def admin_get_claim_details(request, claim_id):
                 "uplift": claim.GeneralUplift,
                 "total_general_damages": general_damages_total
             },
-            
+
             # Injury indicators
             "injury_indicators": {
                 "exceptional_circumstances": claim.Exceptional_Circumstances,
@@ -270,13 +270,13 @@ def admin_get_claim_details(request, claim_id):
                 "dominant_injury": claim.Dominant_injury,
                 "whiplash": claim.Whiplash
             },
-            
+
             # Total claimed amount
             "total_claimed_amount": special_damages_total + general_damages_total
         }
-        
+
         return Response(claim_data, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to retrieve claim details: {str(e)}"
@@ -289,32 +289,32 @@ def admin_bulk_update_claims(request):
     """
     Update status for multiple claims at once.
     """
-    
+
     try:
         claim_ids = request.data.get('claim_ids', [])
         new_status = request.data.get('status')
-        
+
         if not claim_ids:
             return Response({
                 "error": "No claim IDs provided"
             }, status=status.HTTP_400_BAD_REQUEST)
-        
+
         if not new_status or new_status not in ['pending', 'approved', 'rejected', 'settled']:
             return Response({
                 "error": "Invalid status provided"
             }, status=status.HTTP_400_BAD_REQUEST)
-        
+
         # Update all specified claims
         updated_count = UserClaim.objects.filter(user_claim_id__in=claim_ids).update(
             pending_claim=new_status
         )
-        
+
         return Response({
             "message": f"Updated {updated_count} claims to status '{new_status}'",
             "updated_count": updated_count,
             "total_requested": len(claim_ids)
         }, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to update claims: {str(e)}"
@@ -327,7 +327,7 @@ def admin_search_claims(request):
     """
     Search for claims based on various criteria.
     """
-    
+
     try:
         # Extract search parameters
         user_name = request.query_params.get('user_name', '')
@@ -340,38 +340,38 @@ def admin_search_claims(request):
         start_date = request.query_params.get('start_date', '')
         end_date = request.query_params.get('end_date', '')
         injury_type = request.query_params.get('injury_type', '')
-        
+
         # Build query
         query = Q()
-        
+
         if user_name:
             query &= Q(user__full_name__icontains=user_name)
-        
+
         if user_email:
             query &= Q(user__email__icontains=user_email)
-        
+
         if claim_id:
             query &= Q(user_claim_id=claim_id)
-        
+
         if accident_type:
             query &= Q(user_accident__accident__accident_type__icontains=accident_type)
-        
+
         if status:
             query &= Q(pending_claim=status)
-        
+
         if min_settlement:
             query &= Q(predicted_settlement_value__gte=min_settlement)
-        
+
         if max_settlement:
             query &= Q(predicted_settlement_value__lte=max_settlement)
-        
+
         if start_date:
             try:
                 start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d')
                 query &= Q(claim__claim_date__gte=start_date)
             except ValueError:
                 pass
-        
+
         if end_date:
             try:
                 end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d')
@@ -380,34 +380,34 @@ def admin_search_claims(request):
                 query &= Q(claim__claim_date__lt=end_date)
             except ValueError:
                 pass
-        
+
         if injury_type:
             query &= Q(claim__Dominant_injury__icontains=injury_type)
-        
+
         # Execute search
         user_claims = UserClaim.objects.filter(query)
-        
+
         # Apply sorting if provided
         sort_by = request.query_params.get('sort_by', 'claim__claim_date')
         sort_order = request.query_params.get('sort_order', 'desc')
-        
+
         if sort_order.lower() == 'desc':
             sort_by = f"-{sort_by}"
-        
+
         user_claims = user_claims.order_by(sort_by)
-        
+
         # Apply pagination
         page = int(request.query_params.get('page', 1))
         page_size = int(request.query_params.get('page_size', 20))
         start_idx = (page - 1) * page_size
         end_idx = start_idx + page_size
-        
+
         # Get total count before pagination
         total_count = user_claims.count()
-        
+
         # Apply pagination
         user_claims = user_claims[start_idx:end_idx]
-        
+
         claims_data = []
         for user_claim in user_claims:
             claims_data.append({
@@ -420,7 +420,7 @@ def admin_search_claims(request):
                 "predicted_settlement": user_claim.predicted_settlement_value,
                 "dominant_injury": user_claim.claim.Dominant_injury
             })
-        
+
         return Response({
             "claims": claims_data,
             "total_count": total_count,
@@ -428,7 +428,7 @@ def admin_search_claims(request):
             "page_size": page_size,
             "total_pages": (total_count + page_size - 1) // page_size  # Ceiling division
         }, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to search claims: {str(e)}"
@@ -442,26 +442,26 @@ def admin_export_claims(request):
     Export claims data for reporting and analysis.
     """
     # Check if user has admin role
-    
+
     try:
         # Extract filter parameters
         status_filter = request.query_params.get('status', '')
         start_date = request.query_params.get('start_date', '')
         end_date = request.query_params.get('end_date', '')
-        
+
         # Build query
         query = Q()
-        
+
         if status_filter and status_filter != 'all':
             query &= Q(pending_claim=status_filter)
-        
+
         if start_date:
             try:
                 start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d')
                 query &= Q(claim__claim_date__gte=start_date)
             except ValueError:
                 pass
-        
+
         if end_date:
             try:
                 end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d')
@@ -470,16 +470,16 @@ def admin_export_claims(request):
                 query &= Q(claim__claim_date__lt=end_date)
             except ValueError:
                 pass
-        
+
         # Execute query
         user_claims = UserClaim.objects.filter(query)
-        
+
         # Prepare export data
         export_data = []
         for user_claim in user_claims:
             claim = user_claim.claim
             user_accident = user_claim.user_accident
-            
+
             export_data.append({
                 "claim_id": user_claim.user_claim_id,
                 "user_name": user_claim.user.full_name,
@@ -518,7 +518,7 @@ def admin_export_claims(request):
                     claim.GeneralUplift
                 ])
             })
-        
+
         return Response({
             "export_data": export_data,
             "export_count": len(export_data),
@@ -529,12 +529,12 @@ def admin_export_claims(request):
                 "end_date": (end_date - timezone.timedelta(days=1)).strftime('%Y-%m-%d') if isinstance(end_date, timezone.datetime) else None
             }
         }, status=status.HTTP_200_OK)
-        
+
     except Exception as e:
         return Response({
             "error": f"Failed to export claims data: {str(e)}"
         }, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_user_agent("Admin adjusted claim settlement value.")
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -545,28 +545,28 @@ def admin_adjust_settlement(request, claim_id):
     """
     try:
         user_claim = get_object_or_404(UserClaim, user_claim_id=claim_id)
-        
+
         # Get settlement amount from request
         settlement_amount = request.data.get('settlement_amount')
-        
+
         if settlement_amount is None:
             return Response({
                 "error": "Settlement amount is required"
             }, status=status.HTTP_400_BAD_REQUEST)
-            
+
         try:
             # Convert to Decimal for precise financial calculations
             settlement_decimal = Decimal(str(settlement_amount))
-            
+
             # Validate amount is positive
             if settlement_decimal < 0:
                 return Response({
                     "error": "Settlement amount cannot be negative"
                 }, status=status.HTTP_400_BAD_REQUEST)
-                
+
             # Update the settlement amount
             user_claim.settled_amount = settlement_decimal
-            
+
             # Optionally capture reason for adjustment
             adjustment_reason = request.data.get('adjustment_reason')
             if adjustment_reason:
@@ -574,10 +574,10 @@ def admin_adjust_settlement(request, claim_id):
                     user_claim.admin_notes = f"Settlement adjusted: {adjustment_reason}"
                 else:
                     user_claim.admin_notes = f"{user_claim.admin_notes}\nSettlement adjusted: {adjustment_reason}"
-            
+
             # Save changes
             user_claim.save()
-            
+
             return Response({
                 "message": "Settlement value adjusted successfully",
                 "claim_id": user_claim.user_claim_id,
@@ -585,12 +585,12 @@ def admin_adjust_settlement(request, claim_id):
                 "new_settlement_amount": user_claim.settled_amount,
                 "adjustment_difference": user_claim.settled_amount - user_claim.predicted_settlement_value
             }, status=status.HTTP_200_OK)
-            
+
         except (ValueError, TypeError, DecimalException):
             return Response({
                 "error": "Invalid settlement amount format"
             }, status=status.HTTP_400_BAD_REQUEST)
-            
+
     except Exception as e:
         return Response({
             "error": f"Failed to adjust settlement: {str(e)}"

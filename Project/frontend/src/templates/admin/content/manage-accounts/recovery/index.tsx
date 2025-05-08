@@ -381,7 +381,7 @@ const Recovery: React.FC = () => {
     return (
         <>
             {toggleDeleteAccountPopUp && deleteAccountPopUpContext &&
-                <Overlay onClose={() => setToggleDeleteAccountPopUp(false)}>
+                <Overlay onClose={() => setToggleDeleteAccountPopUp(false)} className="max-w-lg">
                     <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
                         <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
                             <h1 className="font-bold">Suspend Account: {deleteAccountPopUpContext.email}</h1>
@@ -411,7 +411,7 @@ const Recovery: React.FC = () => {
                 <Overlay onClose={() => {
                     setToggleEditUser(false);
                     fetchData();
-                }}>
+                }} className="max-w-lg">
                     <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
                         {/* Header */}
                         <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
@@ -488,6 +488,7 @@ const Recovery: React.FC = () => {
                                                 id="password"
                                                 className={`bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                                 placeholder={"•••••••••"}
+                                                autoComplete={"new-password"}
                                                 min={8}
                                                 max={20}
                                                 onChange={(e) => setShowEditUserNewPassword(e.target.value)}
@@ -636,6 +637,7 @@ const Recovery: React.FC = () => {
                                             id="email"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="john.doe@company.com"
+                                            autoComplete="username"
                                             onChange={(e) => setNewAccount({
                                                 ...newAccount,
                                                 email: e.target.value,
@@ -656,6 +658,7 @@ const Recovery: React.FC = () => {
                                                       : "text-green-500"
                                                   } bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                                 placeholder={"•••••••••"}
+                                                autoComplete={"new-password"}
                                                 min={8}
                                                 max={20}
                                                 onChange={(e) => setNewAccount({
@@ -687,6 +690,7 @@ const Recovery: React.FC = () => {
                                                       : "text-green-500"
                                                   } bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500`}
                                                 placeholder={"•••••••••"}
+                                                autoComplete={"new-password"}
                                                 min={8}
                                                 max={20}
                                                 onChange={(e) => {
