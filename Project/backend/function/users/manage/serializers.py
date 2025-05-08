@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from function.models import Users, Role
 from function.serializer import RoleSerializer
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -61,3 +62,27 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
             'is_verified', 'is_active', 'password'
         ]
         read_only_fields = ['user_id']
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    role_id = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        source='role',
+        required=False
+    )
+
+    class Meta:
+        model = Users
+        fields = ['email', 'password', 'full_name', 'phone_number', 'role_id']
+
+    def create(self, validated_data):
+        user = Users(
+            email=validated_data['email'],
+            full_name=validated_data['full_name'],
+            role=validated_data['role'],
+            is_verified=True,
+            phone_number=validated_data['phone_number'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user

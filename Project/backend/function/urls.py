@@ -24,7 +24,7 @@ from function.users.login.views import login_user, get_user_profile, \
     logout_user
 from function.users.manage.views import get_user_details, \
     update_user_profile, list_all_users, get_user_by_id, admin_update_user, \
-    delete_user, admin_create_user
+    delete_user, create_user
 from function.monitoring.views import (
     get_activity_logs_next,
     count_connections
@@ -71,7 +71,7 @@ urlpatterns = [
     path('users/<int:user_id>/delete/', delete_user, name='delete_user'),
 
     # Admin - recovery and create accounts
-    path('users/recovery/create-user/', admin_create_user, name='admin_create_user'),
+    path('users/recovery/create-user/', create_user, name='create_user'),
 
     #Model management endpoints
     path('auth/add_models/', add_model, name='add_model'),
