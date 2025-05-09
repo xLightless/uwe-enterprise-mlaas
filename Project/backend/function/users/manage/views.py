@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 import function.util.swu as swu
 from function.serializer import RoleSerializer
-from .serializers import UserProfileSerializer, AdminUserUpdateSerializer
+from .serializers import UserProfileSerializer, AdminUserUpdateSerializer, UserCreateSerializer
 from function.models import Role, Users
 from function.monitoring.middleware import api_user_agent
 from function.permissions import has_role
@@ -205,3 +205,42 @@ def delete_user(request, user_id):
             },
             status=status.HTTP_404_NOT_FOUND
         )
+
+@swagger_auto_schema(
+    method="post",
+    request_body=swu.request(
+        "password:string",
+        "password2:string",
+        "email:string",
+        "full_name:string",
+        "phone_number:string",
+        "role_id:integer"
+    ),
+    responses={201: swu.response(
+        "user:object"
+    )}
+)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def create_user(request):
+    """
+    Creates a user
+    """
+    serializer = UserCreateSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+
+        return Response({
+            "status": True,
+            "user": serializer.data,
+            "permissions": user.get_permissions(),
+            "message": "User created successfully"
+        }, status=status.HTTP_201_CREATED)
+
+    errors = []
+    for k, v in serializer.errors.items():
+        errors.append(f"{k}: {v[0]}")
+    return Response({
+            'status': False,
+            'message': errors,
+        }, status=status.HTTP_400_BAD_REQUEST)
