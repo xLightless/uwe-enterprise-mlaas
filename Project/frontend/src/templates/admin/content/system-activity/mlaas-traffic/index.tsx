@@ -269,7 +269,7 @@ const MLAASTraffic: React.FC = () => {
                 }} className="w-[400px] h-[200px] bg-white max-w-lg">
                     <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
                         <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                            <h1 className="font-bold">&quot;Prediction Failed&rdquo;&#34;&quot;</h1>
+                            <h1 className="font-bold">Prediction Failed</h1>
                         </div>
 
                         <div>
@@ -286,7 +286,7 @@ const MLAASTraffic: React.FC = () => {
                 }} className="w-[400px] h-[200px] bg-white max-w-lg">
                     <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
                         <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
-                            <h1 className="font-bold">&quot;Prediction Successfull&rdquo;&#34;&quot;</h1>
+                            <h1 className="font-bold">Prediction Successful</h1>
                         </div>
 
                         <div>
