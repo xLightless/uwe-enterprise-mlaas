@@ -4,8 +4,7 @@ import home_cover from '../../assets/home_cover.jpg'
 import Nav from "../../components/navigation/Nav"
 
 function Home() {
-
-    return (
+        return (
         <div className="container-primary">
             <Nav />
             <div className="flex justify-end h-[400px] w-full" style={{backgroundImage: `url(${home_cover})`, backgroundSize: 'cover', backgroundPosition: 'center',}}>
