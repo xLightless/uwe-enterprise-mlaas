@@ -56,6 +56,14 @@ export interface Role {
     permissions: Permission[];
 };
 
+export interface CreateUserProps {
+    email: string;
+    password: string;
+    roleId: number;
+    fullName: string;
+    phoneNumber: string;
+}
+
 export interface UserProps {
     userId?: number;
     roleId?: number;
