@@ -8,11 +8,9 @@ import { useSession } from '../../common/contexts/user/session-context'
 function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    const session = useSession();
-
     const [error, setError] = useState('')
 
+    const session = useSession();
     const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -24,9 +22,6 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
             console.log('Logged in successfully:', data)
 
             toggleAuthForms()
-
-            // console.log(session?.hasPermission("view_user_dashboard"), session?.hasPermission("view_admin_dashboard"))
-
             if (session?.hasPermission("view_user_dashboard")) {
                 navigate('/user-dashboard')
             }
@@ -48,7 +43,7 @@ function Login({ toggleAuthForms }: { toggleAuthForms: () => void }) {
 
                 <div className="w-full relative">
                     <img src={mail_icon} width="17px" height="17px" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
-                    <input type="email" placeholder="john.doe@example.co.uk" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border border-slate-200"/>
+                    <input type="text" placeholder="john.doe@example.co.uk" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="flex w-full pl-10 p-2 rounded-lg border border-slate-200"/>
                 </div>
 
             </div>

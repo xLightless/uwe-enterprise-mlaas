@@ -21,6 +21,7 @@ import function.util.swu as swu
 @permission_classes([AllowAny])
 def login_user(request):
     """Logs in the user into their account and returns a JWT token."""
+
     serializer = UserLoginSerializer(
         data=request.data, context={'request': request})
 

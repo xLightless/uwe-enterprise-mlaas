@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { JSONResponse, ModelFeatures, ModelProps, ModelStatistics } from '../common/interfaces';
+import { JSONResponse, ModelProps, ModelStatistics } from '../common/interfaces';
 import { getTokenAccess } from '../common/session';
 
 
@@ -186,30 +186,30 @@ const getModelFeedback = async (modelId: number): Promise<JSONResponse> => {
     });
 };
 
-/**
- * Create a model prediction of the claim features entered by the user.
- * @param modelId - The ID of the model to be used for prediction.
- * @param features - The features of the claim to be predicted.
- * @returns {Promise<JSONResponse>} - A promise that resolves to the prediction result.
- */
-const createdModelPrediction = async (
-    modelId: number,
-    features: ModelFeatures
-): Promise<JSONResponse> => {
-    return models.post<JSONResponse>(`/${modelId}/predict/`, features,
-        {
-            headers: {
-                Authorization: getTokenAccess(true),
-            },
-        }
-    )
-        .then(response => response.data)
-        .catch(error => {
-            console.error('Error creating model prediction:', error);
-            throw error;
-    });
+// /**
+//  * Create a model prediction of the claim features entered by the user.
+//  * @param modelId - The ID of the model to be used for prediction.
+//  * @param features - The features of the claim to be predicted.
+//  * @returns {Promise<JSONResponse>} - A promise that resolves to the prediction result.
+//  */
+// const createdModelPrediction = async (
+//     modelId: number,
+//     features: ModelFeatures
+// ): Promise<JSONResponse> => {
+//     return models.post<JSONResponse>(`/${modelId}/predict/`, features,
+//         {
+//             headers: {
+//                 Authorization: getTokenAccess(true),
+//             },
+//         }
+//     )
+//         .then(response => response.data)
+//         .catch(error => {
+//             console.error('Error creating model prediction:', error);
+//             throw error;
+//     });
 
-};
+// };
 
 export {
     getModels,
@@ -219,5 +219,5 @@ export {
     setActiveModel,
     getModelStatistics,
     getModelFeedback,
-    createdModelPrediction
+    // createdModelPrediction
 }

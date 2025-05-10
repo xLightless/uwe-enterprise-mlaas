@@ -98,7 +98,6 @@ export const loginUser = async (userData: {
 
         // Fetch the new session context
         const userSession = await getUserSessionContext();
-
         /**
          * Store the new login session into context. This will be picked up
          * by the token provider contextualiser to update the session state.
@@ -107,6 +106,7 @@ export const loginUser = async (userData: {
             // Save the new session context to localStorage
             sessionStorage.setItem("session", JSON.stringify(userSession.data));
             console.log("[loginUser] Updated Session:", userSession.data);
+
         } else {
             console.error("Invalid user session data:", userSession);
         }
@@ -216,11 +216,11 @@ export const createStripeConnectAccount = async () => {
                 }
             }
         );
-        
+
         return response.data;
     } catch (error) {
         console.error("Error creating Stripe Connect account:", error);
-        
+
         if (axios.isAxiosError(error) && error.response) {
             throw error.response.data;
         }
@@ -231,7 +231,7 @@ export const addStripeAccountId = async (accountId: string) => {
     try {
         const token = sessionStorage.getItem('access_token');
         const response = await axios.post(
-            `http://localhost:8000/api/stripe/add/`, 
+            `http://localhost:8000/api/stripe/add/`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -241,7 +241,7 @@ export const addStripeAccountId = async (accountId: string) => {
                 }
             }
         );
-        
+
         return response.data;
     } catch (error) {
         console.error("Error adding Stripe account ID:", error);

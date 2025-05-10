@@ -179,6 +179,12 @@ def submit_claim(request):
             model=active_model  # Associate the active model with the claim
         )
 
+        if (prediction_reason == "Unable to generate prediction"):
+            return Response({
+                "status": False,
+                "message": "Prediction failed. Please try again later.",
+            })
+
         # Return the full prediction information in the response
         # even though we're not storing all of it
         return Response({

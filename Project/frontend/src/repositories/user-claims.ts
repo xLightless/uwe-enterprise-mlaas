@@ -49,6 +49,8 @@ export interface ClaimSubmission {
     additionalInjury: number;
     generalUplift: number;
     loanerVehicle: number;
+
+    claimDate: string;
 }
 
 export interface ClaimDetails extends ClaimSubmission {
@@ -115,7 +117,7 @@ export const submitClaim = async (claimData: ClaimSubmission) => {
         };
 
         console.log("Submitting claim with payload:", payload);
-        
+
         const response = await axiosInstance.post('/claims/submit/', payload);
         console.log("Claim submission response:", response.data);
 
@@ -144,9 +146,9 @@ export const getUserClaims = async () => {
     try {
         const response = await axiosInstance.get('/claims/list/');
         console.log("API Response:", response.data);
-        
+
         const rawClaims = Array.isArray(response.data) ? response.data : response.data && Array.isArray(response.data.claims) ? response.data.claims : [];
-        
+
         return rawClaims.map((claim: RawClaimData) => {
             return {
                 claimId: claim.claim_id || "",
@@ -154,7 +156,7 @@ export const getUserClaims = async () => {
                 settlementAmount: typeof claim.predicted_settlement === 'number' ? `£${claim.predicted_settlement.toFixed(2)}` : claim.predicted_settlement || "£0",
                 status: claim.status || "",
                 accidentType: claim.accident_type || "",
-                
+
                 _rawData: claim
             };
         });
@@ -173,9 +175,9 @@ export const getClaimDetails = async (claimId: string) => {
     try {
         const response = await axiosInstance.get(`/claims/${claimId}/`);
         console.log("Claim details response:", response.data);
-        
+
         const data = response.data;
-        
+
         const details = {
             gender: data.driver_info?.gender || data.gender || "N/A",
             driverAge: Number(data.driver_info?.driver_age || data.driver_age || 0),
@@ -212,7 +214,7 @@ export const getClaimDetails = async (claimId: string) => {
             generalUplift: Number(data.general_damages?.uplift || data.GeneralUplift || 0),
             loanerVehicle: Number(data.special_damages?.loaner_vehicle || data.SpecialLoanerVehicle || 0)
         };
-        
+
         return {
             claimId: data.claim_id || "",
             claimDate: data.claim_date || "",
@@ -232,8 +234,8 @@ export const getClaimDetails = async (claimId: string) => {
 export const getOngoingClaims = async () => {
     const claims = await getUserClaims();
     const claimsArray = Array.isArray(claims) ? claims : [];
-    
-    return claimsArray.filter(claim => 
+
+    return claimsArray.filter(claim =>
         claim.status === 'pending' || claim.status === 'approved'
     );
 };
@@ -241,8 +243,8 @@ export const getOngoingClaims = async () => {
 export const getPastClaims = async () => {
     const claims = await getUserClaims();
     const claimsArray = Array.isArray(claims) ? claims : [];
-    
-    return claimsArray.filter(claim => 
+
+    return claimsArray.filter(claim =>
         claim.status === 'settled' || claim.status === 'rejected'
     );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PaginatedTable from "../../system-activity/network-activity/components/paginated-table";
-import { APIUsersProps, Role, TableData, UserProps } from "../../../../../common/interfaces";
+import { APIUsersProps, CreateUserProps, Role, TableData, UserProps } from "../../../../../common/interfaces";
 
 import { Chart as ChartJS, ChartData, ChartOptions } from "chart.js/auto";
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
@@ -49,7 +49,7 @@ const Recovery: React.FC = () => {
     const [deleteAccountPopUpContext, setDeleteAccountPopUpContext] = useState<UserProps | null>(null);
 
     // Create a new user account in the database, on form submission.
-    function createNewUser(e: React.FormEvent, newAccount: UserProps | null) {
+    function createNewUser(e: React.FormEvent, newAccount: CreateUserProps | null) {
         e.preventDefault();
 
         alert(
@@ -93,15 +93,16 @@ const Recovery: React.FC = () => {
         }
 
         // Create the new user in the system.
-        createUser({
+        const userToCreate = {
             email: newAccount.email,
             password: newAccount.password,
             role_id: newAccount.roleId,
             full_name: newAccount.fullName,
             phone_number: newAccount.phoneNumber,
-            is_verified: newAccount.isVerified,
-            is_active: newAccount.isActive,
-        } as UserProps)
+            // is_verified: newAccount.isVerified,
+            // is_active: newAccount.isActive,
+        } as unknown as CreateUserProps;
+        createUser(userToCreate);
 
 
     }
@@ -593,7 +594,15 @@ const Recovery: React.FC = () => {
                         <h1 className="text-left font-bold text-black">Create User Accounts</h1>
                     </div>
                     <div className="w-full h-fit bg-gray-200 rounded shadow-md p-4 grid grid-rows-[auto_1fr_auto grid-cols-1 gap-4">
-                        <form onSubmit={(e) => createNewUser(e, newAccount)}>
+                        <form onSubmit={(e) => createNewUser(e, {
+                            email: newAccount?.email,
+                            password: newAccount?.password,
+                            roleId: newAccount?.roleId,
+                            fullName: newAccount?.fullName,
+                            phoneNumber: newAccount?.phoneNumber,
+                            // isVerified: newAccount?.isVerified,
+                            // isActive: newAccount?.isActive,
+                        } as CreateUserProps)}>
                             {/* Full Name and Phone Number */}
                             <div className="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
@@ -720,10 +729,11 @@ const Recovery: React.FC = () => {
                                             id="roleName"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             value={newAccount?.roleId || ""}
-                                            onChange={(e) => {
+                                            onChange={async (e) => {
+                                                const resolvedRoleId = await getRoleIdFromName(e.target.value);
                                                 setNewAccount({
                                                     ...newAccount,
-                                                    roleId: getRoleIdFromName(e.target.value) || -1,
+                                                    roleId: resolvedRoleId || -1,
                                                 });
                                             }}
                                         >

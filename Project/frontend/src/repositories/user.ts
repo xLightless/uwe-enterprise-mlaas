@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APIUsersProps, JSONResponse, mapGetUserFromSession, Permission, SessionContextProps, UserMeProps, UserProps } from '../common/interfaces';
+import { APIUsersProps, CreateUserProps, JSONResponse, mapGetUserFromSession, Permission, SessionContextProps, UserMeProps, UserProps } from '../common/interfaces';
 import { getTokenAccess } from '../common/session';
 import { getPermissionsOfRoleId } from './permissions';
 
@@ -139,7 +139,7 @@ const deleteUserById = async (userId: number): Promise<JSONResponse> => {
  * @param user {UserProps} - The user object containing the details of the new user.
  * @returns {Promise<JSONResponse>} - A promise that resolves to the created user's information.
  */
-const createUser = async (user: UserProps): Promise<JSONResponse<UserProps>> => {
+const createUser = async (user: CreateUserProps): Promise<JSONResponse> => {
     return axiosInstance.post<JSONResponse<UserProps>>('/recovery/create-user/', user,
         {
             headers: {

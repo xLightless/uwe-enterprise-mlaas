@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { createdModelPrediction, getModels } from "../../../../../repositories/models";
-import { ModelFeatures, ModelFeaturesPredicted, ModelProps } from "../../../../../common/interfaces";
+import { getModels } from "../../../../../repositories/models";
+import { ModelFeaturesPredicted, ModelProps } from "../../../../../common/interfaces";
 import { Scrollbar } from "../../../../../components/scrollbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import LIMEPrediction from "./components/chart/prediction";
+import { ClaimSubmission, submitClaim } from "../../../../../repositories/user-claims";
+import Overlay from "../../../../../components/overlay";
 
 interface ModelsProps {
     models: ModelProps[];
@@ -31,7 +33,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ metricType, metricValue
 const Models: React.FC<ModelsProps> = ({ models, setClickedModel, clickedModel }) => {
     // console.log("Models:", models);
     const [mlModels, ] = useState<ModelProps[]>(models.map((model: ModelProps) => {
-        console.log("Model:", model);
+        // console.log("Model:", model);
         return {
             modelName: model.model_name,
             modelDescription: model.model_description,
@@ -99,47 +101,49 @@ const MLAASTraffic: React.FC = () => {
     const [mlModels, setMLModels] = useState<ModelProps[] | null>(null);
     const [clickedModel, setClickedModel] = useState<ModelProps | null>(null);
 
-    const [predictionFeatures, setPredictionFeatures] = useState<ModelFeatures>({
+    const [predictionFeatures, setPredictionFeatures] = useState<ClaimSubmission>({
         gender: "Male",
-        driverAge: "33",
+        driverAge: 33,
         vehicleType: "Motorcycle",
-        vehicleAge: "13",
-        passengers: "4",
+        vehicleAge: 13,
+        passengers: 4,
         exceptional: "No",
         accidentType: "Rear end",
-        accidentDate: "22:24.5",
+        accidentDate: "2023-10-01T12:00:00",
         weatherConditions: "Rainy",
         policeReport: "Yes",
         witness: "Yes",
         accidentDescription: "Side collision at an intersection.",
         dominantInjury: "Arms",
-        prognosis: "E. 5 months",
+        prognosis: 5,
         whiplash: "Yes",
         psychological: "Yes",
         injuryDescription: "Whiplash and minor bruises.",
-        assetDamage: "0",
-        earningsLoss: "0",
-        usageLoss: "0",
-        generalFixes: "0",
-        specialFixes: "0",
-        tripCosts: "0",
-        journeyExpenses: "0",
-        medications: "0",
-        rehabilitation: "0",
-        therapy: "0",
-        healthExpenses: "0",
-        specialReduction: "0",
-        specialOverage: "0",
-        generalRest: "0",
-        additionalInjury: "0",
-        generalUplift: "520",
-        loanerVehicle: "0"
+        assetDamage: 0,
+        earningsLoss: 0,
+        usageLoss: 0,
+        generalFixes: 0,
+        specialFixes: 0,
+        tripCosts: 0,
+        journeyExpenses: 0,
+        medications: 0,
+        rehabilitation: 0,
+        therapy: 0,
+        healthExpenses: 0,
+        specialReduction: 0,
+        specialOverage: 0,
+        generalRest: 0,
+        additionalInjury: 0,
+        generalUplift: 520,
+        loanerVehicle: 0,
+        claimDate: "2023-10-01T12:00:00",
     });
 
     /**
      * Predicted features returned by the model.
      * This is the response from the backend after a prediction is made.
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [modelPrediction, setModelPrediction] = useState<ModelFeaturesPredicted | null>({
         gender: 0,
         driverAge: 0.23,
@@ -180,9 +184,9 @@ const MLAASTraffic: React.FC = () => {
 
     async function fetchModels() {
         const models = await getModels();
-        console.log("Models:", models);
+        // console.log("Models:", models);
         setMLModels(models.data as ModelProps[]);
-        console.log("ML Models:", models.data);
+        // console.log("ML Models:", models.data);
     }
 
     /**
@@ -193,14 +197,46 @@ const MLAASTraffic: React.FC = () => {
      * @param model - The model to be used for prediction.
      * @returns {Promise<void>} - A promise that resolves when the prediction is created.
      */
+    const [predictionFailed, setPredictionFailed] = useState(false);
+    const [predictionData, setPredictionData] = useState<unknown>(null);
     async function createPrediction(
-        features: ModelFeatures,
-        model: ModelProps
+        features: ClaimSubmission,
+        // model: ModelProps
     ): Promise<void> {
-        if (!model || !model.modelId) return;
-        console.log("Creating prediction with features:", features);
-        const prediction = await createdModelPrediction(model.modelId, features)
-        setModelPrediction(prediction.data as ModelFeaturesPredicted);
+        try {
+            // if (!model || !model.modelId) return;
+            console.log("Creating prediction with features:", features);
+            // const prediction = await createdModelPrediction(model.modelId, features)
+            const fetchedPrediction = await submitClaim(features as ClaimSubmission)
+            const prediction = fetchedPrediction.data;
+
+            if (prediction && prediction.status === false || prediction && !prediction.model_id) {
+                console.log("Prediction failed:", prediction);
+                setPredictionFailed(false);
+                return;
+            }
+
+            console.log("Prediction created:", prediction.data);
+
+            /**
+             * Capture the result of the prediction minus the feature importance.
+             * After, get the feature importance and setModelPrediction(featureImportance).
+             */
+            setPredictionData({
+                claimId: prediction.data.claim_id,
+                modelId: prediction.data.model_id,
+                predictedReason: prediction.data.predicted_reason,
+                predictedExplaination: prediction.data.predicted_explanation,
+                predictedSettlement: prediction.data.predicted_settlement,
+            });
+
+            // setModelPrediction({
+            //     gender: prediction.
+            // } as ModelFeaturesPredicted);
+        } catch {
+            setPredictionFailed(true);
+            console.error("Error creating prediction:", predictionFailed);
+        }
     };
 
 
@@ -225,6 +261,42 @@ const MLAASTraffic: React.FC = () => {
 
     return (
         <>
+
+            {predictionFailed === true &&
+                <Overlay onClose={() => {
+                    setPredictionFailed(false);
+                    setPredictionData(null);
+                }} className="w-[400px] h-[200px] bg-white max-w-lg">
+                    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
+                        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                            <h1 className="font-bold">Prediction Failed</h1>
+                        </div>
+
+                        <div>
+                            <p>Press ESC to close this menu.</p>
+                        </div>
+                    </div>
+                </Overlay>
+            }
+
+            {predictionData !== null &&
+                <Overlay onClose={() => {
+                    setPredictionFailed(false);
+                    setPredictionData(null);
+                }} className="w-[400px] h-[200px] bg-white max-w-lg">
+                    <div className="w-full h-fit bg-white rounded grid grid-rows-[auto_1fr_auto] p-4">
+                        <div className="w-full flex justify-start items-center border-b pb-2 mb-4">
+                            <h1 className="font-bold">Prediction Successful</h1>
+                        </div>
+
+                        <div>
+                            <p>{predictionData ? JSON.stringify(predictionData) : "There was an issue capturing the prediction data. Press ESC to continue..."}</p>
+                        </div>
+                    </div>
+                </Overlay>
+            }
+
+
             <div className="w-full h-full grid grid-rows-2 gap-4">
                 <div className="w-full h-full grid grid-cols-[325px_1fr] gap-x-4">
                     {/* Selected Model Information */}
@@ -373,7 +445,7 @@ const MLAASTraffic: React.FC = () => {
                                                 <tbody>
                                                     {predictionFeatures &&
                                                         Object.entries(predictionFeatures).map(([key, value]) => {
-                                                            const typedKey = key as keyof ModelFeatures;
+                                                            // const typedKey = key as keyof ModelFeatures;
                                                             const formattedKey = key
                                                                 .replace(/([a-z])([A-Z])/g, "$1 $2")
                                                                 .replace(/^\w/, (c) => c.toUpperCase());
@@ -385,7 +457,7 @@ const MLAASTraffic: React.FC = () => {
                                                                     <td className="border border-gray-300 px-4 py-2 text-sm text-left">
                                                                         {isEditing[key] ? (
                                                                             <input
-                                                                                value={predictionFeatures[typedKey] || value}
+                                                                                value={predictionFeatures[key as keyof ClaimSubmission] || value}
                                                                                 onChange={(e) =>
                                                                                     handleValueChange(key, e.target.value)
                                                                                 }
@@ -417,9 +489,47 @@ const MLAASTraffic: React.FC = () => {
 
 
                                     <div className="mt-4">
+                                        {/* createPrediction(predictionFeatures, clickedModel) */}
                                         <button
-                                            className="bg-red-500 rounded-md p-2 text-white"
-                                            onClick={() => createPrediction(predictionFeatures, clickedModel)}
+                                            className="bg-red-500 rounded-md p-2 text-white cursor-pointer hover:bg-red-600"
+                                            onClick={() => {
+                                                createPrediction({
+                                                    gender: String(predictionFeatures.gender),
+                                                    driverAge: Number(predictionFeatures.driverAge),
+                                                    vehicleType: String(predictionFeatures.vehicleType),
+                                                    vehicleAge: Number(predictionFeatures.vehicleAge),
+                                                    passengers: Number(predictionFeatures.passengers),
+                                                    exceptional: String(predictionFeatures.exceptional),
+                                                    accidentType: String(predictionFeatures.accidentType),
+                                                    accidentDate: new Date(predictionFeatures.accidentDate).toLocaleString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+                                                    weatherConditions: String(predictionFeatures.weatherConditions),
+                                                    policeReport: String(predictionFeatures.policeReport),
+                                                    witness: String(predictionFeatures.witness),
+                                                    accidentDescription: String(predictionFeatures.accidentDescription),
+                                                    dominantInjury: String(predictionFeatures.dominantInjury),
+                                                    prognosis: Number(predictionFeatures.prognosis),
+                                                    whiplash: String(predictionFeatures.whiplash),
+                                                    psychological: String(predictionFeatures.psychological),
+                                                    injuryDescription: String(predictionFeatures.injuryDescription),
+                                                    assetDamage: Number(predictionFeatures.assetDamage),
+                                                    earningsLoss: Number(predictionFeatures.earningsLoss),
+                                                    usageLoss: Number(predictionFeatures.usageLoss),
+                                                    generalFixes: Number(predictionFeatures.generalFixes),
+                                                    specialFixes: Number(predictionFeatures.specialFixes),
+                                                    tripCosts: Number(predictionFeatures.tripCosts),
+                                                    journeyExpenses: Number(predictionFeatures.journeyExpenses),
+                                                    medications: Number(predictionFeatures.medications),
+                                                    rehabilitation: Number(predictionFeatures.rehabilitation),
+                                                    therapy: Number(predictionFeatures.therapy),
+                                                    healthExpenses: Number(predictionFeatures.healthExpenses),
+                                                    specialReduction: Number(predictionFeatures.specialReduction),
+                                                    specialOverage: Number(predictionFeatures.specialOverage),
+                                                    generalRest: Number(predictionFeatures.generalRest),
+                                                    additionalInjury: Number(predictionFeatures.additionalInjury),
+                                                    generalUplift: Number(predictionFeatures.generalUplift),
+                                                    loanerVehicle: Number(predictionFeatures.loanerVehicle),
+                                                    claimDate: new Date(predictionFeatures.claimDate).toLocaleString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+                                                } as ClaimSubmission)}}
                                         >Test Prediction</button>
                                     </div>
                                 </>
